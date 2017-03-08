@@ -9,11 +9,11 @@ class Tracks extends React.Component {
 
     const trackStyleLeft = {
       width: w, height: h + trackLip, background: '#232323',
-      position: 'absolute', top: - h - trackLip/2, left:-w, borderRadius: 4, zIndex:-3, border: '1px solid #000'
+      position: 'absolute', top: 0 - trackLip, left:-w, borderRadius: 4, zIndex:-3, border: '1px solid #000'
     }
     const trackStyleRight = {
       width: w, height: h + trackLip, background: '#232323',
-      position: 'absolute', top: - h - trackLip/2, left: this.props.specs.width, borderRadius: 4, zIndex:-3, border: '1px solid #000'
+      position: 'absolute', top: 0 - trackLip, left: this.props.specs.width, borderRadius: 4, zIndex:-3, border: '1px solid #000'
     }
     return (
       <div style={{position: 'relative'}}>

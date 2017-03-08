@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import appReducer from './reducers/app'
+import tank from './reducers/app'
 
 const rootReducer = combineReducers({
-  appReducer
+  tank
 })
 
 export default rootReducer
