@@ -68,12 +68,12 @@ class MainConnect extends React.Component {
   }
 
   callCell(cell) {
-    
+
     this.props.dispatch({type: 'AIM', payload: cell})
 
     setTimeout(() => {
       this.props.dispatch({type: 'MOVE', payload: cell})
-    }, 1000)
+    }, 2500)
   }
 
 	render() {

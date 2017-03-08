@@ -1,15 +1,17 @@
 //import ReduxThunk from 'redux-thunk'
-
+// background: '#46341f',
+// cabineColor: '#624728',
+// cannonColor: '#685238',
 const initState = {
   firedUp: false,
   aimTarget: {x: 0, y: 0},
   position: {x:4, y:3},
   lastPosition: {},
-  width: 55,
-  height: 60,
-  background: '#685238',
-  cabineColor: '#685238',
-  cannonColor: '#685238',
+  width: 60,
+  height: 70,
+  background: '#46341f',
+  cabineColor: '#5c5349',
+  cannonColor: '#746a5f',
   rotate: 'true'
 
 }

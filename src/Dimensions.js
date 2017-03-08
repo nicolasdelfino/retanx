@@ -1,5 +1,5 @@
 const DIMENSIONS = () => ({
-  width: 1100,
+  width: 1000,
   height: 600
 })
 

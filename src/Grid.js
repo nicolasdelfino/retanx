@@ -30,12 +30,12 @@ class Grid extends React.Component {
       display: 'flex', fontSize:10, color: '#ccc',width: w, height: w, background: 'black', border: '0px solid ' + borderColor
     }
 
-    // console.log('rows', rows, 'cols', cols)
+    // console.log('rows', rows, 'cols', cols) x: {i} y: {x}
     for (let i = 0; i < rows; i++) {
       let row = []
       for (let x = 0; x < cols; x++) {
         row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
-        <div style={{opacity: 0.5, flex:1, border: '1px solid #282828'}}>x: {i} y: {x}</div>
+        <div className='gridItem' style={{opacity: 0.7, flex:1, border: '2px dashed rgba(0,0,0,0.2)'}}></div>
         </div>)
       }
       c.push(<div key={i} style={{flexDirection: 'row'}}>{row}</div>)

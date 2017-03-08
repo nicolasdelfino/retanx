@@ -22,3 +22,26 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.gridItem {
+  background-image: url("./grass.jpg");
+  background-size: 110px 110px;
+  flex: 1;
+  transition: all 0s ease;
+}
+.gridItem:hover {
+  /*background:rgba(255,255,255,0.01);*/
+}
+
+html {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+body {
+  background: black;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
