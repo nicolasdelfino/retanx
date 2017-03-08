@@ -3,6 +3,7 @@ import './App.css';
 import { connect } from 'react-redux'
 import Grid from './Grid'
 import Tank from './tank/Tank'
+import Body from './tank/Body'
 import Cannon from './tank/Cannon'
 import Tracks from './tank/Tracks'
 import DIMENSIONS from './Dimensions'
@@ -49,28 +50,24 @@ class MainConnect extends React.Component {
   }
 
   getSpeed(position) {
-
+    // TODO TRAVEL SPEED
   }
 
   renderTank() {
     let tank = this.props.tank
     // console.log('tank', tank)
     return (
-      <div>
-      <TankWrapper position={this.coordinates(tank.position, tank.width, tank.height)}>
-        <Tank specs={tank} speed={this.getSpeed(tank.position)} rotate={this.props.tank.rotate} rotation={this.aimDegrees(tank)}>
+      <Tank position={this.coordinates(tank.position, tank.width, tank.height)}>
+        <Body specs={tank} speed={this.getSpeed(tank.position)} rotate={this.props.tank.rotate} rotation={this.aimDegrees(tank)}>
           <Tracks specs={tank}/>
-        </Tank>
+        </Body>
         <Cannon specs={tank} rotate={this.props.tank.rotate} rotation={this.aimDegrees(tank)}/>
-      </TankWrapper>
-      </div>
+      </Tank>
     )
   }
 
   callCell(cell) {
-
     this.props.dispatch({type: 'AIM', payload: cell})
-
     setTimeout(() => {
       this.props.dispatch({type: 'MOVE', payload: cell})
     }, 2500)
@@ -80,24 +77,14 @@ class MainConnect extends React.Component {
     return (
       <div>
         <div className='main' style={{...mainStyle}}>
-
+          {/*  GRID */}
           <Grid aim={this.callCell.bind(this)}/>
-
+          {/* TANK  */}
           {this.renderTank()}
-
         </div>
       </div>
     )
 	}
-}
-
-class TankWrapper extends React.Component {
-  render() {
-
-    return (
-      <div style={{position: 'absolute', left: this.props.position.x, top: this.props.position.y, 'transition': 'all 1s ease'}}>{this.props.children}</div>
-    )
-  }
 }
 
 
