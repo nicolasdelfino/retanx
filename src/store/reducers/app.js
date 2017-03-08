@@ -7,11 +7,12 @@ const initState = {
   aimTarget: {x: 0, y: 0},
   position: {x:4, y:3},
   lastPosition: {},
-  width: 60,
-  height: 70,
-  background: '#46341f',
-  cabineColor: '#5c5349',
-  cannonColor: '#746a5f',
+  width: 50,
+  height: 65,
+  cannonSize: 70,
+  background: '#464645',
+  cabineColor: '#524d48',
+  cannonColor: '#696868',
   rotate: 'true'
 
 }

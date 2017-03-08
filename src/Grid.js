@@ -11,11 +11,11 @@ class Grid extends React.Component {
   }
 
   clickCell(i,x) {
-    // let size = DIMENSIONS().width / 10
-    // console.log('you clicked cell: [' + i + '][' + x + ']')
-    // console.log('pixels x:', i * size, 'pixels y:', x * size)
-
     this.props.aim({x: i, y: x})
+  }
+
+  shouldComponentUpdate() {
+    return false
   }
 
   renderGrid() {
@@ -35,7 +35,7 @@ class Grid extends React.Component {
       let row = []
       for (let x = 0; x < cols; x++) {
         row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
-        <div className='gridItem' style={{opacity: 0.7, flex:1, border: '2px dashed rgba(0,0,0,0.2)'}}></div>
+        <div className='gridItem' style={{opacity: 0.45, flex:1, border: '2px dashed rgba(0,0,0,0)'}}></div>
         </div>)
       }
       c.push(<div key={i} style={{flexDirection: 'row'}}>{row}</div>)

@@ -24,7 +24,7 @@
 }
 
 .gridItem {
-  background-image: url("./grass.jpg");
+  background-image: url("./dirt.gif");
   background-size: 110px 110px;
   flex: 1;
   transition: all 0s ease;

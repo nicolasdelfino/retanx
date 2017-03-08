@@ -16,12 +16,14 @@ class Body extends React.Component {
   render() {
 
     const zoom = 1
+    const w = this.props.specs.width
+    const h = this.props.specs.height
 
     const tankStyle = {
-      width: this.props.specs.width, height: this.props.specs.height,
-      borderRadius: 0, zoom: zoom, zIndex: 100, transform: 'rotate(' + this.state.rotation + 'deg)', boxShadow: '0px 0px 20px #000',
-      border: '0px solid #000',
-      background: this.props.specs.background, 'transition': 'all 3s ease-out', transitionDelay: '0s'
+      width: w, height: h,
+      borderRadius: 0, zoom: zoom, zIndex: 100, transform: 'rotate(' + this.state.rotation + 'deg)',
+      border: '0px solid #000', boxShadow: 'inset 0 0 10px #000, inset 0 0 20px #262626, inset 0 0 20px' + this.props.specs.cabineColor,
+      background: this.props.specs.background, 'transition': 'all 2s ease-out', transitionDelay: '0s'
     }
     return (
       <div style={{...tankStyle}}>

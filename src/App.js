@@ -70,7 +70,7 @@ class MainConnect extends React.Component {
     this.props.dispatch({type: 'AIM', payload: cell})
     setTimeout(() => {
       this.props.dispatch({type: 'MOVE', payload: cell})
-    }, 2500)
+    }, 1500)
   }
 
 	render() {
