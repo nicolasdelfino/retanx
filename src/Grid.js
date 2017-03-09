@@ -14,16 +14,17 @@ class Grid extends React.Component {
     this.props.aim({x: i, y: x})
   }
 
-  shouldComponentUpdate() {
-    return false
-  }
+  // shouldComponentUpdate() {
+  //   return false
+  // }
 
   renderGrid() {
-    let w = DIMENSIONS().width / 10
-    let h = DIMENSIONS().height / 10
-    let cols = h / 10
-    let rows = w / 10
-    let c = []
+    let amount = 10
+    let w = DIMENSIONS().width / amount
+    let h = DIMENSIONS().height / amount
+    let cols = h / (amount)
+    let rows = w / (amount)
+    let grid = []
     let borderColor = '#efefef'
 
     const cellStyle = {
@@ -38,14 +39,16 @@ class Grid extends React.Component {
         <div className='gridItem' style={{opacity: 0.45, flex:1, border: '2px dashed rgba(0,0,0,0)'}}></div>
         </div>)
       }
-      c.push(<div key={i} style={{flexDirection: 'row'}}>{row}</div>)
+      grid.push(<div key={i} style={{flexDirection: 'row'}}>{row}</div>)
     }
 
-    return c
+    return grid
   }
+
   render() {
+    console.log('cursor', this.props.cursor)
     return (
-      <div style={{display: 'flex', width: DIMENSIONS().width, height: DIMENSIONS().height, flexDirection: 'row'}}>
+      <div className={this.props.cursor} style={{display: 'flex', width: DIMENSIONS().width, height: DIMENSIONS().height, flexDirection: 'row'}}>
       {this.renderGrid()}
       </div>
     )

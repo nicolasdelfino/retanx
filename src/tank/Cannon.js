@@ -54,7 +54,7 @@ class Cannon extends React.Component {
       border: '2px solid rgba(0,0,0,0.3)', zIndex: 10}
 
     let hatchKnob = {
-      width: hatchKnobSize, height: hatchKnobSize, background: this.props.specs.cannonColor, borderRadius: 0.25 * hatchKnobSize,
+      width: hatchKnobSize, height: hatchKnobSize, background: this.props.specs.cabineColor, borderRadius: 0.25 * hatchKnobSize,
       position: 'absolute', left: 'calc(50% - ' + Math.floor((hatchKnobSize + 2) / 2) + 'px)', top: 'calc(50% - ' + Math.floor((hatchKnobSize + 2) / 2) + 'px)',
       border: '1px solid rgba(0,0,0,0.3)', zIndex: 10}
 

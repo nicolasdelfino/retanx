@@ -6,13 +6,16 @@ import Tank from './tank/Tank'
 import Body from './tank/Body'
 import Cannon from './tank/Cannon'
 import Tracks from './tank/Tracks'
+import Outline from './tank/Outline'
+import SpecsView from './tank/SpecsView'
 import DIMENSIONS from './Dimensions'
 
 const mainStyle = {
   width: DIMENSIONS().width, height: DIMENSIONS().height,
   color: '#fff',
   background: '#e8e8e8',
-  position: 'relative'
+  position: 'relative',
+  border: '0px solid #402c1b'
 }
 
 class MainConnect extends React.Component {
@@ -55,22 +58,69 @@ class MainConnect extends React.Component {
 
   renderTank() {
     let tank = this.props.tank
-    // console.log('tank', tank)
+    let shouldRotate = this.props.tank.rotate
+    let position = tank.position
+    let width = tank.width
+    let height = tank.height
     return (
-      <Tank position={this.coordinates(tank.position, tank.width, tank.height)}>
-        <Body specs={tank} speed={this.getSpeed(tank.position)} rotate={this.props.tank.rotate} rotation={this.aimDegrees(tank)}>
-          <Tracks specs={tank}/>
-        </Body>
-        <Cannon specs={tank} rotate={this.props.tank.rotate} rotation={this.aimDegrees(tank)}/>
-      </Tank>
+      <div>
+      <div style={{'cursor': 'pointer'}} onClick={() => {
+        this.props.dispatch({type: 'SELECT'})
+       }}>
+        <Tank position={this.coordinates(position, width, height)} >
+          <Body specs={tank} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={this.aimDegrees(tank)}>
+            <Tracks specs={tank}/>
+          </Body>
+          <Cannon specs={tank} rotate={shouldRotate} rotation={this.aimDegrees(tank)}/>
+        </Tank>
+        <Outline specs={tank} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={this.aimDegrees(tank)}/>
+        </div>
+        <SpecsView specs={tank}
+        details={this.showSpecs.bind(this)}
+        rotate={shouldRotate}
+        position={this.coordinates(position, width, height)}
+        rotation={this.aimDegrees(tank)}/>
+      </div>
     )
   }
 
   callCell(cell) {
+    if(!this.props.tank.selected) {
+      return null
+    }
+
     this.props.dispatch({type: 'AIM', payload: cell})
     setTimeout(() => {
       this.props.dispatch({type: 'MOVE', payload: cell})
     }, 1500)
+  }
+
+  showSpecs() {
+    this.props.dispatch({type: 'SHOW_DETAIL_VIEW'})
+  }
+
+  hideSpecs() {
+    this.props.dispatch({type: 'HIDE_DETAIL_VIEW'})
+  }
+
+  renderSpecsView() {
+    const specsStyle = {
+      display: 'flex',
+      position: 'absolute', top:0, zIndex: 300,
+      width: DIMENSIONS().width, height: DIMENSIONS().height,
+      background: 'rgba(252, 27, 27, 0.5)',
+      justifyContent: 'center', alignItems: 'center'
+    }
+    if(!this.props.app.detailsView) {
+      return null
+    }
+    return (
+      <div style={{...specsStyle}}>
+        <div style={{padding: 20, background: 'transparent', color: '#ccc', cursor: 'pointer'}} onClick={() => {
+          this.hideSpecs()
+        }}>CLOSE SPECS</div>
+      </div>
+    )
   }
 
 	render() {
@@ -78,19 +128,22 @@ class MainConnect extends React.Component {
       <div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
-          <Grid aim={this.callCell.bind(this)}/>
+          <Grid cursor={this.props.tank.selected ? 'crosshair' : 'normal'} aim={this.callCell.bind(this)}/>
           {/* TANK  */}
           {this.renderTank()}
+          {/* SPECS VIEW  */}
+          {this.renderSpecsView()}
+
         </div>
       </div>
     )
 	}
 }
 
-
 const MSTP = (state) => {
 	return {
-    tank: state.tank
+    tank: state.tank,
+    app: state.app
   }
 }
 

@@ -24,13 +24,20 @@
 }
 
 .gridItem {
-  background-image: url("./dirt.gif");
-  background-size: 110px 110px;
+  /*background-image: url("./stone.jpg");*/
+  /*background-image: url("./dirt.gif");
+  background-size: 110px 110px;*/
+  outline: 1px solid green;
   flex: 1;
   transition: all 0s ease;
 }
 .gridItem:hover {
   /*background:rgba(255,255,255,0.01);*/
+}
+
+@keyframes fade {
+  0%,100% { opacity: 0.2 }
+  50% { opacity: 1 }
 }
 
 html {
@@ -44,4 +51,12 @@ body {
   display: flex;
   align-self: center;
   justify-content: center;
+}
+
+.crosshair {
+  cursor: crosshair;
+}
+
+.normal {
+  cursor: default;
 }
