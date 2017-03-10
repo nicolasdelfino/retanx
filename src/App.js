@@ -20,6 +20,16 @@ const mainStyle = {
 
 class MainConnect extends React.Component {
 
+  constructor(props) {
+    super(props)
+
+    this.timer = null
+
+    this.state = {
+      acceptMoveAction: true
+    }
+  }
+
   componentDidMount() {
     this.props.dispatch({type: 'AIM', payload: {x:0,y:0}})
     this.props.dispatch({type: 'MOVE', payload: {x:3,y:3}})
@@ -84,15 +94,24 @@ class MainConnect extends React.Component {
     )
   }
 
-  callCell(cell) {
+  moveToCell(cell) {
     if(!this.props.tank.selected) {
       return null
     }
 
     this.props.dispatch({type: 'AIM', payload: cell})
-    setTimeout(() => {
+
+    clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
+      this.setState({ acceptMoveAction: false })
+
       this.props.dispatch({type: 'MOVE', payload: cell})
-    }, 1500)
+
+      setTimeout(() => {
+        this.setState({ acceptMoveAction: true })
+      }, 2000)
+
+    }, 1000)
   }
 
   showSpecs() {
@@ -128,7 +147,7 @@ class MainConnect extends React.Component {
       <div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
-          <Grid cursor={this.props.tank.selected ? 'crosshair' : 'normal'} aim={this.callCell.bind(this)}/>
+          <Grid cursor={this.props.tank.selected ? 'crosshair' : 'normal'} aim={this.moveToCell.bind(this)}/>
           {/* TANK  */}
           {this.renderTank()}
           {/* SPECS VIEW  */}
