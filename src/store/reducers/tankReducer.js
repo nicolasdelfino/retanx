@@ -1,43 +1,77 @@
 // width: 45,
 // height: 65,
+
 const initState = {
-  firedUp: false,
-  aimTarget: {x: 0, y: 0},
-  position: {x:4, y:3},
-  lastPosition: {},
-  width: 45,
-  height: 65,
-  cannonSize: 90,
-  background: '#383838',
-  cabineColor: '#383838',
-  cannonColor: '#696868',
-  rotate: 'true',
-  selected: false
+  units: []
 }
 
-const tank = (state = initState, action) => {
-  // console.log('action', action)
+// tank reducer contains tank array, each tank with a unique id
+// const tanka = (state = initState, action) => {
+//   switch (action.type) {
+//     case 'AIM':
+//       return {
+//         ...state,
+//         aimTarget: { x:action.payload.y, y: action.payload.x },
+//         rotate: 'true'
+//     }
+//     case 'MOVE':
+//       return {
+//         ...state,
+//         position: { x:action.payload.y, y: action.payload.x },
+//         rotate: 'false'
+//     }
+//     case 'SELECT':
+//       let current = state.selected
+//       return {
+//         ...state, selected: !current
+//     }
+//     default:
+//       return state
+//   }
+// }
+
+const tanks = (state = initState, action) => {
+  let specs = null
   switch (action.type) {
+    case 'ADD_TANK':
+    return {
+      ...state,
+      units: [...state.units, action.payload],
+    }
     case 'AIM':
-      return {
-        ...state,
-        aimTarget: { x:action.payload.y, y: action.payload.x },
-        rotate: 'true'
+    specs = state.units[action.payload.id]
+    return {
+      ...state,
+      units: [
+        ...state.units.slice(0, action.payload.id),
+        { ...specs, aimTarget: { x:action.payload.target.y, y: action.payload.target.x }, rotate: 'true' },
+        ...state.units.slice(action.payload.id + 1),
+      ],
     }
     case 'MOVE':
-      return {
-        ...state,
-        position: { x:action.payload.y, y: action.payload.x },
-        rotate: 'false'
+    specs = state.units[action.payload.id]
+    return {
+      ...state,
+      units: [
+        ...state.units.slice(0, action.payload.id),
+        { ...specs, position: { x:action.payload.target.y, y: action.payload.target.x }, rotate: 'false' },
+        ...state.units.slice(action.payload.id + 1),
+      ],
     }
     case 'SELECT':
-      let current = state.selected
-      return {
-        ...state, selected: !current
+    let tankSelectionState = !state.units[action.payload.id].selected
+    specs = state.units[action.payload.id]
+    return {
+      ...state,
+      units: [
+        ...state.units.slice(0, action.payload.id),
+        { ...specs, selected: tankSelectionState },
+        ...state.units.slice(action.payload.id + 1),
+      ],
     }
     default:
       return state
   }
 }
 
-export default tank
+export default tanks

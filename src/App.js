@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { connect } from 'react-redux'
 import Grid from './Grid'
-import Tank from './tank/Tank'
+import TankPosition from './tank/TankPosition'
 import Body from './tank/Body'
 import Cannon from './tank/Cannon'
 import Tracks from './tank/Tracks'
@@ -22,20 +22,69 @@ class MainConnect extends React.Component {
 
   constructor(props) {
     super(props)
-
     this.timer = null
+  }
 
-    this.state = {
-      acceptMoveAction: true
+  getRandomPos() {
+    let foundFreeSlot = false
+    let posX, posY
+    do {
+      posX = Math.floor(Math.random() * 9) // TODO get values from grid
+      posY = Math.floor(Math.random() * 5)
+
+      if(this.props.tanks.length === 0) {
+        foundFreeSlot = true
+        return {x: posX, y: posY}
+      }
+
+      foundFreeSlot = true
+      this.props.tanks.forEach((tank) => {
+        if(tank.position.x === posX && tank.position.y === posY) {
+          foundFreeSlot = false
+        }
+      })
+
+      for (var i = 0; i < this.props.tanks.length; i++) {
+        if(i === this.props.tanks.length -1) {
+          console.log('end')
+        }
+
+      }
+
+    } while (!foundFreeSlot);
+
+    if(foundFreeSlot) {
+      return {x: posX, y: posY}
     }
   }
 
+  addTank() {
+    let tankPosition = this.getRandomPos()
+    const tankUnit = {
+      id: this.props.tanks.length,
+      aimTarget: {x: 0, y: 0},
+      position: tankPosition,
+      width: Math.floor(Math.random() * 45) + 35,
+      height: Math.floor(Math.random() * 60) + 55,
+      cannonSize: Math.floor(Math.random() * 130) + 70,
+      background: '#383838',
+      cabineColor: '#383838',
+      cannonColor: '#696868',
+      rotate: 'true',
+      selected: false
+    }
+
+    this.props.dispatch({ type: 'ADD_TANK', payload: tankUnit})
+  }
+
   componentDidMount() {
-    this.props.dispatch({type: 'AIM', payload: {x:0,y:0}})
-    this.props.dispatch({type: 'MOVE', payload: {x:3,y:3}})
+    this.addTank()
+    //this.props.dispatch( {type: 'AIM', payload: { id: 0, target: {x:0, y:0 } } } )
+    //this.props.dispatch( {type: 'MOVE', payload: { id: 0, target: {x:3, y:3 } } } )
   }
 
   coordinates(pos, width, height) {
+    // console.log('pos', pos)
     let size = DIMENSIONS().width / 10
     return {
       x: pos.x * size + (size / 2 - width / 2),
@@ -44,6 +93,7 @@ class MainConnect extends React.Component {
   }
 
   aimDegrees(tank) {
+    // console.warn('tank', tank)
     let position = tank.position
     let p1 = {
       x: tank.aimTarget.x,
@@ -66,51 +116,52 @@ class MainConnect extends React.Component {
     // TODO TRAVEL SPEED
   }
 
-  renderTank() {
-    let tank = this.props.tank
-    let shouldRotate = this.props.tank.rotate
-    let position = tank.position
-    let width = tank.width
-    let height = tank.height
-    return (
-      <div>
-      <div style={{'cursor': 'pointer'}} onClick={() => {
-        this.props.dispatch({type: 'SELECT'})
-       }}>
-        <Tank position={this.coordinates(position, width, height)} >
-          <Body specs={tank} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={this.aimDegrees(tank)}>
-            <Tracks specs={tank}/>
-          </Body>
-          <Cannon specs={tank} rotate={shouldRotate} rotation={this.aimDegrees(tank)}/>
-        </Tank>
-        <Outline specs={tank} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={this.aimDegrees(tank)}/>
+  renderTanks() {
+    let tanks = this.props.tanks
+    let units = []
+
+    tanks.forEach((tankUnit, index) => {
+      let shouldRotate  = tankUnit.rotate
+      let position      = tankUnit.position
+      let width         = tankUnit.width
+      let height        = tankUnit.height
+
+      units.push(
+        <div id={'tank_' + index} key={index}>
+        <div style={{'cursor': 'pointer'}} onClick={() => {
+          console.log('tankUnit', tankUnit)
+          this.props.dispatch({type: 'SELECT', payload: {id: tankUnit.id }})
+         }}>
+          <TankPosition position={this.coordinates(position, width, height)} >
+            <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={this.aimDegrees(tankUnit)}>
+              <Tracks specs={tankUnit}/>
+            </Body>
+            <Cannon specs={tankUnit} rotate={shouldRotate} rotation={this.aimDegrees(tankUnit)}/>
+          </TankPosition>
+          <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={this.aimDegrees(tankUnit)}/>
+          </div>
+          <SpecsView specs={tankUnit}
+          details={this.showSpecs.bind(this)}
+          rotate={shouldRotate}
+          position={this.coordinates(position, width, height)}
+          rotation={this.aimDegrees(tankUnit)}/>
         </div>
-        <SpecsView specs={tank}
-        details={this.showSpecs.bind(this)}
-        rotate={shouldRotate}
-        position={this.coordinates(position, width, height)}
-        rotation={this.aimDegrees(tank)}/>
-      </div>
-    )
+      )
+    })
+    return units
   }
 
   moveToCell(cell) {
-    if(!this.props.tank.selected) {
+    if(!this.props.tanks[this.props.currentSelectionID].selected) {
       return null
     }
-
-    this.props.dispatch({type: 'AIM', payload: cell})
-
+    // Clear aim time each time a new aim action is called (takes 1 second to aim)
     clearTimeout(this.timer)
+    // Move cannon action (aim)
+    this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell } })
+    // Wait for aim animation to finish
     this.timer = setTimeout(() => {
-      this.setState({ acceptMoveAction: false })
-
-      this.props.dispatch({type: 'MOVE', payload: cell})
-
-      setTimeout(() => {
-        this.setState({ acceptMoveAction: true })
-      }, 2000)
-
+      this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell} })
     }, 1000)
   }
 
@@ -142,16 +193,35 @@ class MainConnect extends React.Component {
     )
   }
 
+  renderGrid() {
+    if(this.props.tanks.length === 0) {
+      return null
+    }
+
+    let sel = false
+    this.props.tanks.forEach((tank) => {
+      if(tank.selected) {
+        sel = true
+      }
+    })
+    return (
+      <Grid cursor={sel ? 'crosshair' : 'normal'}
+      aim={this.moveToCell.bind(this)}/>
+    )
+  }
+
 	render() {
     return (
       <div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
-          <Grid cursor={this.props.tank.selected ? 'crosshair' : 'normal'} aim={this.moveToCell.bind(this)}/>
+          {this.renderGrid()}
           {/* TANK  */}
-          {this.renderTank()}
+          {this.renderTanks()}
           {/* SPECS VIEW  */}
           {this.renderSpecsView()}
+
+          <div><button onClick={this.addTank.bind(this)}>ADD TANK</button></div>
 
         </div>
       </div>
@@ -161,8 +231,9 @@ class MainConnect extends React.Component {
 
 const MSTP = (state) => {
 	return {
-    tank: state.tank,
-    app: state.app
+    tanks: state.tanks.units,
+    app: state.app,
+    currentSelectionID: state.app.currentSelectionID
   }
 }
 

@@ -19,9 +19,7 @@ class Cannon extends React.Component {
       height: this.props.specs.height + 10
     }
 
-    // console.warn('ROTATION ====', this.props.rotation)
     let w = this.props.specs.width + 8
-
     let h = this.props.specs.height - 12
 
     let outer = {

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import app from './reducers/appReducer'
-import tank from './reducers/tankReducer'
+import tanks from './reducers/tankReducer'
 
 const rootReducer = combineReducers({
   app,
-  tank
+  tanks
 })
 
 export default rootReducer
