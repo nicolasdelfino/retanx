@@ -14,10 +14,6 @@ class Grid extends React.Component {
     this.props.aim({x: i, y: x})
   }
 
-  // shouldComponentUpdate() {
-  //   return false
-  // }
-
   renderGrid() {
     let amount = 10
     let w = DIMENSIONS().width / amount
@@ -36,7 +32,7 @@ class Grid extends React.Component {
       let row = []
       for (let x = 0; x < cols; x++) {
         row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
-        <div className='gridItem' style={{opacity: 0.45, flex:1, border: '2px dashed rgba(0,0,0,0)'}}></div>
+        <div className='gridItem' style={{opacity: 0.3, flex:1, border: '0px dashed #7d725f'}}></div>
         </div>)
       }
       grid.push(<div key={i} style={{flexDirection: 'row'}}>{row}</div>)

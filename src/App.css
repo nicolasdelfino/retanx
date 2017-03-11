@@ -25,9 +25,10 @@
 
 .gridItem {
   /*background-image: url("./stone.jpg");*/
-  /*background-image: url("./dirt.gif");
-  background-size: 110px 110px;*/
-  outline: 1px solid green;
+  background-image: url("./dirt.gif");
+  background-size: 110px 110px;
+  /*background: #000;*/
+  /*outline: 1px solid green;*/
   flex: 1;
   transition: all 0s ease;
 }

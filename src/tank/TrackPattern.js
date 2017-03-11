@@ -4,7 +4,7 @@ class TrackPattern extends React.Component {
     let trackHeight = 2
     let t = []
     for (var i = 0; i < this.props.trackHeight / trackHeight; i++) {
-      let color = i % 2 ? '#000' : '#343434'
+      let color = i % 2 ? '#000' : '#2d2929'
       t.push(<div key={i} style={{width: this.props.trackWidth, height: trackHeight, background: color}} />)
     }
 

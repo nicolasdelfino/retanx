@@ -58,7 +58,7 @@ const tanks = (state = initState, action) => {
         ...state.units.slice(action.payload.id + 1),
       ],
     }
-    case 'SELECT':
+    case 'SELECT_UNIT':
     let tankSelectionState = !state.units[action.payload.id].selected
     specs = state.units[action.payload.id]
     return {
@@ -68,6 +68,19 @@ const tanks = (state = initState, action) => {
         { ...specs, selected: tankSelectionState },
         ...state.units.slice(action.payload.id + 1),
       ],
+    }
+    case 'DESELECT_ALL_BUT_ID':
+    if(state.units.length === 1) {
+      return state
+    }
+
+    let ex = state.units.map((unit) => {
+      unit.selected = unit.id === action.payload.id
+      return unit
+    })
+
+    return {
+      units: ex
     }
     default:
       return state

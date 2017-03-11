@@ -23,7 +23,7 @@ class Outline extends React.Component {
       left: this.props.position.x - 30, top: this.props.position.y - 15,
       width: w, height: h, opacity: 1, animation: 'fade 1s linear infinite',
       zIndex: 100, transform: 'rotate(' + this.state.rotation + 'deg)', borderRadius: 2,
-      border: '1px solid #5ee400', background: 'transparent', 'transition': 'all 2s ease', transitionDelay: '0s'
+      border: '2px solid #0069e4', background: 'transparent', 'transition': 'all 2s ease', transitionDelay: '0s'
     }
 
     if(!this.props.specs.selected) {

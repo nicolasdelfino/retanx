@@ -12,7 +12,7 @@ const app = (state = initState, action) => {
     //     ...state,
     //     aimTarget: { x:action.payload.y, y: action.payload.x }
     // }
-    case 'SELECT':
+    case 'SELECT_UNIT':
     return {
       ...state,
       currentSelectionID: action.payload.id

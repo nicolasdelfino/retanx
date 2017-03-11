@@ -44,13 +44,6 @@ class MainConnect extends React.Component {
         }
       })
 
-      for (var i = 0; i < this.props.tanks.length; i++) {
-        if(i === this.props.tanks.length -1) {
-          console.log('end')
-        }
-
-      }
-
     } while (!foundFreeSlot);
 
     if(foundFreeSlot) {
@@ -58,18 +51,22 @@ class MainConnect extends React.Component {
     }
   }
 
+  // background: '#383838',
+  // cabineColor: '#383838',
+  // cannonColor: '#696868',
+
   addTank() {
     let tankPosition = this.getRandomPos()
     const tankUnit = {
       id: this.props.tanks.length,
       aimTarget: {x: 0, y: 0},
       position: tankPosition,
-      width: Math.floor(Math.random() * 45) + 35,
-      height: Math.floor(Math.random() * 60) + 55,
-      cannonSize: Math.floor(Math.random() * 130) + 70,
-      background: '#383838',
-      cabineColor: '#383838',
-      cannonColor: '#696868',
+      width: Math.floor(Math.random() * 40) + 40,
+      height: Math.floor(Math.random() * 50) + 45,
+      cannonSize: Math.floor(Math.random() * 100) + 70,
+      background: '#131313',
+      cabineColor: '#211e1e',
+      cannonColor: '#463d3d',
       rotate: 'true',
       selected: false
     }
@@ -79,8 +76,6 @@ class MainConnect extends React.Component {
 
   componentDidMount() {
     this.addTank()
-    //this.props.dispatch( {type: 'AIM', payload: { id: 0, target: {x:0, y:0 } } } )
-    //this.props.dispatch( {type: 'MOVE', payload: { id: 0, target: {x:3, y:3 } } } )
   }
 
   coordinates(pos, width, height) {
@@ -130,7 +125,9 @@ class MainConnect extends React.Component {
         <div id={'tank_' + index} key={index}>
         <div style={{'cursor': 'pointer'}} onClick={() => {
           console.log('tankUnit', tankUnit)
-          this.props.dispatch({type: 'SELECT', payload: {id: tankUnit.id }})
+          this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
+          // deselct all other units
+          this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
          }}>
           <TankPosition position={this.coordinates(position, width, height)} >
             <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={this.aimDegrees(tankUnit)}>
@@ -213,6 +210,7 @@ class MainConnect extends React.Component {
 	render() {
     return (
       <div>
+        <div><button onClick={this.addTank.bind(this)}>ADD TANK</button></div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
           {this.renderGrid()}
@@ -220,9 +218,6 @@ class MainConnect extends React.Component {
           {this.renderTanks()}
           {/* SPECS VIEW  */}
           {this.renderSpecsView()}
-
-          <div><button onClick={this.addTank.bind(this)}>ADD TANK</button></div>
-
         </div>
       </div>
     )
