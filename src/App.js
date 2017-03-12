@@ -74,6 +74,10 @@ class MainConnect extends React.Component {
     this.props.dispatch({ type: 'ADD_TANK', payload: tankUnit})
   }
 
+  toggleDebug() {
+    this.props.dispatch({ type: 'TOGGLE_DEBUG' })
+  }
+
   componentDidMount() {
     this.addTank()
   }
@@ -213,7 +217,7 @@ class MainConnect extends React.Component {
       }
     })
     return (
-      <Grid cursor={sel ? 'crosshair' : 'normal'}
+      <Grid debug={this.props.debugMode} tanks={this.props.tanks} cursor={sel ? 'crosshair' : 'normal'}
       aim={this.moveToCell.bind(this)}/>
     )
   }
@@ -221,7 +225,10 @@ class MainConnect extends React.Component {
 	render() {
     return (
       <div>
-        <div><button onClick={this.addTank.bind(this)}>ADD TANK</button></div>
+        <div style={{flexDirection: 'column'}}>
+          <button onClick={this.addTank.bind(this)}>ADD TANK</button>
+          <button onClick={this.toggleDebug.bind(this)}>TOGGLE DEBUG</button>
+        </div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
           {this.renderGrid()}
@@ -239,7 +246,8 @@ const MSTP = (state) => {
 	return {
     tanks: state.tanks.units,
     app: state.app,
-    currentSelectionID: state.app.currentSelectionID
+    currentSelectionID: state.app.currentSelectionID,
+    debugMode: state.app.debugMode
   }
 }
 

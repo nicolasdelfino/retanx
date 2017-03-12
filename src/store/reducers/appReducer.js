@@ -1,7 +1,8 @@
 const initState = {
   aimTarget: {x: 0, y: 0},
   detailsView: false,
-  currentSelectionID: 0
+  currentSelectionID: 0,
+  debugMode: false
 }
 
 //put aim target here and change aimTarget within a tank reducer to point to target?
@@ -26,6 +27,11 @@ const app = (state = initState, action) => {
       return {
         ...state,
         detailsView: false
+    }
+    case 'TOGGLE_DEBUG':
+      return {
+        ...state,
+        debugMode: !state.debugMode
     }
     default:
       return state

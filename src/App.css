@@ -32,9 +32,6 @@
   flex: 1;
   transition: all 0s ease;
 }
-.gridItem:hover {
-  /*background:rgba(255,255,255,0.01);*/
-}
 
 @keyframes fade {
   0%,100% { opacity: 0.2 }
@@ -52,6 +49,7 @@ body {
   display: flex;
   align-self: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .crosshair {
