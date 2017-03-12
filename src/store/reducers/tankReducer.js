@@ -1,34 +1,6 @@
-// width: 45,
-// height: 65,
-
 const initState = {
   units: []
 }
-
-// tank reducer contains tank array, each tank with a unique id
-// const tanka = (state = initState, action) => {
-//   switch (action.type) {
-//     case 'AIM':
-//       return {
-//         ...state,
-//         aimTarget: { x:action.payload.y, y: action.payload.x },
-//         rotate: 'true'
-//     }
-//     case 'MOVE':
-//       return {
-//         ...state,
-//         position: { x:action.payload.y, y: action.payload.x },
-//         rotate: 'false'
-//     }
-//     case 'SELECT':
-//       let current = state.selected
-//       return {
-//         ...state, selected: !current
-//     }
-//     default:
-//       return state
-//   }
-// }
 
 const tanks = (state = initState, action) => {
   let specs = null
@@ -59,13 +31,22 @@ const tanks = (state = initState, action) => {
       ],
     }
     case 'SELECT_UNIT':
-    let tankSelectionState = !state.units[action.payload.id].selected
     specs = state.units[action.payload.id]
     return {
       ...state,
       units: [
         ...state.units.slice(0, action.payload.id),
-        { ...specs, selected: tankSelectionState },
+        { ...specs, selected: true },
+        ...state.units.slice(action.payload.id + 1),
+      ],
+    }
+    case 'DESELECT_UNIT':
+    specs = state.units[action.payload.id]
+    return {
+      ...state,
+      units: [
+        ...state.units.slice(0, action.payload.id),
+        { ...specs, selected: false },
         ...state.units.slice(action.payload.id + 1),
       ],
     }

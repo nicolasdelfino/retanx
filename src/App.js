@@ -61,11 +61,11 @@ class MainConnect extends React.Component {
       id: this.props.tanks.length,
       aimTarget: {x: 0, y: 0},
       position: tankPosition,
-      width: Math.floor(Math.random() * 40) + 40,
+      width: Math.floor(Math.random() * 45) + 40,
       height: Math.floor(Math.random() * 50) + 45,
       cannonSize: Math.floor(Math.random() * 100) + 70,
       background: '#131313',
-      cabineColor: '#211e1e',
+      cabineColor: '#494242',
       cannonColor: '#463d3d',
       rotate: 'true',
       selected: false
@@ -125,9 +125,15 @@ class MainConnect extends React.Component {
         <div id={'tank_' + index} key={index}>
         <div style={{'cursor': 'pointer'}} onClick={() => {
           console.log('tankUnit', tankUnit)
-          this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
-          // deselct all other units
-          this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
+
+          if(tankUnit.selected) {
+            this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: tankUnit.id }})
+          }
+          else {
+            this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
+            // deselct all other units
+            this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
+          }
          }}>
           <TankPosition position={this.coordinates(position, width, height)} >
             <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={this.aimDegrees(tankUnit)}>
@@ -181,11 +187,16 @@ class MainConnect extends React.Component {
     if(!this.props.app.detailsView) {
       return null
     }
+
+    let tank = this.props.tanks[this.props.currentSelectionID]
     return (
       <div style={{...specsStyle}}>
-        <div style={{padding: 20, background: 'transparent', color: '#ccc', cursor: 'pointer'}} onClick={() => {
+        <div style={{padding: 20, fontSize: 10, background: 'transparent', color: '#ccc', cursor: 'pointer'}} onClick={() => {
           this.hideSpecs()
-        }}>CLOSE SPECS</div>
+        }}>
+        CLOSE SPECS
+
+        </div>
       </div>
     )
   }
