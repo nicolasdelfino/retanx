@@ -22,7 +22,10 @@ class MainConnect extends React.Component {
 
   constructor(props) {
     super(props)
-    this.timer = null
+    this.timer = null,
+    this.state = {
+      isAiming: false
+    }
   }
 
   getRandomPos() {
@@ -130,6 +133,10 @@ class MainConnect extends React.Component {
         <div style={{'cursor': 'pointer'}} onClick={() => {
           console.log('tankUnit', tankUnit)
 
+          if(this.state.isAiming) {
+            return
+          }
+
           if(tankUnit.selected) {
             this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: tankUnit.id }})
           }
@@ -162,12 +169,18 @@ class MainConnect extends React.Component {
     if(!this.props.tanks[this.props.currentSelectionID].selected) {
       return null
     }
+
+    // TODO - A* ?
+
     // Clear aim time each time a new aim action is called (takes 1 second to aim)
     clearTimeout(this.timer)
     // Move cannon action (aim)
     this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell } })
+    this.setState({ isAiming: true })
+
     // Wait for aim animation to finish
     this.timer = setTimeout(() => {
+      this.setState({ isAiming: false })
       this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell} })
     }, 1000)
   }
