@@ -31,6 +31,7 @@ class Grid extends React.Component {
     for (let i = 0; i < rows; i++) {
       let row = []
       for (let x = 0; x < cols; x++) {
+
         row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
         <div className='gridItem' style={{opacity: 0.4, flex:1, border: '0px dashed #7d725f'}}></div>
         </div>)

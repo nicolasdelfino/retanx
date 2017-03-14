@@ -3,7 +3,7 @@ import TrackPattern from './TrackPattern'
 
 class Tracks extends React.Component {
   render() {
-    let w = 10
+    let w = 14
     let h = this.props.specs.height
     let trackLip = 4
 

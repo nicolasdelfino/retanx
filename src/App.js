@@ -22,36 +22,90 @@ class MainConnect extends React.Component {
 
   constructor(props) {
     super(props)
-    this.timer = null,
+    this.timer = null
     this.state = {
       isAiming: false
     }
   }
 
-  getRandomPos() {
-    let foundFreeSlot = false
-    let posX, posY
-    do {
-      posX = Math.floor(Math.random() * 9) // TODO get values from grid
-      posY = Math.floor(Math.random() * 5)
+  getRandomPos3() {
+    // let posX = Math.floor(Math.random() * 9)
+    // lets posY = Math.floor(Math.random() * 5)
 
-      if(this.props.tanks.length === 0) {
-        foundFreeSlot = true
-        return {x: posX, y: posY}
-      }
+    // let randomPosIsTaken = this.props.tanks.forEach((tank) => {
+    //   if(tank.position.x === posX && tank.position.y === posY) {
+    //     return true
+    //   }
+    // })
 
-      foundFreeSlot = true
-      this.props.tanks.forEach((tank) => {
-        if(tank.position.x === posX && tank.position.y === posY) {
-          foundFreeSlot = false
+    let amount = 10
+    let w = DIMENSIONS().width / amount
+    let h = DIMENSIONS().height / amount
+    let cols = h / (amount)
+    let rows = w / (amount)
+    let grid = []
+    for (let i = 0; i < rows; i++) {
+      for (let x = 0; x < cols; x++) {
+
+        if(this.props.tanks.length > 0) {
+          for(var t = 0; t < this.props.tanks; t++) {
+            let tank = this.props.tanks[t]
+            if(tank.position.x !== i && tank.position.y !== x) {
+              grid.push({x:i,y:x})
+            }
+          }
         }
-      })
-
-    } while (!foundFreeSlot);
-
-    if(foundFreeSlot) {
-      return {x: posX, y: posY}
+        else {
+          grid.push({x:i,y:x})
+        }
+      }
     }
+
+    console.log(grid)
+
+    return grid[Math.floor(Math.random() * grid.length-1)]
+  }
+
+  isPositionAvaliable(position) {
+    let isAvailable = true
+    this.props.tanks.forEach((tank, index) => {
+      if(tank.position.x === position.x && tank.position.y === position.y) {
+        isAvailable = false
+      }
+    })
+
+    return isAvailable
+  }
+
+  getRandomPosition() {
+    return {
+      x: Math.floor(Math.random() * 10),
+      y: Math.floor(Math.random() * 6)
+    }
+  }
+
+  getRandomPos() {
+    let foundPosition = false
+    let position = null
+    // let numTries = 0
+    let maxTries = 9 * 5
+
+    if(this.props.tanks.length === 0) {
+      return this.getRandomPosition()
+    }
+
+    for(var i = 0; i < maxTries; i++) {
+      position = this.getRandomPosition()
+      // eslint-disable-next-line
+      foundPosition = this.isPositionAvaliable(position)
+
+      if(foundPosition) {
+        break;
+      }
+      // numTries++;
+    }
+    // console.log('numTries', numTries, 'maxTries', maxTries)
+    return foundPosition ? position : undefined
   }
 
   // background: '#383838',
@@ -60,6 +114,12 @@ class MainConnect extends React.Component {
 
   addTank() {
     let tankPosition = this.getRandomPos()
+
+    if(!tankPosition) {
+      console.log('no available position for a unit')
+      return
+    }
+
     const tankUnit = {
       id: this.props.tanks.length,
       aimTarget: {x: 0, y: 0},
@@ -68,7 +128,7 @@ class MainConnect extends React.Component {
       height: Math.floor(Math.random() * 50) + 45,
       cannonSize: Math.floor(Math.random() * 100) + 70,
       background: '#131313',
-      cabineColor: '#494242',
+      cabineColor: '#470606',
       cannonColor: '#463d3d',
       rotate: 'true',
       selected: false
@@ -205,7 +265,7 @@ class MainConnect extends React.Component {
       return null
     }
 
-    let tank = this.props.tanks[this.props.currentSelectionID]
+    // let tank = this.props.tanks[this.props.currentSelectionID]
     return (
       <div style={{...specsStyle}}>
         <div style={{padding: 20, fontSize: 10, background: 'transparent', color: '#ccc', cursor: 'pointer'}} onClick={() => {
