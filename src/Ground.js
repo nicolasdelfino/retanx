@@ -74,7 +74,7 @@ class Ground extends React.Component {
         if(this.isCellInUse(i,x) ) {
           row.push(
             <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '2px solid #ffffff', flexDirection: 'row'}}>
+              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid #ffffff', flexDirection: 'row'}}>
               </div>
             </div>
           )
@@ -82,7 +82,7 @@ class Ground extends React.Component {
         else {
           row.push(
             <div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
-              <div style={{opacity: 1, flex:1, border: '1px solid #05e400', flexDirection: 'row', justifyContent: 'space-around'}}>
+              <div style={{opacity: 1, flex:1, border: '1px solid black', flexDirection: 'row', justifyContent: 'space-around'}}>
                 <div style={{display: 'flex', flex:1, background: 'transparent', height: size / 2, flexDirection: 'row'}}>
                   <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2}}>
                     <span className="cell xy">{cell.x}, {cell.y}</span>
@@ -116,7 +116,7 @@ class Ground extends React.Component {
           {this.renderGround()}
         </div>
         <div style={{
-          display: 'flex', position: 'absolute', top: 0, left: 0, opacity: 0.4,
+          display: 'flex', position: 'absolute', top: 0, left: 0, opacity: 1,
           width: Dimensions().width, height: Dimensions().height, flexDirection: 'row',
           pointerEvents: 'none'
         }}>
