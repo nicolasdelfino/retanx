@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { connect } from 'react-redux'
-import Grid from './Grid'
+import Ground from './Ground'
 import TankPosition from './tank/TankPosition'
 import Body from './tank/Body'
 import Cannon from './tank/Cannon'
@@ -9,6 +9,9 @@ import Tracks from './tank/Tracks'
 import Outline from './tank/Outline'
 import SpecsView from './tank/SpecsView'
 import DIMENSIONS from './Dimensions'
+
+import { Grid } from './Grid'
+let _grid = null
 
 const mainStyle = {
   width: DIMENSIONS().width, height: DIMENSIONS().height,
@@ -28,44 +31,6 @@ class MainConnect extends React.Component {
     }
   }
 
-  getRandomPos3() {
-    // let posX = Math.floor(Math.random() * 9)
-    // lets posY = Math.floor(Math.random() * 5)
-
-    // let randomPosIsTaken = this.props.tanks.forEach((tank) => {
-    //   if(tank.position.x === posX && tank.position.y === posY) {
-    //     return true
-    //   }
-    // })
-
-    let amount = 10
-    let w = DIMENSIONS().width / amount
-    let h = DIMENSIONS().height / amount
-    let cols = h / (amount)
-    let rows = w / (amount)
-    let grid = []
-    for (let i = 0; i < rows; i++) {
-      for (let x = 0; x < cols; x++) {
-
-        if(this.props.tanks.length > 0) {
-          for(var t = 0; t < this.props.tanks; t++) {
-            let tank = this.props.tanks[t]
-            if(tank.position.x !== i && tank.position.y !== x) {
-              grid.push({x:i,y:x})
-            }
-          }
-        }
-        else {
-          grid.push({x:i,y:x})
-        }
-      }
-    }
-
-    console.log(grid)
-
-    return grid[Math.floor(Math.random() * grid.length-1)]
-  }
-
   isPositionAvaliable(position) {
     let isAvailable = true
     this.props.tanks.forEach((tank, index) => {
@@ -73,7 +38,6 @@ class MainConnect extends React.Component {
         isAvailable = false
       }
     })
-
     return isAvailable
   }
 
@@ -87,7 +51,6 @@ class MainConnect extends React.Component {
   getRandomPos() {
     let foundPosition = false
     let position = null
-    // let numTries = 0
     let maxTries = 9 * 5
 
     if(this.props.tanks.length === 0) {
@@ -102,15 +65,9 @@ class MainConnect extends React.Component {
       if(foundPosition) {
         break;
       }
-      // numTries++;
     }
-    // console.log('numTries', numTries, 'maxTries', maxTries)
     return foundPosition ? position : undefined
   }
-
-  // background: '#383838',
-  // cabineColor: '#383838',
-  // cannonColor: '#696868',
 
   addTank() {
     let tankPosition = this.getRandomPos()
@@ -128,8 +85,8 @@ class MainConnect extends React.Component {
       height: Math.floor(Math.random() * 50) + 45,
       cannonSize: Math.floor(Math.random() * 100) + 70,
       background: '#131313',
-      cabineColor: '#470606',
-      cannonColor: '#463d3d',
+      cabineColor: '#32237d',
+      cannonColor: '#6262da',
       rotate: 'true',
       selected: false
     }
@@ -142,12 +99,13 @@ class MainConnect extends React.Component {
   }
 
   componentDidMount() {
+    _grid = Grid.getInstance()
     this.addTank()
   }
 
   coordinates(pos, width, height) {
     // console.log('pos', pos)
-    let size = DIMENSIONS().width / 10
+    let size = DIMENSIONS().width / _grid.getDivider()
     return {
       x: pos.x * size + (size / 2 - width / 2),
       y: pos.y * size + (size / 2 - height / 2)
@@ -191,8 +149,6 @@ class MainConnect extends React.Component {
       units.push(
         <div id={'tank_' + index} key={index}>
         <div style={{'cursor': 'pointer'}} onClick={() => {
-          console.log('tankUnit', tankUnit)
-
           if(this.state.isAiming) {
             return
           }
@@ -202,7 +158,7 @@ class MainConnect extends React.Component {
           }
           else {
             this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
-            // deselct all other units
+            // deselect all other units
             this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
           }
          }}>
@@ -225,12 +181,16 @@ class MainConnect extends React.Component {
     return units
   }
 
+
   moveToCell(cell) {
     if(!this.props.tanks[this.props.currentSelectionID].selected) {
       return null
     }
 
     // TODO - A* ?
+    console.log('A* Algorithm')
+
+    // return
 
     // Clear aim time each time a new aim action is called (takes 1 second to aim)
     clearTimeout(this.timer)
@@ -278,7 +238,7 @@ class MainConnect extends React.Component {
     )
   }
 
-  renderGrid() {
+  renderGround() {
     if(this.props.tanks.length === 0) {
       return null
     }
@@ -290,7 +250,7 @@ class MainConnect extends React.Component {
       }
     })
     return (
-      <Grid debug={this.props.debugMode} tanks={this.props.tanks} cursor={sel ? 'crosshair' : 'normal'}
+      <Ground debug={this.props.debugMode} tanks={this.props.tanks} cursor={sel ? 'crosshair' : 'normal'}
       aim={this.moveToCell.bind(this)}/>
     )
   }
@@ -304,7 +264,7 @@ class MainConnect extends React.Component {
         </div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
-          {this.renderGrid()}
+          {this.renderGround()}
           {/* TANK  */}
           {this.renderTanks()}
           {/* SPECS VIEW  */}

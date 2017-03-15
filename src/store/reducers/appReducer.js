@@ -2,7 +2,7 @@ const initState = {
   aimTarget: {x: 0, y: 0},
   detailsView: false,
   currentSelectionID: 0,
-  debugMode: false
+  debugMode: true
 }
 
 //put aim target here and change aimTarget within a tank reducer to point to target?
