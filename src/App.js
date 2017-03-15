@@ -188,7 +188,7 @@ class MainConnect extends React.Component {
     }
 
     // TODO - A* ?
-    console.log('A* Algorithm')
+    console.log('A* Algorithm', _grid.getGrid())
 
     // return
 

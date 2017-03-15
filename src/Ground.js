@@ -19,19 +19,15 @@ class Ground extends React.Component {
   }
 
   renderGround() {
-    let map = _grid.getGrid()
     let amount = _grid.getDivider()
-    let w = Dimensions().width / amount
-    let h = Dimensions().height / amount
     let rows = _grid.getRows()
     let cols = _grid.getCols()
+    let size = Dimensions().width / amount
     let grid = []
     let borderColor = '#efefef'
 
-    console.log('rows', rows, 'cols', cols)
-
     const cellStyle = {
-      display: 'flex', fontSize:10, color: '#ccc',width: w, height: w, background: 'black', border: '0px solid ' + borderColor
+      display: 'flex', fontSize:10, color: '#ccc',width: size, height: size, background: 'black', border: '0px solid ' + borderColor
     }
 
     for (let i = 0; i < cols; i++) {
@@ -59,17 +55,14 @@ class Ground extends React.Component {
 
   renderDebug() {
     let amount = _grid.getDivider()
-    let w = Dimensions().width / amount
-    let h = Dimensions().height / amount
+    let size = Dimensions().width / amount
     let rows = _grid.getRows()
     let cols = _grid.getCols()
     let grid = []
     let borderColor = '#efefef'
 
-    console.log('w', w)
-
     const cellStyle = {
-      display: 'flex', fontSize:12, color: '#05e400',width: w, height: w, background: 'transparent', border: '0px solid ' + borderColor
+      display: 'flex', fontSize:12, color: '#05e400',width: size, height: size, background: 'transparent', border: '0px solid ' + borderColor
     }
 
     for (let i = 0; i < cols; i++) {
