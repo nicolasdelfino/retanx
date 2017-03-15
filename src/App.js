@@ -8,13 +8,13 @@ import Cannon from './tank/Cannon'
 import Tracks from './tank/Tracks'
 import Outline from './tank/Outline'
 import SpecsView from './tank/SpecsView'
-import DIMENSIONS from './Dimensions'
+// import Dimensions from './Dimensions'
 
-import { Grid } from './Grid'
+import { Dimensions, Grid } from './Grid'
 let _grid = null
 
 const mainStyle = {
-  width: DIMENSIONS().width, height: DIMENSIONS().height,
+  width: Dimensions().width, height: Dimensions().height,
   color: '#fff',
   background: '#e8e8e8',
   position: 'relative',
@@ -43,8 +43,8 @@ class MainConnect extends React.Component {
 
   getRandomPosition() {
     return {
-      x: Math.floor(Math.random() * 10),
-      y: Math.floor(Math.random() * 6)
+      x: Math.floor(Math.random() * Dimensions().width / 100),
+      y: Math.floor(Math.random() * Dimensions().height / 100)
     }
   }
 
@@ -105,7 +105,7 @@ class MainConnect extends React.Component {
 
   coordinates(pos, width, height) {
     // console.log('pos', pos)
-    let size = DIMENSIONS().width / _grid.getDivider()
+    let size = Dimensions().width / _grid.getDivider()
     return {
       x: pos.x * size + (size / 2 - width / 2),
       y: pos.y * size + (size / 2 - height / 2)
@@ -217,7 +217,7 @@ class MainConnect extends React.Component {
     const specsStyle = {
       display: 'flex',
       position: 'absolute', top:0, zIndex: 300,
-      width: DIMENSIONS().width, height: DIMENSIONS().height,
+      width: Dimensions().width, height: Dimensions().height,
       background: 'rgba(252, 27, 27, 0.5)',
       justifyContent: 'center', alignItems: 'center'
     }

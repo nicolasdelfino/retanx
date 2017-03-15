@@ -7,10 +7,10 @@ import Cannon from './Cannon'
 import Tracks from './Tracks'
 import Outline from './Outline'
 import SpecsView from './SpecsView'
-import DIMENSIONS from '../Dimensions'
+import { Dimensions } from '../Grid'
 
 const mainStyle = {
-  width: DIMENSIONS().width, height: DIMENSIONS().height,
+  width: Dimensions().width, height: Dimensions().height,
   color: '#fff',
   background: '#e8e8e8',
   position: 'relative',
@@ -31,7 +31,7 @@ class MainConnect extends React.Component {
   }
 
   coordinates(pos, width, height) {
-    let size = DIMENSIONS().width / 10
+    let size = Dimensions().width / 10
     return {
       x: pos.x * size + (size / 2 - width / 2),
       y: pos.y * size + (size / 2 - height / 2)
@@ -120,7 +120,7 @@ class MainConnect extends React.Component {
     const specsStyle = {
       display: 'flex',
       position: 'absolute', top:0, zIndex: 300,
-      width: DIMENSIONS().width, height: DIMENSIONS().height,
+      width: Dimensions().width, height: Dimensions().height,
       background: 'rgba(252, 27, 27, 0.5)',
       justifyContent: 'center', alignItems: 'center'
     }

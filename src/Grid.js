@@ -1,12 +1,21 @@
 // Grid singleton
-import DIMENSIONS from './Dimensions'
-
 function CELL() {
   this.x = 0
   this.y = 0
+
+  this.f = 0
+  this.g = 0
+  this.h = 0
+
   this.row = 0
   this.col = 0
 }
+
+export const Dimensions = () => ({
+  width: 1000,
+  height: 100,
+  divider: 10
+})
 
 export const Grid = function() {
 
@@ -15,11 +24,11 @@ export const Grid = function() {
   function createGrid() {
 
      var grid = []
-     let divider = 10
-     let w = DIMENSIONS().width / divider
-     let h = DIMENSIONS().height / divider
+     let divider = Dimensions().divider
+     let w = Dimensions().width / divider
+     let h = Dimensions().height / divider
      let cols = divider
-     let rows = 7
+     let rows = Dimensions().height / 100
 
      for(var i = 0; i < cols; i++) {
        grid[i] = new Array(rows)
