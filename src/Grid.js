@@ -1,8 +1,8 @@
 // Grid singleton
 export const Dimensions = () => ({
-  width: 1000,
+  width: 600,
   height: 300,
-  divider: 10
+  divider: 6
 })
 
 function Cell() {

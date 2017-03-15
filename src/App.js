@@ -77,13 +77,14 @@ class MainConnect extends React.Component {
       return
     }
 
+    let randomize = false
     const tankUnit = {
       id: this.props.tanks.length,
       aimTarget: {x: 0, y: 0},
       position: tankPosition,
-      width: Math.floor(Math.random() * 45) + 40,
-      height: Math.floor(Math.random() * 50) + 45,
-      cannonSize: Math.floor(Math.random() * 100) + 70,
+      width: randomize ? Math.floor(Math.random() * 45) + 40 : 40,
+      height: randomize ? Math.floor(Math.random() * 50) + 45 : 50,
+      cannonSize: randomize ? Math.floor(Math.random() * 100) + 70 : 65,
       background: '#131313',
       cabineColor: '#32237d',
       cannonColor: '#6262da',

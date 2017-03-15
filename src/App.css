@@ -2,6 +2,21 @@
   text-align: center;
 }
 
+.cell {
+  padding: 5px;
+  font-size: 15px;
+}
+
+.fval {
+  color: red;
+}
+.gval {
+  color: yellow;
+}
+.hval {
+  color: cyan;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;

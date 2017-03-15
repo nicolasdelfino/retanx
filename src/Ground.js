@@ -72,14 +72,36 @@ class Ground extends React.Component {
         var cell = _grid.getGrid()[i][x]
 
         if(this.isCellInUse(i,x) ) {
-          row.push(<div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-          <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid #05e400'}}>{cell.x},{cell.y}</div>
-          </div>)
+          row.push(
+            <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
+              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '2px solid #ffffff', flexDirection: 'row'}}>
+              </div>
+            </div>
+          )
         }
         else {
-          row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
-          <div style={{opacity: 1, flex:1, border: '0px dashed #7d725f'}}>{cell.x},{cell.y}</div>
-          </div>)
+          row.push(
+            <div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
+              <div style={{opacity: 1, flex:1, border: '1px solid #05e400', flexDirection: 'row', justifyContent: 'space-around'}}>
+                <div style={{display: 'flex', flex:1, background: 'transparent', height: size / 2, flexDirection: 'row'}}>
+                  <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2}}>
+                    <span className="cell xy">{cell.x}, {cell.y}</span>
+                  </div>
+                  <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, justifyContent: 'flex-end'}}>
+                    <span className="cell fval">F:{cell.f}</span>
+                  </div>
+                </div>
+                <div style={{display: 'flex', flex:1, background: 'transparent', height: size / 2, flexDirection: 'row'}}>
+                  <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, alignItems:'flex-end'}}>
+                    <span className="cell gval">G:{cell.g}</span>
+                  </div>
+                  <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, justifyContent: 'flex-end', alignItems:'flex-end'}}>
+                    <span className="cell hval">H:{cell.h}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
         }
       }
       grid.push(<div key={i} style={{flexDirection: 'row'}}>{row}</div>)
