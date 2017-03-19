@@ -5,7 +5,7 @@ class Tank extends React.Component {
       <div style={{
         position: 'absolute',
         left: this.props.position.x, top: this.props.position.y,
-        'transition': 'all 2s ease'
+        'transition': 'all 1s ease'
 
       }}>
         {this.props.children}

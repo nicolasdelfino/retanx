@@ -1,19 +1,11 @@
+import { Cell } from './Cell'
+
 // Grid singleton
 export const Dimensions = () => ({
-  width: 600,
-  height: 300,
-  divider: 6
+  width: 900,
+  height: 500,
+  divider: 9
 })
-
-function Cell() {
-  this.x = 0
-  this.y = 0
-  this.f = 0
-  this.g = 0
-  this.h = 0
-  this.row = 0
-  this.col = 0
-}
 
 export const Grid = function() {
 
@@ -28,12 +20,28 @@ export const Grid = function() {
      for(var s = 0; s < cols; s++) {
        grid[s] = new Array(rows)
        for(var a = 0; a < rows; a++) {
-         let cell = new Cell()
+         let cell = new Cell(Dimensions)
          cell.x = s
          cell.y = a
          cell.row = s
          cell.col = a
          grid[s][a] = cell
+       }
+     }
+
+     function addCellNeighbors() {
+       for(var e = 0; e < cols; e++) {
+         for(var r = 0; r < rows; r++) {
+           grid[e][r].addNeighbors(grid)
+         }
+       }
+     }
+
+     function resetCells() {
+       for(var e = 0; e < cols; e++) {
+         for(var r = 0; r < rows; r++) {
+           grid[e][r].reset()
+         }
        }
      }
 
@@ -51,7 +59,9 @@ export const Grid = function() {
         setGrid: setGrid,
         getCols: getCols,
         getRows: getRows,
-        getDivider: getDivider
+        getDivider: getDivider,
+        resetCells: resetCells,
+        addCellNeighbors: addCellNeighbors
      }
   }
 

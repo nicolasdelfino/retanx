@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { connect } from 'react-redux'
-import Ground from './Ground'
+import Ground from './grid/Ground'
 import TankPosition from './tank/TankPosition'
 import Body from './tank/Body'
 import Cannon from './tank/Cannon'
@@ -10,7 +10,8 @@ import Outline from './tank/Outline'
 import SpecsView from './tank/SpecsView'
 // import Dimensions from './Dimensions'
 
-import { Dimensions, Grid } from './Grid'
+import { Dimensions, Grid } from './grid/Grid'
+import { AStar } from './grid/AStar'
 let _grid = null
 
 const mainStyle = {
@@ -42,9 +43,12 @@ class MainConnect extends React.Component {
   }
 
   getRandomPosition() {
+    let columns = _grid.getCols()
+    let rows = _grid.getRows()
+    // console.log('columns', columns, 'rows', rows)
     return {
-      x: Math.floor(Math.random() * Dimensions().width / 100),
-      y: Math.floor(Math.random() * Dimensions().height / 100)
+      x: Math.floor(Math.random() * columns),
+      y: Math.floor(Math.random() * rows)
     }
   }
 
@@ -188,10 +192,30 @@ class MainConnect extends React.Component {
       return null
     }
 
-    // TODO - A* ?
-    console.log('A* Algorithm', _grid.getGrid())
+    // Do A*
+    let unit  = this.props.tanks[this.props.currentSelectionID]
+    let start = _grid.getGrid()[unit.position.x][unit.position.y]
 
-    // return
+    // make sure that start cell isn´t a wall
+    _grid.getGrid()[unit.position.x][unit.position.y].wall = false // FIX ?
+
+    let end   = _grid.getGrid()[cell.y][cell.x]
+
+    // eslint-disable-next-line
+    let path = AStar(_grid, start, end)
+    console.log('A* path', path)
+
+    if(path.length === 0) {
+      console.warn('No a * solution found')
+      return
+    }
+
+    
+
+    // path.reverse()
+    // path.forEach((pathCell, index) => {
+    //   let target = _grid.getGrid()[pathCell.y][pathCell.x]
+    // })
 
     // Clear aim time each time a new aim action is called (takes 1 second to aim)
     clearTimeout(this.timer)
@@ -203,7 +227,7 @@ class MainConnect extends React.Component {
     this.timer = setTimeout(() => {
       this.setState({ isAiming: false })
       this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell} })
-    }, 1000)
+    }, 500)
   }
 
   showSpecs() {

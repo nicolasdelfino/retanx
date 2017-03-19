@@ -15,7 +15,7 @@
   color: green;
 }
 .hval {
-  color: blue;
+  color: yellow;
 }
 
 .App-logo {
@@ -45,9 +45,18 @@
   /*background-size: 110px 110px;*/
   /*background: #000;*/
   /*outline: 1px solid green;*/
+  background-size: 100px 100px;
   flex: 1;
   transition: all 0s ease;
 }
+
+.gridItemWall {
+  background-image: url("./stone_wall.jpg");
+  flex: 1;
+  background-size: 100px 100px;
+  transition: all 0s ease;
+}
+
 
 @keyframes fade {
   0%,100% { opacity: 0.2 }

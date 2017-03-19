@@ -33,9 +33,19 @@ class Ground extends React.Component {
     for (let i = 0; i < cols; i++) {
       let row = []
       for (let x = 0; x < rows; x++) {
-        row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
-        <div className='gridItem' style={{opacity: 0.4, flex:1, border: '0px dashed #7d725f'}}></div>
-        </div>)
+        var cell = _grid.getGrid()[i][x]
+        if(cell.wall) {
+          row.push(<div key={x} style={{ ...cellStyle, background: 'black' }} >
+            <div className='gridItemWall' style={{opacity: 1, flex:1, border: '0px dashed #7d725f', color: 'white'}}>
+              wall
+            </div>
+          </div>)
+        }
+        else {
+          row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
+          <div className='gridItem' style={{opacity: 1, flex:1, border: '0px dashed #7d725f'}}></div>
+          </div>)
+        }
       }
       grid.push(<div key={i} style={{flexDirection: 'row'}}>{row}</div>)
     }
@@ -70,8 +80,8 @@ class Ground extends React.Component {
       for (let x = 0; x < rows; x++) {
 
         var cell = _grid.getGrid()[i][x]
-
-        if(this.isCellInUse(i,x) ) {
+        var a = false
+        if(a && this.isCellInUse(i,x) ) {
           row.push(
             <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
               <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid #ffffff', flexDirection: 'row'}}>
@@ -79,13 +89,31 @@ class Ground extends React.Component {
             </div>
           )
         }
+        else if(cell.isPath && cell.isPathDirectionTurn) {
+          row.push(
+            <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
+              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid yellow', flexDirection: 'row'}}>
+              </div>
+            </div>
+          )
+        }
+        else if(cell.isPath) {
+          row.push(
+            <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
+              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px dotted red', flexDirection: 'row'}}>
+              {cell.tempPathString}
+              </div>
+            </div>
+          )
+        }
         else {
+          // {cell.x}, {cell.y}
           row.push(
             <div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
               <div style={{opacity: 1, flex:1, border: '1px solid black', flexDirection: 'row', justifyContent: 'space-around'}}>
                 <div style={{display: 'flex', flex:1, background: 'transparent', height: size / 2, flexDirection: 'row'}}>
                   <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2}}>
-                    <span className="cell xy">{cell.x}, {cell.y}</span>
+                    <span className="cell xy"></span>
                   </div>
                   <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, justifyContent: 'flex-end'}}>
                     <span className="cell fval">F:{cell.f}</span>
