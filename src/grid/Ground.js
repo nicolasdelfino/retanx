@@ -37,7 +37,6 @@ class Ground extends React.Component {
         if(cell.wall) {
           row.push(<div key={x} style={{ ...cellStyle, background: 'black' }} >
             <div className='gridItemWall' style={{opacity: 1, flex:1, border: '0px dashed #7d725f', color: 'white'}}>
-              wall
             </div>
           </div>)
         }

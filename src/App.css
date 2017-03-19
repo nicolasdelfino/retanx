@@ -40,7 +40,7 @@
 }
 
 .gridItem {
-  background-image: url("./stone.jpg");
+  background-image: url("./tile_stone.jpg");
   /*background-image: url("./dirt.gif");*/
   /*background-size: 110px 110px;*/
   /*background: #000;*/
@@ -51,7 +51,7 @@
 }
 
 .gridItemWall {
-  background-image: url("./stone_wall.jpg");
+  background-image: url("./tile_wall.jpg");
   flex: 1;
   background-size: 100px 100px;
   transition: all 0s ease;
