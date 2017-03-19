@@ -8,7 +8,8 @@ import Cannon from './tank/Cannon'
 import Tracks from './tank/Tracks'
 import Outline from './tank/Outline'
 import SpecsView from './tank/SpecsView'
-// import Dimensions from './Dimensions'
+
+// import randomColor from 'randomcolor'
 
 import { Dimensions, Grid } from './grid/Grid'
 import { AStar } from './grid/AStar'
@@ -28,17 +29,27 @@ class MainConnect extends React.Component {
     super(props)
     this.timer = null
     this.state = {
-      isAiming: false
+      isAiming: false,
+      isFollowingPath: true,
+      forceValUpdate: 0
     }
   }
 
   isPositionAvaliable(position) {
     let isAvailable = true
+
+    if(_grid.suggestedPositionIsAnObstacleCell(position)) {
+      return false
+    }
+
+    // check units
     this.props.tanks.forEach((tank, index) => {
       if(tank.position.x === position.x && tank.position.y === position.y) {
         isAvailable = false
       }
     })
+
+
     return isAvailable
   }
 
@@ -73,6 +84,27 @@ class MainConnect extends React.Component {
     return foundPosition ? position : undefined
   }
 
+  shadeColor(color, percent) {
+
+      var R = parseInt(color.substring(1,3),16)
+      var G = parseInt(color.substring(3,5),16)
+      var B = parseInt(color.substring(5,7),16)
+
+      R = parseInt(R * (100 + percent) / 100, 10)
+      G = parseInt(G * (100 + percent) / 100, 10)
+      B = parseInt(B * (100 + percent) / 100, 10)
+
+      R = (R<255)?R:255;
+      G = (G<255)?G:255;
+      B = (B<255)?B:255;
+
+      var RR = ((R.toString(16).length===1)?"0"+R.toString(16):R.toString(16));
+      var GG = ((G.toString(16).length===1)?"0"+G.toString(16):G.toString(16));
+      var BB = ((B.toString(16).length===1)?"0"+B.toString(16):B.toString(16));
+
+      return "#"+RR+GG+BB;
+  }
+
   addTank() {
     let tankPosition = this.getRandomPos()
 
@@ -81,19 +113,26 @@ class MainConnect extends React.Component {
       return
     }
 
+    // let rc = randomColor({
+    //     luminosity: 'light',
+    //     hue: 'blue'
+    // });
+    //
+    // rc = '#0066CC'
+
     let randomize = false
     const tankUnit = {
-      id: this.props.tanks.length,
-      aimTarget: {x: 0, y: 0},
-      position: tankPosition,
-      width: randomize ? Math.floor(Math.random() * 45) + 40 : 40,
-      height: randomize ? Math.floor(Math.random() * 50) + 45 : 50,
-      cannonSize: randomize ? Math.floor(Math.random() * 100) + 70 : 65,
-      background: '#131313',
-      cabineColor: '#32237d',
-      cannonColor: '#6262da',
-      rotate: 'true',
-      selected: false
+      id:           this.props.tanks.length,
+      aimTarget:    {x: 0, y: 0},
+      position:     tankPosition,
+      width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,
+      height:       randomize ? Math.floor(Math.random() * 50) + 45 : 50,
+      cannonSize:   randomize ? Math.floor(Math.random() * 100) + 70 : 70,
+      background:   '#254871',
+      cabineColor:  '#3B71A6',
+      cannonColor:  '#3B71A6',
+      rotate:       'true',
+      selected:     false
     }
 
     this.props.dispatch({ type: 'ADD_TANK', payload: tankUnit})
@@ -186,48 +225,106 @@ class MainConnect extends React.Component {
     return units
   }
 
+  followPath(start, path) {
+    path.reverse()
+
+    let end = path[path.length -1]
+    let animationCells = []
+
+    clearTimeout(this.timer)
+
+    for(var i = 0; i < path.length; i ++) {
+      if(i > 0 && i < path.length -1) {
+        let current = path[i]
+        let previous = path[i -1]
+        let next = path[i +1]
+        if(previous.x !== next.x && previous.y !== next.y) {
+          animationCells.push(current)
+        }
+      }
+    }
+
+    animationCells.push(end)
+    // console.log('animationCells', animationCells, animationCells.length)
+
+    animationCells.forEach((item, index) => {
+      item.tempPathString = index
+      let delay = index * 1500
+      this.timer = setTimeout(() => {
+        // console.log('pos', _grid.getPositionForCell(item))
+        let position = {
+          x: item.y,
+          y: item.x
+        }
+
+
+        // aim cannon
+        this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position } })
+
+        // move unit
+        setTimeout(() => {
+          this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position}})
+        }, 500)
+
+      }, delay)
+    })
+
+
+    this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
+
+    // reset
+  }
+
 
   moveToCell(cell) {
     if(!this.props.tanks[this.props.currentSelectionID].selected) {
       return null
     }
 
-    // Do A*
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // A* - Wikipedia source: https://en.wikipedia.org/wiki/A*_search_algorithm
+    //////////////////////////////////////////////////////////////////////////////////////////
+
     let unit  = this.props.tanks[this.props.currentSelectionID]
     let start = _grid.getGrid()[unit.position.x][unit.position.y]
-
-    // make sure that start cell isn´t a wall
-    _grid.getGrid()[unit.position.x][unit.position.y].wall = false // FIX ?
-
     let end   = _grid.getGrid()[cell.y][cell.x]
 
-    // eslint-disable-next-line
-    let path = AStar(_grid, start, end)
+    // make sure that start cell isn´t a wall
+    start.obstacle = false
+    start.showObstacle = false
+
+    let path = AStar(_grid, start, end, this.props.tanks, this.props.currentSelectionID)
     console.log('A* path', path)
 
     if(path.length === 0) {
       console.warn('No a * solution found')
+
+      // aim cannon
+      this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell } })
+
       return
     }
 
-    
+    // follow shortest path to destination
+    this.followPath(start, path)
 
-    // path.reverse()
-    // path.forEach((pathCell, index) => {
-    //   let target = _grid.getGrid()[pathCell.y][pathCell.x]
-    // })
+    // <- A* end
 
-    // Clear aim time each time a new aim action is called (takes 1 second to aim)
-    clearTimeout(this.timer)
-    // Move cannon action (aim)
-    this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell } })
-    this.setState({ isAiming: true })
+    // No A*, just click and move (bird path)
+    let autoMove = false
+    if(autoMove) {
+      // Clear aim time each time a new aim action is called (takes 1 second to aim)
+      clearTimeout(this.timer)
+      // Move cannon action (aim)
+      this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell } })
+      this.setState({ isAiming: true })
 
-    // Wait for aim animation to finish
-    this.timer = setTimeout(() => {
-      this.setState({ isAiming: false })
-      this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell} })
-    }, 500)
+      // Wait for aim animation to finish
+      this.timer = setTimeout(() => {
+        this.setState({ isAiming: false })
+        this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell}})
+      }, 500)
+    }
   }
 
   showSpecs() {

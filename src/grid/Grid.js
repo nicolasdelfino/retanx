@@ -45,6 +45,34 @@ export const Grid = function() {
        }
      }
 
+     function getPositionForCell(cell) {
+       return grid[cell.x][cell.y].position
+     }
+
+     function makeObstaclesOfInactiveUnits(units, startIndex) {
+       let n = units.filter((unit, index) => {
+         return index !== startIndex
+       })
+
+       for(var e = 0; e < cols; e++) {
+         for(var r = 0; r < rows; r++) {
+           grid[e][r].reset()
+
+           // eslint-disable-next-line
+           n.forEach((unit) => {
+             if(grid[e][r].x === unit.position.x && grid[e][r].y === unit.position.y ) {
+               console.warn('obstacle found', grid[e][r])
+               grid[e][r].obstacle = true
+             }
+           })
+         }
+       }
+     }
+
+     function suggestedPositionIsAnObstacleCell(position) {
+       return grid[position.x][position.y].obstacle
+     }
+
      //getters
      function getGrid() { return grid }
      function getCols() { return cols }
@@ -61,7 +89,10 @@ export const Grid = function() {
         getRows: getRows,
         getDivider: getDivider,
         resetCells: resetCells,
-        addCellNeighbors: addCellNeighbors
+        addCellNeighbors: addCellNeighbors,
+        getPositionForCell: getPositionForCell,
+        makeObstaclesOfInactiveUnits: makeObstaclesOfInactiveUnits,
+        suggestedPositionIsAnObstacleCell: suggestedPositionIsAnObstacleCell
      }
   }
 

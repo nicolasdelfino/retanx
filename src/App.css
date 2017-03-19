@@ -10,12 +10,15 @@
 
 .fval {
   color: red;
+  opacity: 0.8;
 }
 .gval {
   color: green;
+  opacity: 0.8;
 }
 .hval {
   color: yellow;
+  opacity: 0.8;
 }
 
 .App-logo {
@@ -50,8 +53,26 @@
   transition: all 0s ease;
 }
 
-.gridItemWall {
-  background-image: url("./tile_wall.jpg");
+.gridItemObstacle0 {
+  background-image: url("./tile_wall0.jpg");
+  flex: 1;
+  background-size: 100px 100px;
+  transition: all 0s ease;
+}
+.gridItemObstacle1 {
+  background-image: url("./tile_wall1.jpg");
+  flex: 1;
+  background-size: 100px 100px;
+  transition: all 0s ease;
+}
+.gridItemObstacle2 {
+  background-image: url("./tile_wall2.jpg");
+  flex: 1;
+  background-size: 100px 100px;
+  transition: all 0s ease;
+}
+.gridItemObstacle3 {
+  background-image: url("./tile_wall3.jpg");
   flex: 1;
   background-size: 100px 100px;
   transition: all 0s ease;

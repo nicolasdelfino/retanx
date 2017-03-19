@@ -18,6 +18,11 @@ class Ground extends React.Component {
     this.props.aim({x: i, y: x})
   }
 
+  getRandomObstacleCell() {
+    return 'gridItemObstacle0'
+    // return 'gridItemObstacle' + Math.floor(Math.random() * 3)
+  }
+
   renderGround() {
     let amount = _grid.getDivider()
     let rows = _grid.getRows()
@@ -34,9 +39,9 @@ class Ground extends React.Component {
       let row = []
       for (let x = 0; x < rows; x++) {
         var cell = _grid.getGrid()[i][x]
-        if(cell.wall) {
+        if(cell.obstacle && cell.showObstacle) {
           row.push(<div key={x} style={{ ...cellStyle, background: 'black' }} >
-            <div className='gridItemWall' style={{opacity: 1, flex:1, border: '0px dashed #7d725f', color: 'white'}}>
+            <div className={this.getRandomObstacleCell()} style={{opacity: 1, flex:1, border: '0px dashed #7d725f', color: 'white'}}>
             </div>
           </div>)
         }
@@ -98,7 +103,7 @@ class Ground extends React.Component {
         }
         else if(cell.isPath) {
           row.push(
-            <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
+            <div key={x} style={{ ...cellStyle, background: 'rgba(255,0,0,.05)', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
               <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px dotted red', flexDirection: 'row'}}>
               {cell.tempPathString}
               </div>

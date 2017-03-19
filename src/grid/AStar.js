@@ -1,9 +1,13 @@
 // A* pathfinding
-export let AStar = (_grid, start, end) => {
+export let AStar = (_grid, start, end, units, currentSelectionID) => {
   console.log('A*')
 
   // Reset score of cells
   _grid.resetCells()
+
+  // pass tanks to grid and make them obstacles
+  _grid.makeObstaclesOfInactiveUnits(units, currentSelectionID)
+  
   // Add possible cell neighbors
   _grid.addCellNeighbors()
 
@@ -47,7 +51,7 @@ export let AStar = (_grid, start, end) => {
     for(var j = 0; j < neighbors.length; j++) {
       var neighbor = neighbors[j]
 
-      if(!closedSet.includes(neighbor) && !neighbor.wall) {
+      if(!closedSet.includes(neighbor) && !neighbor.obstacle) {
         let tentativeG = current.g + 1
         if(openSet.includes(neighbor)) {
           if(tentativeG < neighbor.g) {

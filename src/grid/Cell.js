@@ -11,10 +11,12 @@ export const Cell = function(Dimensions) {
   this.isPath     = false
   this.isPathDirectionTurn = false
   this.tempPathString = ''
-  this.wall = false
+  this.obstacle = false
+  this.showObstacle = false
 
   if((Math.floor(Math.random() * 100) + 1) < 22) {
-    this.wall = true
+    this.obstacle = true
+    this.showObstacle = true
   }
 
   this.addNeighbors = function(grid) {
@@ -22,7 +24,7 @@ export const Cell = function(Dimensions) {
     let _y = this.y
 
     this.addDefaultNeighbors(grid, _x, _y)
-    this.addDiagonalNeighbors(grid, _x, _y)
+    // this.addDiagonalNeighbors(grid, _x, _y) <- TODO
   }
 
   this.addDefaultNeighbors = function(grid, _x, _y) {
@@ -64,5 +66,6 @@ export const Cell = function(Dimensions) {
     this.isPath = false
     this.isPathDirectionTurn = false
     this.tempPathString = ''
+    // this.obstacle = false
   }
 }
