@@ -1,3 +1,3 @@
-## Battle tanks - redux
+## RETANX
 
-Something something react tank game with redux 
+React redux tanks & A*
