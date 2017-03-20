@@ -31,9 +31,12 @@ class MainConnect extends React.Component {
     this.state = {
       isAiming: false,
       isFollowingPath: true,
-      forceValUpdate: 0
+      forceValUpdate: 0,
+      shooting: false
     }
+
   }
+
 
   isPositionAvaliable(position) {
     let isAvailable = true
@@ -113,12 +116,17 @@ class MainConnect extends React.Component {
       return
     }
 
-    // let rc = randomColor({
-    //     luminosity: 'light',
-    //     hue: 'blue'
-    // });
-    //
-    // rc = '#0066CC'
+    // Colors
+    let baseBlue = '#131313'
+    let baseRed = '#131313'
+    let cabinBlue = '#32237d'
+    let cabinRed = '#7d2333'
+    let cannonBlue = '#6262da'
+    let cannonRed = '#d61818'
+
+    let baseColor = this.props.tanks.length % 2 ? baseBlue : baseRed
+    let cabinColor = this.props.tanks.length % 2 ? cabinBlue : cabinRed
+    let cannonColor = this.props.tanks.length % 2 ? cannonBlue : cannonRed
 
     let randomize = false
     const tankUnit = {
@@ -128,9 +136,9 @@ class MainConnect extends React.Component {
       width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,
       height:       randomize ? Math.floor(Math.random() * 50) + 45 : 50,
       cannonSize:   randomize ? Math.floor(Math.random() * 100) + 70 : 70,
-      background:   '#254871',
-      cabineColor:  '#3B71A6',
-      cannonColor:  '#3B71A6',
+      background:   baseColor,
+      cabineColor:  cabinColor,
+      cannonColor:  cannonColor,
       rotate:       'true',
       selected:     false
     }
@@ -157,7 +165,6 @@ class MainConnect extends React.Component {
   }
 
   aimDegrees(tank) {
-    // console.warn('tank', tank)
     let position = tank.position
     let p1 = {
       x: tank.aimTarget.x,
@@ -178,6 +185,10 @@ class MainConnect extends React.Component {
 
   getSpeed(position) {
     // TODO TRAVEL SPEED
+  }
+
+  getIsTankShooting(unit, id) {
+    return (unit.selected) && (this.props.currentSelectionID === id) && (this.state.shooting) ? true : false
   }
 
   renderTanks() {
@@ -210,7 +221,7 @@ class MainConnect extends React.Component {
             <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={this.aimDegrees(tankUnit)}>
               <Tracks specs={tankUnit}/>
             </Body>
-            <Cannon specs={tankUnit} rotate={shouldRotate} rotation={this.aimDegrees(tankUnit)}/>
+            <Cannon specs={tankUnit} rotate={shouldRotate} rotation={this.aimDegrees(tankUnit)} shooting={this.getIsTankShooting(tankUnit, index)}/>
           </TankPosition>
           <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={this.aimDegrees(tankUnit)}/>
           </div>
@@ -271,7 +282,6 @@ class MainConnect extends React.Component {
 
 
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
-
     // reset
   }
 
@@ -377,6 +387,22 @@ class MainConnect extends React.Component {
     )
   }
 
+  shoot() {
+    document.body.onkeydown = (e) => {
+        if(e.keyCode === 32){
+            if(!this.state.shooting) {
+              this.setState({ shooting: true })
+            }
+        }
+    }
+
+    document.body.onkeyup = (e) => {
+        if(e.keyCode === 32){
+            this.setState({ shooting: false })
+        }
+    }
+  }
+
 	render() {
     return (
       <div>
@@ -391,6 +417,8 @@ class MainConnect extends React.Component {
           {this.renderTanks()}
           {/* SPECS VIEW  */}
           {this.renderSpecsView()}
+          {/* SPACEBAR */}
+          {this.shoot()}
         </div>
       </div>
     )

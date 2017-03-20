@@ -13,6 +13,15 @@ class Cannon extends React.Component {
     }
   }
 
+  shoot() {
+    if(!this.props.shooting) {
+      return null
+    }
+    return (
+      <div className='beam' />
+    )
+  }
+
   render() {
     const cannonSpecs = {
       width: 8,
@@ -62,6 +71,7 @@ class Cannon extends React.Component {
         <div style={{...inner}} />
         <div style={{...hatch}} />
         <div style={{...hatchKnob}} />
+        {this.shoot()}
       </div>
     )
   }

@@ -61,7 +61,7 @@ export const Grid = function() {
            // eslint-disable-next-line
            n.forEach((unit) => {
              if(grid[e][r].x === unit.position.x && grid[e][r].y === unit.position.y ) {
-               console.warn('obstacle found', grid[e][r])
+              //  console.warn('obstacle found', grid[e][r])
                grid[e][r].obstacle = true
              }
            })

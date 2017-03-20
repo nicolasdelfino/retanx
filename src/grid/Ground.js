@@ -104,7 +104,7 @@ class Ground extends React.Component {
         else if(cell.isPath) {
           row.push(
             <div key={x} style={{ ...cellStyle, background: 'rgba(255,0,0,.05)', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px dotted red', flexDirection: 'row'}}>
+              <div className='debugItemCell' style={{flex:1, color: '#eb840c', border: '1px dotted red', flexDirection: 'row'}}>
               {cell.tempPathString}
               </div>
             </div>

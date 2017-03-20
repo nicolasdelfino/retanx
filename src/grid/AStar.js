@@ -7,7 +7,7 @@ export let AStar = (_grid, start, end, units, currentSelectionID) => {
 
   // pass tanks to grid and make them obstacles
   _grid.makeObstaclesOfInactiveUnits(units, currentSelectionID)
-  
+
   // Add possible cell neighbors
   _grid.addCellNeighbors()
 
@@ -38,6 +38,7 @@ export let AStar = (_grid, start, end, units, currentSelectionID) => {
       while(tempCell.previous) {
         tempCell.isPath = true
         tempCell.tempPathString = tempCell.x + ',' + tempCell.y
+        tempCell.tempPathString = ''
         path.push(tempCell.previous)
         tempCell = tempCell.previous
       }
