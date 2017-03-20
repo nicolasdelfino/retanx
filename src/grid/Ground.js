@@ -143,7 +143,7 @@ class Ground extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='ground'>
         <div className={this.props.cursor} style={{display: 'flex', width: Dimensions().width, height: Dimensions().height, flexDirection: 'row'}}>
           {this.renderGround()}
         </div>

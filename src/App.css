@@ -89,7 +89,7 @@ html {
 }
 
 body {
-  background: black;
+  background: #1d1d1d;
   display: flex;
   align-self: center;
   justify-content: center;
@@ -121,4 +121,26 @@ body {
   1% { opacity: 1; width: 100px; top: 100px; }
   99% { width: 0px; top: 350px; }
   100% { opacity: 0}
+}
+
+.logo {
+  position: absolute;
+  top: -120px;
+  left: 200px;
+}
+
+.ground {
+  outline: 1px solid #095745;
+}
+
+button {
+  background: #095745;
+  color: white;
+  border: none;
+  margin-right: 10px;
+  height: 20px;
+  user-select: none;
+  cursor: pointer;
+  display: inline-block;
+  outline: none;
 }

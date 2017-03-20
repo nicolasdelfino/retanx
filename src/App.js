@@ -9,6 +9,8 @@ import Tracks from './tank/Tracks'
 import Outline from './tank/Outline'
 import SpecsView from './tank/SpecsView'
 
+import logo from './retanx.png'
+
 // import randomColor from 'randomcolor'
 
 import { Dimensions, Grid } from './grid/Grid'
@@ -282,7 +284,6 @@ class MainConnect extends React.Component {
 
 
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
-    // reset
   }
 
 
@@ -317,8 +318,6 @@ class MainConnect extends React.Component {
 
     // follow shortest path to destination
     this.followPath(start, path)
-
-    // <- A* end
 
     // No A*, just click and move (bird path)
     let autoMove = false
@@ -387,7 +386,7 @@ class MainConnect extends React.Component {
     )
   }
 
-  shoot() {
+  handleKeyInput() {
     document.body.onkeydown = (e) => {
         if(e.keyCode === 32){
             if(!this.state.shooting) {
@@ -401,6 +400,10 @@ class MainConnect extends React.Component {
             this.setState({ shooting: false })
         }
     }
+  }
+
+  renderLogo() {
+    return <div className='logo'><img src={logo} alt='logo'/></div>
   }
 
 	render() {
@@ -418,7 +421,9 @@ class MainConnect extends React.Component {
           {/* SPECS VIEW  */}
           {this.renderSpecsView()}
           {/* SPACEBAR */}
-          {this.shoot()}
+          {this.handleKeyInput()}
+          {/* RETANX LOGO */}
+          {this.renderLogo()}
         </div>
       </div>
     )
