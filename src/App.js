@@ -166,11 +166,11 @@ class MainConnect extends React.Component {
     }
   }
 
-  aimDegrees(tank) {
+  aimDegrees(tank, aimTarget) {
     let position = tank.position
     let p1 = {
-      x: tank.aimTarget.x,
-      y: tank.aimTarget.y
+      x: aimTarget.x,
+      y: aimTarget.y
     }
     let p2 = {
       x: position.x,
@@ -182,6 +182,12 @@ class MainConnect extends React.Component {
     var angle = Math.atan2(deltaX, deltaY) * (180.0 / Math.PI);
 
     let a =  Math.abs(180 - ( angle ))
+
+    //Adjust angle to take the closest turn (eg if current tank angle is 0 and new angle should be 270, go -90 instead)
+    if (a < 0) a += 360;
+    if (a > 360) a -= 360;
+    if (a - tank.angle > 180) a -= 360;
+    if (a - tank.angle < -180) a += 360;
     return a
   }
 
@@ -202,6 +208,7 @@ class MainConnect extends React.Component {
       let position      = tankUnit.position
       let width         = tankUnit.width
       let height        = tankUnit.height
+      let angle         = tankUnit.angle;
 
       units.push(
         <div id={'tank_' + index} key={index}>
@@ -220,18 +227,18 @@ class MainConnect extends React.Component {
           }
          }}>
           <TankPosition position={this.coordinates(position, width, height)} >
-            <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={this.aimDegrees(tankUnit)}>
+            <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
               <Tracks specs={tankUnit}/>
             </Body>
-            <Cannon specs={tankUnit} rotate={shouldRotate} rotation={this.aimDegrees(tankUnit)} shooting={this.getIsTankShooting(tankUnit, index)}/>
+            <Cannon specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsTankShooting(tankUnit, index)}/>
           </TankPosition>
-          <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={this.aimDegrees(tankUnit)}/>
+          <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
           </div>
           <SpecsView specs={tankUnit}
           details={this.showSpecs.bind(this)}
           rotate={shouldRotate}
           position={this.coordinates(position, width, height)}
-          rotation={this.aimDegrees(tankUnit)}/>
+          rotation={angle}/>
         </div>
       )
     })
@@ -272,7 +279,7 @@ class MainConnect extends React.Component {
 
 
         // aim cannon
-        this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position } })
+        this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], { x: position.y, y: position.x }) } })
 
         // move unit
         setTimeout(() => {

@@ -16,7 +16,7 @@ const tanks = (state = initState, action) => {
       ...state,
       units: [
         ...state.units.slice(0, action.payload.id),
-        { ...specs, aimTarget: { x:action.payload.target.y, y: action.payload.target.x }, rotate: 'true' },
+        { ...specs, aimTarget: { x:action.payload.target.y, y: action.payload.target.x }, rotate: 'true', angle: action.payload.angle },
         ...state.units.slice(action.payload.id + 1),
       ],
     }
