@@ -36,9 +36,7 @@ class MainConnect extends React.Component {
       forceValUpdate: 0,
       shooting: false
     }
-
   }
-
 
   isPositionAvaliable(position) {
     let isAvailable = true
@@ -53,7 +51,6 @@ class MainConnect extends React.Component {
         isAvailable = false
       }
     })
-
 
     return isAvailable
   }
@@ -277,7 +274,6 @@ class MainConnect extends React.Component {
           y: item.x
         }
 
-
         // aim cannon
         this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], { x: position.y, y: position.x }) } })
 
@@ -289,10 +285,8 @@ class MainConnect extends React.Component {
       }, delay)
     })
 
-
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
   }
-
 
   moveToCell(cell) {
     if(!this.props.tanks[this.props.currentSelectionID].selected) {
