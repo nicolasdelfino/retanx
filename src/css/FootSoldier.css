@@ -1,0 +1,175 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0px; }
+
+.main {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background: #13280b; }
+
+.unitWrapper {
+  position: relative;
+  background: #0d1c08;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: rotateUnit 20s infinite;
+  border-radius: 100px; }
+  .unitWrapper .unit {
+    zoom: 0.8; }
+    .unitWrapper .unit .body {
+      width: 100px;
+      height: 70px;
+      background: #696e77;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible; }
+      .unitWrapper .unit .body .arms {
+        display: flex;
+        position: absolute;
+        flex: 1;
+        width: 150px;
+        height: 50px;
+        background: #4e5e7a;
+        flex-direction: row;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        justify-content: space-between; }
+        .unitWrapper .unit .body .arms .arm {
+          display: flex;
+          width: 30px;
+          height: 50px;
+          border-bottom-left-radius: 10px;
+          border-bottom-right-radius: 10px; }
+          .unitWrapper .unit .body .arms .arm.left {
+            background: #303c51;
+            z-index: -1; }
+          .unitWrapper .unit .body .arms .arm.right {
+            background: #303c51;
+            z-index: -1; }
+      .unitWrapper .unit .body .head {
+        position: relative;
+        background: #2a477c;
+        width: 50px;
+        height: 60px;
+        border-radius: 10px;
+        margin-top: -20px; }
+
+.walking .body {
+  animation: walking-body 0.3s infinite; }
+
+.walking .arm.left {
+  animation: walking-arm-left 0.3s infinite; }
+
+.walking .arm.right {
+  animation: walking-arm-right 0.3s infinite; }
+
+.walking .head {
+  animation: walking-head 0.3s infinite; }
+
+@keyframes walking-body {
+  0% {
+    transform: rotate(-5deg); }
+  50% {
+    transform: rotate(5deg); }
+  100% {
+    transform: rotate(-5deg); } }
+
+@keyframes walking-arm-left {
+  0% {
+    margin-top: 0px; }
+  50% {
+    margin-top: -20px; }
+  100% {
+    margin-top: 0px; } }
+
+@keyframes walking-arm-right {
+  0% {
+    margin-top: -20px; }
+  50% {
+    margin-top: 0px; }
+  100% {
+    margin-top: -20px; } }
+
+@keyframes walking-head {
+  0% {
+    transform: rotate(8deg); }
+  50% {
+    transform: rotate(-8deg); }
+  100% {
+    transform: rotate(8deg); } }
+
+.shooting .body {
+  transform: rotate(-30deg);
+  animation: shooting-body 0.3s infinite; }
+
+.shooting .arm.left {
+  margin-top: -30px;
+  margin-left: 10px;
+  transform: rotate(50deg); }
+
+.shooting .arm.right {
+  margin-top: -30px;
+  margin-left: 0px;
+  transform: rotate(-30deg); }
+
+.shooting .head {
+  transform: rotate(30deg);
+  animation: shooting-head 0.2s infinite; }
+
+.shooting .gunWrapper {
+  position: relative; }
+  .shooting .gunWrapper .gun {
+    width: 60px;
+    height: 50px;
+    background: #73757a;
+    position: absolute;
+    top: -25px;
+    left: 0px;
+    z-index: -1;
+    animation: shooting-gun 0.1s infinite; }
+    .shooting .gunWrapper .gun .barrel {
+      position: absolute;
+      width: 30px;
+      height: 120px;
+      background: #73757a;
+      top: -70px;
+      left: 20px;
+      border-top: 10px solid #93959b; }
+
+@keyframes shooting-gun {
+  0% {
+    margin-top: 0px; }
+  75% {
+    margin-top: -5px; }
+  100% {
+    margin-top: 0px; } }
+
+@keyframes shooting-body {
+  0% {
+    margin-top: 0px; }
+  35% {
+    margin-top: -15px; }
+  100% {
+    margin-top: 0px; } }
+
+@keyframes shooting-head {
+  0% {
+    margin-top: 0px; }
+  35% {
+    margin-top: -5px; }
+  100% {
+    margin-top: 0px; } }
+
+@keyframes rotateUnit {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
