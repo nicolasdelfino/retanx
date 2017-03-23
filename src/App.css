@@ -45,32 +45,32 @@
 }
 
 .gridItem {
-  background-image: url("./tile_stone.jpg");
+  background-image: url("./assets/tile_stone.jpg");
   background-size: 100px 100px;
   flex: 1;
   transition: all 0s ease;
 }
 
 .gridItemObstacle0 {
-  background-image: url("./tile_wall0.jpg");
+  background-image: url("./assets/tile_wall0.jpg");
   flex: 1;
   background-size: 100px 100px;
   transition: all 0s ease;
 }
 .gridItemObstacle1 {
-  background-image: url("./tile_wall1.jpg");
+  background-image: url("./assets/tile_wall1.jpg");
   flex: 1;
   background-size: 100px 100px;
   transition: all 0s ease;
 }
 .gridItemObstacle2 {
-  background-image: url("./tile_wall2.jpg");
+  background-image: url("./assets/tile_wall2.jpg");
   flex: 1;
   background-size: 100px 100px;
   transition: all 0s ease;
 }
 .gridItemObstacle3 {
-  background-image: url("./tile_wall3.jpg");
+  background-image: url("./assets/tile_wall3.jpg");
   flex: 1;
   background-size: 100px 100px;
   transition: all 0s ease;
@@ -142,7 +142,7 @@ body {
   height: 100px;
   top: 0px;
   left: 0px;
-  background-image: url("./explosion.gif");
+  background-image: url("./assets/explosion.gif");
 }
 
 .logo {

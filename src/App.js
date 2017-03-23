@@ -9,8 +9,8 @@ import Tracks from './tank/Tracks'
 import Outline from './tank/Outline'
 import SpecsView from './tank/SpecsView'
 
-import sound_pew from './pew.mp3'
-import sound_explosion from './explosion.mp3'
+import sound_pew from './assets/pew.mp3'
+import sound_explosion from './assets/explosion.mp3'
 import logo from './retanx.png'
 
 // import randomColor from 'randomcolor'
@@ -40,9 +40,7 @@ class MainConnect extends React.Component {
       shooting: false,
       refresh: 0
     }
-
   }
-
 
   isPositionAvaliable(position) {
     let isAvailable = true
@@ -57,7 +55,6 @@ class MainConnect extends React.Component {
         isAvailable = false
       }
     })
-
 
     return isAvailable
   }
@@ -185,7 +182,6 @@ class MainConnect extends React.Component {
     let deltaX = p2.x - p1.x
     let deltaY = p2.y - p1.y
     var angle = Math.atan2(deltaX, deltaY) * (180.0 / Math.PI);
-
     let a =  Math.abs(180 - ( angle ))
 
     //Adjust angle to take the closest turn (eg if current tank angle is 0 and new angle should be 270, go -90 instead)
@@ -282,7 +278,6 @@ class MainConnect extends React.Component {
           y: item.x
         }
 
-
         // aim cannon
         this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], { x: position.y, y: position.x }) } })
 
@@ -294,10 +289,8 @@ class MainConnect extends React.Component {
       }, delay)
     })
 
-
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
   }
-
 
   moveToCell(cell) {
     if(!this.props.tanks[this.props.currentSelectionID].selected) {
