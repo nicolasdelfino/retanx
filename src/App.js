@@ -316,7 +316,7 @@ class MainConnect extends React.Component {
       console.warn('No a * solution found')
 
       // aim cannon
-      this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell } })
+      this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], {x:cell.y, y:cell.x }) } })
 
       return
     }
@@ -339,6 +339,17 @@ class MainConnect extends React.Component {
         this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell}})
       }, 500)
     }
+  }
+
+  aimOnCell(cell) {
+    if(!this.props.tanks[this.props.currentSelectionID].selected) {
+      return null
+    }
+    console.log('aiming')
+    // aim cannon
+
+    this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], {x:cell.y, y:cell.x }) } })
+
   }
 
   showSpecs() {
@@ -387,7 +398,7 @@ class MainConnect extends React.Component {
     })
     return (
       <Ground debug={this.props.debugMode} tanks={this.props.tanks} cursor={sel ? 'crosshair' : 'normal'}
-      aim={this.moveToCell.bind(this)}/>
+      aim={this.aimOnCell.bind(this)} move={this.moveToCell.bind(this)}/>
     )
   }
 

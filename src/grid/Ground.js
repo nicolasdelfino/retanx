@@ -14,8 +14,13 @@ class Ground extends React.Component {
     _grid = Grid.getInstance()
   }
 
-  clickCell(i,x) {
-    this.props.aim({x: i, y: x})
+  clickCell(i,x,isAvailable) {
+    if(isAvailable) {
+      this.props.move({x: i, y: x})
+    }
+    else {
+      this.props.aim({x: i, y: x})
+    }
   }
 
   getRandomObstacleCell() {
@@ -49,14 +54,14 @@ class Ground extends React.Component {
       for (let x = 0; x < rows; x++) {
         var cell = _grid.getGrid()[i][x]
         if(cell.obstacle && cell.showObstacle) {
-          row.push(<div key={x} style={{ ...cellStyle, background: 'black' }} >
+          row.push(<div key={x} style={{ ...cellStyle, background: 'black' }} onClick={() => this.clickCell(x,i,false)}>
             <div className={this.getRandomObstacleCell()} style={{opacity: 1, flex:1, border: '0px dashed #7d725f', color: 'white'}}>
               {this.renderExplosion(cell.isExploding)}
             </div>
           </div>)
         }
         else {
-          row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
+          row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i,true)}>
           <div className='gridItem' style={{opacity: 1, flex:1, border: '0px dashed #7d725f'}}></div>
           </div>)
         }
