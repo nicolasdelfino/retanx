@@ -8,6 +8,7 @@ import Cannon from './units/tank/Cannon'
 import Tracks from './units/tank/Tracks'
 import Outline from './units/tank/Outline'
 import SpecsView from './units/tank/SpecsView'
+import FootSoldier from './units/soldiers/FootSoldier'
 
 import sound_pew from './assets/pew.mp3'
 import sound_explosion from './assets/explosion.mp3'
