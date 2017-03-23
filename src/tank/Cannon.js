@@ -22,6 +22,15 @@ class Cannon extends React.Component {
     )
   }
 
+  lasersight() {
+    if (!this.props.debug) {
+      return null
+    }
+    return (
+      <div className='lasersight' />
+    )
+  }
+
   render() {
     const cannonSpecs = {
       width: 8,
@@ -72,6 +81,7 @@ class Cannon extends React.Component {
         <div style={{...hatch}} />
         <div style={{...hatchKnob}} />
         {this.shoot()}
+        {this.lasersight()}
       </div>
     )
   }
