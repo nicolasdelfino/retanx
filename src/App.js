@@ -9,6 +9,8 @@ import Tracks from './units/tank/Tracks'
 import Outline from './units/tank/Outline'
 import SpecsView from './units/tank/SpecsView'
 
+import sound_pew from './assets/pew.mp3'
+import sound_explosion from './assets/explosion.mp3'
 import logo from './retanx.png'
 
 // import randomColor from 'randomcolor'
@@ -30,15 +32,15 @@ class MainConnect extends React.Component {
   constructor(props) {
     super(props)
     this.timer = null
+    this.shootingTimer = null
     this.state = {
       isAiming: false,
       isFollowingPath: true,
       forceValUpdate: 0,
-      shooting: false
+      shooting: false,
+      refresh: 0
     }
-
   }
-
 
   isPositionAvaliable(position) {
     let isAvailable = true
@@ -53,7 +55,6 @@ class MainConnect extends React.Component {
         isAvailable = false
       }
     })
-
 
     return isAvailable
   }
@@ -142,7 +143,8 @@ class MainConnect extends React.Component {
       cabineColor:  cabinColor,
       cannonColor:  cannonColor,
       rotate:       'true',
-      selected:     false
+      selected:     false,
+      angle:        0
     }
 
     this.props.dispatch({ type: 'ADD_TANK', payload: tankUnit})
@@ -180,7 +182,6 @@ class MainConnect extends React.Component {
     let deltaX = p2.x - p1.x
     let deltaY = p2.y - p1.y
     var angle = Math.atan2(deltaX, deltaY) * (180.0 / Math.PI);
-
     let a =  Math.abs(180 - ( angle ))
 
     //Adjust angle to take the closest turn (eg if current tank angle is 0 and new angle should be 270, go -90 instead)
@@ -230,7 +231,7 @@ class MainConnect extends React.Component {
             <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
               <Tracks specs={tankUnit}/>
             </Body>
-            <Cannon specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsTankShooting(tankUnit, index)}/>
+            <Cannon debug={this.props.debugMode} specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsTankShooting(tankUnit, index)}/>
           </TankPosition>
           <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
           </div>
@@ -277,7 +278,6 @@ class MainConnect extends React.Component {
           y: item.x
         }
 
-
         // aim cannon
         this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], { x: position.y, y: position.x }) } })
 
@@ -289,10 +289,8 @@ class MainConnect extends React.Component {
       }, delay)
     })
 
-
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
   }
-
 
   moveToCell(cell) {
     if(!this.props.tanks[this.props.currentSelectionID].selected) {
@@ -398,6 +396,8 @@ class MainConnect extends React.Component {
         if(e.keyCode === 32){
             if(!this.state.shooting) {
               this.setState({ shooting: true })
+              this.handleShotFired()
+              this.shootingTimer = setInterval(() => { this.handleShotFired(); }, 300)
             }
         }
     }
@@ -405,9 +405,67 @@ class MainConnect extends React.Component {
     document.body.onkeyup = (e) => {
         if(e.keyCode === 32){
             this.setState({ shooting: false })
+            clearInterval(this.shootingTimer)
         }
     }
   }
+
+  handleShotFired() {
+    //Pew
+    (new Audio(sound_pew)).play();
+
+    //Calculate target area
+    let beamWidth = 0.5/2;
+    let tank = this.props.tanks[this.props.currentSelectionID];
+    let targetArea = [[
+        tank.position.x + 0.5 + (beamWidth * Math.sin((tank.angle + 90) * (Math.PI / 180))),
+        tank.position.y + 0.5 + (beamWidth * Math.cos((tank.angle + 90) * (Math.PI / 180)))
+      ],[
+        tank.position.x + 0.5 + (beamWidth * Math.sin((tank.angle - 90) * (Math.PI / 180))),
+        tank.position.y + 0.5 + (beamWidth * Math.cos((tank.angle - 90) * (Math.PI / 180)))
+      ]
+    ];
+    let range = 5;
+    targetArea.push([
+        targetArea[1][0] + -(range * Math.sin((tank.angle) * (Math.PI / 180))),
+        targetArea[1][1] + (range * Math.cos((tank.angle) * (Math.PI / 180)))
+    ]);
+    targetArea.push([
+        targetArea[0][0] + -(range * Math.sin((tank.angle) * (Math.PI / 180))),
+        targetArea[0][1] + (range * Math.cos((tank.angle) * (Math.PI / 180)))
+    ]);
+
+    //Find obstacles within target area, and blow em up!
+    let grid = _grid.getGrid();
+    for (let x = 0; x < grid.length; x++) {
+      for (let y = 0; y < grid[x].length; y++) {
+        if (grid[x][y].obstacle) {
+          if (this.pointInPolygon(x+0.5, y+0.5, targetArea)) {
+            (new Audio(sound_explosion)).play();
+            grid[x][y].isExploding = true;
+            this.setState({refresh: this.state.refresh+1}); //TODO: Ugly-ass-hack, make the cell a state component instead?
+            setTimeout(() => {
+              grid[x][y].isExploding = false;
+              grid[x][y].obstacle = false;
+              this.setState({refresh: this.state.refresh+1});
+            }, 800);
+          }
+        }
+      }
+    }
+  }
+
+  //https://github.com/substack/point-in-polygon
+  pointInPolygon(x, y, polygon) {
+    var inside = false;
+    for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      var xi = polygon[i][0], yi = polygon[i][1];
+      var xj = polygon[j][0], yj = polygon[j][1];
+      var intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  };
 
   renderLogo() {
     return <div className='logo'><img src={logo} alt='logo'/></div>
