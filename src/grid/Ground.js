@@ -23,6 +23,15 @@ class Ground extends React.Component {
     // return 'gridItemObstacle' + Math.floor(Math.random() * 3)
   }
 
+  renderExplosion(isExploding) {
+    if (!isExploding) {
+      return null;
+    }
+    return (
+      <div className='explosion' />
+    )
+  }
+
   renderGround() {
     let amount = _grid.getDivider()
     let rows = _grid.getRows()
@@ -42,6 +51,7 @@ class Ground extends React.Component {
         if(cell.obstacle && cell.showObstacle) {
           row.push(<div key={x} style={{ ...cellStyle, background: 'black' }} >
             <div className={this.getRandomObstacleCell()} style={{opacity: 1, flex:1, border: '0px dashed #7d725f', color: 'white'}}>
+              {this.renderExplosion(cell.isExploding)}
             </div>
           </div>)
         }
