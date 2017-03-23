@@ -2,12 +2,12 @@ import React from 'react';
 import './App.css';
 import { connect } from 'react-redux'
 import Ground from './grid/Ground'
-import TankPosition from './tank/TankPosition'
-import Body from './tank/Body'
-import Cannon from './tank/Cannon'
-import Tracks from './tank/Tracks'
-import Outline from './tank/Outline'
-import SpecsView from './tank/SpecsView'
+import TankPosition from './units/tank/TankPosition'
+import Body from './units/tank/Body'
+import Cannon from './units/tank/Cannon'
+import Tracks from './units/tank/Tracks'
+import Outline from './units/tank/Outline'
+import SpecsView from './units/tank/SpecsView'
 
 import logo from './retanx.png'
 
