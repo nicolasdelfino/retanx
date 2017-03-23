@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './css/App.css';
 import { connect } from 'react-redux'
 import Ground from './grid/Ground'
 import TankPosition from './units/tank/TankPosition'
@@ -279,7 +279,10 @@ class MainConnect extends React.Component {
         }
 
         // aim cannon
-        this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], { x: position.y, y: position.x }) } })
+        this.props.dispatch({type: 'AIM', payload: {
+          id: this.props.tanks[this.props.currentSelectionID].id,
+          target: position,
+          angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], { x: position.y, y: position.x }) }})
 
         // move unit
         setTimeout(() => {
@@ -316,7 +319,10 @@ class MainConnect extends React.Component {
       console.warn('No a * solution found')
 
       // aim cannon
-      this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], {x:cell.y, y:cell.x }) } })
+      this.props.dispatch({type: 'AIM', payload: {
+        id: this.props.tanks[this.props.currentSelectionID].id,
+        target: cell,
+        angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], {x:cell.y, y:cell.x }) }})
 
       return
     }
