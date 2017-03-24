@@ -14,7 +14,7 @@ export const Grid = function() {
   function createGrid() {
      var grid     = []
      let divider  = Dimensions().divider
-     let cols     = divider
+     let cols     = Dimensions().width / 100
      let rows     = Dimensions().height / 100
 
      for(var s = 0; s < cols; s++) {

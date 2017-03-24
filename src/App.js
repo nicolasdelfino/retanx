@@ -14,11 +14,12 @@ import sound_pew from './assets/pew.mp3'
 import sound_explosion from './assets/explosion.mp3'
 import logo from './retanx.png'
 
-// import randomColor from 'randomcolor'
-
 import { Dimensions, Grid } from './grid/Grid'
 import { AStar } from './grid/AStar'
 let _grid = null
+
+import { UnitUtils } from './units/utils/UnitUtils'
+let unitUtils = UnitUtils.getInstance()
 
 const mainStyle = {
   width: Dimensions().width, height: Dimensions().height,
@@ -43,80 +44,11 @@ class MainConnect extends React.Component {
     }
   }
 
-  isPositionAvaliable(position) {
-    let isAvailable = true
-
-    if(_grid.suggestedPositionIsAnObstacleCell(position)) {
-      return false
-    }
-
-    // check units
-    this.props.units.forEach((tank, index) => {
-      if(tank.position.x === position.x && tank.position.y === position.y) {
-        isAvailable = false
-      }
-    })
-
-    return isAvailable
-  }
-
-  getRandomPosition() {
-    let columns = _grid.getCols()
-    let rows = _grid.getRows()
-    // console.log('columns', columns, 'rows', rows)
-    return {
-      x: Math.floor(Math.random() * columns),
-      y: Math.floor(Math.random() * rows)
-    }
-  }
-
-  getRandomPos() {
-    let foundPosition = false
-    let position = null
-    let maxTries = 9 * 5
-
-    if(this.props.units.length === 0) {
-      return this.getRandomPosition()
-    }
-
-    for(var i = 0; i < maxTries; i++) {
-      position = this.getRandomPosition()
-      // eslint-disable-next-line
-      foundPosition = this.isPositionAvaliable(position)
-
-      if(foundPosition) {
-        break;
-      }
-    }
-    return foundPosition ? position : undefined
-  }
-
-  shadeColor(color, percent) {
-
-      var R = parseInt(color.substring(1,3),16)
-      var G = parseInt(color.substring(3,5),16)
-      var B = parseInt(color.substring(5,7),16)
-
-      R = parseInt(R * (100 + percent) / 100, 10)
-      G = parseInt(G * (100 + percent) / 100, 10)
-      B = parseInt(B * (100 + percent) / 100, 10)
-
-      R = (R<255)?R:255;
-      G = (G<255)?G:255;
-      B = (B<255)?B:255;
-
-      var RR = ((R.toString(16).length===1)?"0"+R.toString(16):R.toString(16));
-      var GG = ((G.toString(16).length===1)?"0"+G.toString(16):G.toString(16));
-      var BB = ((B.toString(16).length===1)?"0"+B.toString(16):B.toString(16));
-
-      return "#"+RR+GG+BB;
-  }
-
   addTank() {
-    let tankPosition = this.getRandomPos()
+    let tankPosition = unitUtils.getRandomPos(this.props.units)
 
     if(!tankPosition) {
-      console.log('no available position for a unit')
+      console.log('no available position for unit')
       return
     }
 
