@@ -3,10 +3,10 @@ import * as TYPES from '../types/unitTypes'
 export const SoldierType = function() {
   // Type
   this.type        = TYPES.SOLDIER_TYPE
-
   // A* category
   this.aStar       = 'advanced'
-
+  // Rotate aim duration
+  this.aimDuration = 0
   // Colors
   this.torsoColor     = '#'
   this.shoulderColor  = '#'
@@ -14,7 +14,6 @@ export const SoldierType = function() {
   this.headColor      = '#'
   this.weaponColor    = '#'
   this.barrelColor    = '#'
-
   // Id & position
   this.id          = null
   this.position    = null
@@ -42,6 +41,7 @@ export const SoldierType = function() {
       type:           this.type,
       position:       this.position,
       aimTarget:      {x: 0, y: 0},
+      aimDuration:    this.aimDuration,
       width:          100,
       height:         100,
       torsoColor:     this.torsoColor,

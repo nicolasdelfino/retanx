@@ -16,7 +16,7 @@ export default class FootSoldier extends React.Component {
 
   render() {
     return (
-        <div className="unitWrapper shooting" style={{transform: 'rotate(' + this.state.rotation + 'deg)'}}>
+        <div className="unitWrapper" style={{transform: 'rotate(' + this.state.rotation + 'deg)'}}>
           <div id="soldier" className="unit">
             <div className="gunWrapper">
               <div className="gun">

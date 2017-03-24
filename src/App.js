@@ -68,6 +68,7 @@ class MainConnect extends React.Component {
   componentDidMount() {
     _grid = Grid.getInstance()
     this.addUnit(TYPES.TANK_TYPE)
+    // this.addUnit(TYPES.SOLDIER_TYPE)
   }
 
   coordinates(pos, width, height) {
@@ -195,6 +196,7 @@ class MainConnect extends React.Component {
 
     let end = path[path.length -1]
     let animationCells = []
+    let unit = this.props.units[this.props.currentSelectionID]
 
     clearTimeout(this.timer)
 
@@ -213,7 +215,7 @@ class MainConnect extends React.Component {
     // console.log('animationCells', animationCells, animationCells.length)
     animationCells.forEach((item, index) => {
       item.tempPathString = index
-      let delay = index * 1500
+      let delay = index * (1000 + this.props.units[this.props.currentSelectionID].aimDuration)
       this.timer = setTimeout(() => {
         // console.log('pos', _grid.getPositionForCell(item))
         let position = {
@@ -230,7 +232,7 @@ class MainConnect extends React.Component {
         // move unit
         setTimeout(() => {
           this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: position}})
-        }, 500)
+        }, this.props.units[this.props.currentSelectionID].aimDuration)
 
       }, delay)
     })

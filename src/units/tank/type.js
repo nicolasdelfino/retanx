@@ -3,10 +3,10 @@ import * as TYPES from '../types/unitTypes'
 export const TankType = function() {
   // Type
   this.type        = TYPES.TANK_TYPE
-
   // A* category
   this.aStar       = 'basic'
-
+  // Rotate aim duration
+  this.aimDuration = 2000
   // Colors
   this.baseBlue    = '#131313'
   this.baseRed     = '#131313'
@@ -17,11 +17,9 @@ export const TankType = function() {
   this.baseColor   = null
   this.cabinColor  = null
   this.cannonColor = null
-
   // Id & position
   this.id          = null
   this.position    = null
-
   // Randomize colors
   let randomize    = false
 
@@ -45,6 +43,7 @@ export const TankType = function() {
       type:         this.type,
       position:     this.position,
       aimTarget:    {x: 0, y: 0},
+      aimDuration:  this.aimDuration,
       width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,
       height:       randomize ? Math.floor(Math.random() * 50) + 45 : 50,
       cannonSize:   randomize ? Math.floor(Math.random() * 100) + 70 : 70,
