@@ -108,7 +108,7 @@ class MainConnect extends React.Component {
     // TODO TRAVEL SPEED
   }
 
-  getIsTankShooting(unit, id) {
+  getIsThisUnitShooting(unit, id) {
     return (unit.selected) && (this.props.currentSelectionID === id) && (this.state.shooting) ? true : false
   }
 
@@ -144,7 +144,7 @@ class MainConnect extends React.Component {
               <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
                 <Tracks specs={tankUnit}/>
               </Body>
-              <Cannon debug={this.props.debugMode} specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsTankShooting(tankUnit, index)}/>
+              <Cannon debug={this.props.debugMode} specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsThisUnitShooting(tankUnit, index)}/>
             </BasePosition>
             <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
             </div>
@@ -172,7 +172,7 @@ class MainConnect extends React.Component {
             }
            }}>
               <BasePosition position={this.coordinates(position, width, height)} >
-                <FootSoldier isShooting={this.state.shooting} isMoving={this.state.isMoving} specs={soldierUnit} rotate={shouldRotate} rotation={angle} />
+                <FootSoldier isShooting={this.getIsThisUnitShooting(soldierUnit, index)} isMoving={this.state.isMoving} specs={soldierUnit} rotate={shouldRotate} rotation={angle} />
               </BasePosition>
               <Outline specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
             </div>
