@@ -38,6 +38,7 @@ class MainConnect extends React.Component {
     this.shootingTimer = null
     this.state = {
       isAiming: false,
+      isMoving: false,
       isFollowingPath: true,
       forceValUpdate: 0,
       shooting: false,
@@ -172,7 +173,7 @@ class MainConnect extends React.Component {
             }
            }}>
               <BasePosition position={this.coordinates(position, width, height)} >
-                <FootSoldier rotate={shouldRotate} rotation={angle} />
+                <FootSoldier isShooting={this.state.shooting} isMoving={this.state.isMoving} specs={soldierUnit} rotate={shouldRotate} rotation={angle} />
               </BasePosition>
               <Outline specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
             </div>
@@ -223,6 +224,9 @@ class MainConnect extends React.Component {
           y: item.x
         }
 
+        // used for controlling walk animation
+        this.setState({ isMoving: false })
+
         // aim cannon
         this.props.dispatch({type: 'AIM', payload: {
           id: this.props.units[this.props.currentSelectionID].id,
@@ -231,7 +235,17 @@ class MainConnect extends React.Component {
 
         // move unit
         setTimeout(() => {
+          this.setState({ isMoving: true })
           this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: position}})
+
+          // check if animation end
+          if(index === animationCells.length -1) {
+            // TODO add travel duration (this.getSpeed())
+            setTimeout(() => {
+              this.setState({ isMoving: false })
+            }, 1000)
+          }
+
         }, this.props.units[this.props.currentSelectionID].aimDuration)
 
       }, delay)

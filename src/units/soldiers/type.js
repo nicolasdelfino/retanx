@@ -6,7 +6,7 @@ export const SoldierType = function() {
   // A* category
   this.aStar       = 'advanced'
   // Rotate aim duration
-  this.aimDuration = 0
+  this.aimDuration = 200
   // Colors
   this.torsoColor     = '#'
   this.shoulderColor  = '#'
