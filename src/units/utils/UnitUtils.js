@@ -1,5 +1,9 @@
 import { Grid } from '../../grid/Grid'
+import * as TYPES from '../types/unitTypes'
 let _grid = Grid.getInstance()
+
+// TYPES
+import { TankType } from '../tank/type'
 
 export const UnitUtils = function() {
   var instance = null
@@ -52,7 +56,10 @@ export const UnitUtils = function() {
     function getUnit(unitType, unitPosition, units) {
       let unit = null
       switch (unitType) {
-        case 'TANK':
+        case TYPES.TANK_TYPE:
+          unit = getTankUnit(unitPosition, units)
+          break;
+        case TYPES.SOLDIER_TYPE:
           unit = getTankUnit(unitPosition, units)
           break;
         default:
@@ -62,36 +69,26 @@ export const UnitUtils = function() {
     }
     //___________________________________________________________________________
     function getTankUnit(unitPosition, units) {
-      // Colors
-      let baseBlue    = '#131313'
-      let baseRed     = '#131313'
-      let cabinBlue   = '#32237d'
-      let cabinRed    = '#7d2333'
-      let cannonBlue  = '#6262da'
-      let cannonRed   = '#d61818'
+      let tank = new TankType()
 
-      let baseColor   = units.length % 2 ? baseBlue : baseRed
-      let cabinColor  = units.length % 2 ? cabinBlue : cabinRed
-      let cannonColor = units.length % 2 ? cannonBlue : cannonRed
+      // id
+      tank.setId(units.length)
 
-      let randomize = false
+      // position
+      tank.setPosition(unitPosition)
 
-      return {
-        id:           units.length,
-        aimTarget:    {x: 0, y: 0},
-        position:     unitPosition,
-        width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,
-        height:       randomize ? Math.floor(Math.random() * 50) + 45 : 50,
-        cannonSize:   randomize ? Math.floor(Math.random() * 100) + 70 : 70,
-        background:   baseColor,
-        cabineColor:  cabinColor,
-        cannonColor:  cannonColor,
-        rotate:       'true',
-        selected:     false,
-        angle:        0
-      }
+      // color
+      let baseColor   = units.length % 2 ? tank.baseBlue : tank.baseRed
+      let cabinColor  = units.length % 2 ? tank.cabinBlue : tank.cabinRed
+      let cannonColor = units.length % 2 ? tank.cannonBlue : tank.cannonRed
+      tank.setColors(baseColor, cabinColor, cannonColor)
+
+      return tank.getUnit()
     }
 
+    //___________________________________________________________________________
+    // PUBLIC
+    //___________________________________________________________________________
     return {
       getRandomPos: getRandomPos,
       getUnit: getUnit,
