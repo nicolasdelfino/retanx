@@ -29,10 +29,10 @@ export const Grid = function() {
        }
      }
 
-     function addCellNeighbors() {
+     function addCellNeighbors(aStarStyle) {
        for(var e = 0; e < cols; e++) {
          for(var r = 0; r < rows; r++) {
-           grid[e][r].addNeighbors(grid)
+           grid[e][r].addNeighbors(grid, aStarStyle)
          }
        }
      }

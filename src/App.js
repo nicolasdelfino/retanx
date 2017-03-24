@@ -310,11 +310,8 @@ class MainConnect extends React.Component {
     if(!this.props.units[this.props.currentSelectionID].selected) {
       return null
     }
-    console.log('aiming')
     // aim cannon
-
     this.props.dispatch({type: 'AIM', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell, angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], {x:cell.y, y:cell.x }) } })
-
   }
 
   showSpecs() {

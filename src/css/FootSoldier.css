@@ -1,6 +1,6 @@
 .unitWrapper {
   position: relative;
-  background: rgba(0, 0, 0, 0.1);
+  background: transparent;
   width: 100px;
   height: 100px;
   display: flex;

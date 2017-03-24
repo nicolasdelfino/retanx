@@ -8,8 +8,9 @@ export let AStar = (_grid, start, end, units, currentSelectionID) => {
   // pass tanks to grid and make them obstacles
   _grid.makeObstaclesOfInactiveUnits(units, currentSelectionID)
 
-  // Add possible cell neighbors
-  _grid.addCellNeighbors()
+  // Add possible cell neighbors, pass unit A* style
+  let aStarStyle = units[currentSelectionID].aStarStyle
+  _grid.addCellNeighbors(aStarStyle)
 
   let openSet   = []
   let closedSet = []
