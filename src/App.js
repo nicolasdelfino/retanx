@@ -45,6 +45,7 @@ class MainConnect extends React.Component {
   }
 
   addUnit() {
+    // currently just tanks
     let tankPosition = unitUtils.getRandomPos(this.props.units)
 
     if(!tankPosition) {
@@ -52,8 +53,7 @@ class MainConnect extends React.Component {
       return
     }
 
-    let tankUnit = unitUtils.getTankUnit(tankPosition, this.props.units)
-
+    let tankUnit = unitUtils.getUnit('TANK', tankPosition, this.props.units)
     this.props.dispatch({ type: 'ADD_UNIT', payload: tankUnit})
   }
 
@@ -174,7 +174,6 @@ class MainConnect extends React.Component {
 
     animationCells.push(end)
     // console.log('animationCells', animationCells, animationCells.length)
-
     animationCells.forEach((item, index) => {
       item.tempPathString = index
       let delay = index * 1500

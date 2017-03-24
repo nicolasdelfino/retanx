@@ -49,7 +49,19 @@ export const UnitUtils = function() {
       return foundPosition ? position : undefined
     }
     //___________________________________________________________________________
-    function getTankUnit(tankPosition, units) {
+    function getUnit(unitType, unitPosition, units) {
+      let unit = null
+      switch (unitType) {
+        case 'TANK':
+          unit = getTankUnit(unitPosition, units)
+          break;
+        default:
+          unit = getTankUnit(unitPosition, units)
+      }
+      return unit
+    }
+    //___________________________________________________________________________
+    function getTankUnit(unitPosition, units) {
       // Colors
       let baseBlue    = '#131313'
       let baseRed     = '#131313'
@@ -67,7 +79,7 @@ export const UnitUtils = function() {
       return {
         id:           units.length,
         aimTarget:    {x: 0, y: 0},
-        position:     tankPosition,
+        position:     unitPosition,
         width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,
         height:       randomize ? Math.floor(Math.random() * 50) + 45 : 50,
         cannonSize:   randomize ? Math.floor(Math.random() * 100) + 70 : 70,
@@ -82,6 +94,7 @@ export const UnitUtils = function() {
 
     return {
       getRandomPos: getRandomPos,
+      getUnit: getUnit,
       getTankUnit: getTankUnit
     }
   }
