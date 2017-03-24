@@ -4,6 +4,7 @@ let _grid = Grid.getInstance()
 
 // TYPES
 import { TankType } from '../tank/type'
+import { SoldierType } from '../soldiers/type'
 
 export const UnitUtils = function() {
   var instance = null
@@ -60,7 +61,7 @@ export const UnitUtils = function() {
           unit = getTankUnit(unitPosition, units)
           break;
         case TYPES.SOLDIER_TYPE:
-          unit = getTankUnit(unitPosition, units)
+          unit = getSoldierUnit(unitPosition, units)
           break;
         default:
           unit = getTankUnit(unitPosition, units)
@@ -68,15 +69,30 @@ export const UnitUtils = function() {
       return unit
     }
     //___________________________________________________________________________
+    function getSoldierUnit(unitPosition, units) {
+      let soldier = new SoldierType()
+      // id
+      soldier.setId(units.length)
+      // position
+      soldier.setPosition(unitPosition)
+      // color
+      let torso     = '#696e77'
+      let shoulders = '#4e5e7a'
+      let arms      = '#303c51'
+      let head      = '#2a477c'
+      let weapon    = '#73757a'
+      let barrel    = '#73757a'
+      soldier.setColors(torso, shoulders, arms, head, weapon, barrel)
+
+      return soldier.getUnit()
+    }
+    //___________________________________________________________________________
     function getTankUnit(unitPosition, units) {
       let tank = new TankType()
-
       // id
       tank.setId(units.length)
-
       // position
       tank.setPosition(unitPosition)
-
       // color
       let baseColor   = units.length % 2 ? tank.baseBlue : tank.baseRed
       let cabinColor  = units.length % 2 ? tank.cabinBlue : tank.cabinRed
@@ -85,7 +101,6 @@ export const UnitUtils = function() {
 
       return tank.getUnit()
     }
-
     //___________________________________________________________________________
     // PUBLIC
     //___________________________________________________________________________

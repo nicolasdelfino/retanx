@@ -1,16 +1,15 @@
 .unitWrapper {
   position: relative;
-  background: #0d1c08;
+  background: rgba(0, 0, 0, 0.3);
   width: 100px;
   height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: rotateUnit 20s infinite;
   border-radius: 100px; }
 
 .unitWrapper .unit {
-  zoom: 0.8; }
+  zoom: 0.15; }
 
 .unitWrapper .unit .body {
   width: 100px;

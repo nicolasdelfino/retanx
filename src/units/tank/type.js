@@ -1,4 +1,12 @@
+import * as TYPES from '../types/unitTypes'
+
 export const TankType = function() {
+  // Type
+  this.type        = TYPES.TANK_TYPE
+
+  // A* category
+  this.aStar       = 'basic'
+
   // Colors
   this.baseBlue    = '#131313'
   this.baseRed     = '#131313'
@@ -10,9 +18,11 @@ export const TankType = function() {
   this.cabinColor  = null
   this.cannonColor = null
 
+  // Id & position
   this.id          = null
   this.position    = null
 
+  // Randomize colors
   let randomize    = false
 
   this.setId = function(id) {
@@ -32,6 +42,7 @@ export const TankType = function() {
   this.getUnit = function() {
     return {
       id:           this.id,
+      type:         this.type,
       position:     this.position,
       aimTarget:    {x: 0, y: 0},
       width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,

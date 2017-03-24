@@ -2,13 +2,14 @@ import React from 'react';
 import './css/App.css';
 import { connect } from 'react-redux'
 import Ground from './grid/Ground'
-import TankPosition from './units/tank/components/TankPosition'
+import BasePosition from './units/base/BasePosition'
 import Body from './units/tank/components/Body'
 import Cannon from './units/tank/components/Cannon'
 import Tracks from './units/tank/components/Tracks'
-import Outline from './units/tank/components/Outline'
+import Outline from './units/base/Outline'
 import SpecsView from './units/tank/components/SpecsView'
 import FootSoldier from './units/soldiers/components/FootSoldier'
+import * as TYPES from './units/types/unitTypes'
 
 import sound_pew from './assets/pew.mp3'
 import sound_explosion from './assets/explosion.mp3'
@@ -44,17 +45,20 @@ class MainConnect extends React.Component {
     }
   }
 
-  addUnit() {
+  addUnit(type) {
+    if(!type) {
+      type = TYPES.TANK_TYPE
+    }
     // currently just tanks
-    let tankPosition = unitUtils.getRandomPos(this.props.units)
+    let unitPosition = unitUtils.getRandomPos(this.props.units)
 
-    if(!tankPosition) {
-      console.log('no available position for unit')
+    if(!unitPosition) {
+      console.log('No available position for unit')
       return
     }
 
-    let tankUnit = unitUtils.getUnit('TANK', tankPosition, this.props.units)
-    this.props.dispatch({ type: 'ADD_UNIT', payload: tankUnit})
+    let unit = unitUtils.getUnit(type, unitPosition, this.props.units)
+    this.props.dispatch({ type: 'ADD_UNIT', payload: unit})
   }
 
   toggleDebug() {
@@ -63,7 +67,7 @@ class MainConnect extends React.Component {
 
   componentDidMount() {
     _grid = Grid.getInstance()
-    this.addUnit()
+    this.addUnit(TYPES.TANK_TYPE)
   }
 
   coordinates(pos, width, height) {
@@ -107,50 +111,83 @@ class MainConnect extends React.Component {
     return (unit.selected) && (this.props.currentSelectionID === id) && (this.state.shooting) ? true : false
   }
 
-  renderTanks() {
-    let tanks = this.props.units
-    let units = []
+  renderUnits() {
+    let units     = this.props.units
+    let unitList  = []
 
-    tanks.forEach((tankUnit, index) => {
-      let shouldRotate  = tankUnit.rotate
-      let position      = tankUnit.position
-      let width         = tankUnit.width
-      let height        = tankUnit.height
-      let angle         = tankUnit.angle;
+    units.forEach((unit, index) => {
+      let shouldRotate  = unit.rotate
+      let position      = unit.position
+      let width         = unit.width
+      let height        = unit.height
+      let angle         = unit.angle
+      let type          = unit.type
 
-      units.push(
-        <div id={'tank_' + index} key={index}>
-        <div style={{'cursor': 'pointer'}} onClick={() => {
-          if(this.state.isAiming) {
-            return
-          }
-
-          if(tankUnit.selected) {
-            this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: tankUnit.id }})
-          }
-          else {
-            this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
-            // deselect all other units
-            this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
-          }
-         }}>
-          <TankPosition position={this.coordinates(position, width, height)} >
-            <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
-              <Tracks specs={tankUnit}/>
-            </Body>
-            <Cannon debug={this.props.debugMode} specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsTankShooting(tankUnit, index)}/>
-          </TankPosition>
-          <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+      if(type === TYPES.TANK_TYPE) {
+        // cast as tank unit
+        let tankUnit    = unit
+        unitList.push(
+          <div id={'tank_' + index} key={index}>
+          <div style={{'cursor': 'pointer'}} onClick={() => {
+            if(this.state.isAiming) { return }
+            if(tankUnit.selected) {
+              this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: tankUnit.id }})
+            }
+            else {
+              this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
+              // deselect all other units
+              this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
+            }
+           }}>
+            <BasePosition position={this.coordinates(position, width, height)} >
+              <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
+                <Tracks specs={tankUnit}/>
+              </Body>
+              <Cannon debug={this.props.debugMode} specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsTankShooting(tankUnit, index)}/>
+            </BasePosition>
+            <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+            </div>
+            <SpecsView specs={tankUnit}
+            details={this.showSpecs.bind(this)}
+            rotate={shouldRotate}
+            position={this.coordinates(position, width, height)}
+            rotation={angle}/>
           </div>
-          <SpecsView specs={tankUnit}
-          details={this.showSpecs.bind(this)}
-          rotate={shouldRotate}
-          position={this.coordinates(position, width, height)}
-          rotation={angle}/>
-        </div>
-      )
+        )
+      }
+      else if(type === TYPES.SOLDIER_TYPE) {
+        let soldierUnit = unit
+        unitList.push(
+          <div id={'tank_' + index} key={index}>
+          <div style={{'cursor': 'pointer'}} onClick={() => {
+            if(this.state.isAiming) { return }
+            if(soldierUnit.selected) {
+              this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: soldierUnit.id }})
+            }
+            else {
+              this.props.dispatch({type: 'SELECT_UNIT', payload: {id: soldierUnit.id }})
+              // deselect all other units
+              this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: soldierUnit.id }})
+            }
+           }}>
+              <BasePosition position={this.coordinates(position, width, height)} >
+                <FootSoldier />
+              </BasePosition>
+              <Outline specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+            </div>
+            <SpecsView specs={soldierUnit}
+            details={this.showSpecs.bind(this)}
+            rotate={shouldRotate}
+            position={this.coordinates(position, width, height)}
+            rotation={angle}/>
+          </div>
+        )
+      }
+      else {
+        return null
+      }
     })
-    return units
+    return unitList
   }
 
   followPath(start, path) {
@@ -398,14 +435,15 @@ class MainConnect extends React.Component {
     return (
       <div>
         <div style={{flexDirection: 'column'}}>
-          <button onClick={this.addUnit.bind(this)}>ADD UNIT</button>
+          <button onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button>
+          <button onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button>
           <button onClick={this.toggleDebug.bind(this)}>TOGGLE DEBUG</button>
         </div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
           {this.renderGround()}
           {/* TANK  */}
-          {this.renderTanks()}
+          {this.renderUnits()}
           {/* SPECS VIEW  */}
           {this.renderSpecsView()}
           {/* SPACEBAR */}

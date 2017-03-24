@@ -3,24 +3,22 @@ import '../../../css/FootSoldier.css';
 export default class FootSoldier extends React.Component {
   render() {
     return (
-      <div class="main">
-        <div class="unitWrapper">
-          <div id="soldier" class="unit">
-            <div class="gunWrapper">
-              <div class="gun">
-                <div class="barrel" />
+        <div className="unitWrapper">
+          <div id="soldier" className="unit">
+            <div className="gunWrapper">
+              <div className="gun">
+                <div className="barrel" />
               </div>
             </div>
-            <div class="body">
-              <div class="arms">
-                <div class="arm left"></div>
-                <div class="arm right"></div>
+            <div className="body">
+              <div className="arms">
+                <div className="arm left"></div>
+                <div className="arm right"></div>
               </div>
-              <div class="head" />
+              <div className="head" />
             </div>
           </div>
         </div>
-      </div>
     )
   }
 }

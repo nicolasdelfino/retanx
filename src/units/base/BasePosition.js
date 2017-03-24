@@ -1,5 +1,5 @@
 import React from 'react';
-class Tank extends React.Component {
+class BasePosition extends React.Component {
   render() {
     return (
       <div style={{
@@ -14,4 +14,4 @@ class Tank extends React.Component {
   }
 }
 
-export default Tank
+export default BasePosition
