@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../css/FootSoldier.css';
+import '../../../css/FootSoldier.css';
 export default class FootSoldier extends React.Component {
   render() {
     return (
