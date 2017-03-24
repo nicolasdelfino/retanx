@@ -51,7 +51,7 @@ class MainConnect extends React.Component {
     }
 
     // check units
-    this.props.tanks.forEach((tank, index) => {
+    this.props.units.forEach((tank, index) => {
       if(tank.position.x === position.x && tank.position.y === position.y) {
         isAvailable = false
       }
@@ -75,7 +75,7 @@ class MainConnect extends React.Component {
     let position = null
     let maxTries = 9 * 5
 
-    if(this.props.tanks.length === 0) {
+    if(this.props.units.length === 0) {
       return this.getRandomPosition()
     }
 
@@ -128,13 +128,13 @@ class MainConnect extends React.Component {
     let cannonBlue = '#6262da'
     let cannonRed = '#d61818'
 
-    let baseColor = this.props.tanks.length % 2 ? baseBlue : baseRed
-    let cabinColor = this.props.tanks.length % 2 ? cabinBlue : cabinRed
-    let cannonColor = this.props.tanks.length % 2 ? cannonBlue : cannonRed
+    let baseColor = this.props.units.length % 2 ? baseBlue : baseRed
+    let cabinColor = this.props.units.length % 2 ? cabinBlue : cabinRed
+    let cannonColor = this.props.units.length % 2 ? cannonBlue : cannonRed
 
     let randomize = false
     const tankUnit = {
-      id:           this.props.tanks.length,
+      id:           this.props.units.length,
       aimTarget:    {x: 0, y: 0},
       position:     tankPosition,
       width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,
@@ -148,7 +148,7 @@ class MainConnect extends React.Component {
       angle:        0
     }
 
-    this.props.dispatch({ type: 'ADD_TANK', payload: tankUnit})
+    this.props.dispatch({ type: 'ADD_UNIT', payload: tankUnit})
   }
 
   toggleDebug() {
@@ -202,7 +202,7 @@ class MainConnect extends React.Component {
   }
 
   renderTanks() {
-    let tanks = this.props.tanks
+    let tanks = this.props.units
     let units = []
 
     tanks.forEach((tankUnit, index) => {
@@ -281,13 +281,13 @@ class MainConnect extends React.Component {
 
         // aim cannon
         this.props.dispatch({type: 'AIM', payload: {
-          id: this.props.tanks[this.props.currentSelectionID].id,
+          id: this.props.units[this.props.currentSelectionID].id,
           target: position,
-          angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], { x: position.y, y: position.x }) }})
+          angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], { x: position.y, y: position.x }) }})
 
         // move unit
         setTimeout(() => {
-          this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position}})
+          this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: position}})
         }, 500)
 
       }, delay)
@@ -297,7 +297,7 @@ class MainConnect extends React.Component {
   }
 
   moveToCell(cell) {
-    if(!this.props.tanks[this.props.currentSelectionID].selected) {
+    if(!this.props.units[this.props.currentSelectionID].selected) {
       return null
     }
 
@@ -305,7 +305,7 @@ class MainConnect extends React.Component {
     // A* - Wikipedia source: https://en.wikipedia.org/wiki/A*_search_algorithm
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let unit  = this.props.tanks[this.props.currentSelectionID]
+    let unit  = this.props.units[this.props.currentSelectionID]
     let start = _grid.getGrid()[unit.position.x][unit.position.y]
     let end   = _grid.getGrid()[cell.y][cell.x]
 
@@ -313,7 +313,7 @@ class MainConnect extends React.Component {
     start.obstacle = false
     start.showObstacle = false
 
-    let path = AStar(_grid, start, end, this.props.tanks, this.props.currentSelectionID)
+    let path = AStar(_grid, start, end, this.props.units, this.props.currentSelectionID)
     console.log('A* path', path)
 
     if(path.length === 0) {
@@ -321,9 +321,9 @@ class MainConnect extends React.Component {
 
       // aim cannon
       this.props.dispatch({type: 'AIM', payload: {
-        id: this.props.tanks[this.props.currentSelectionID].id,
+        id: this.props.units[this.props.currentSelectionID].id,
         target: cell,
-        angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], {x:cell.y, y:cell.x }) }})
+        angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], {x:cell.y, y:cell.x }) }})
 
       return
     }
@@ -337,25 +337,25 @@ class MainConnect extends React.Component {
       // Clear aim time each time a new aim action is called (takes 1 second to aim)
       clearTimeout(this.timer)
       // Move cannon action (aim)
-      this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell } })
+      this.props.dispatch({type: 'AIM', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell } })
       this.setState({ isAiming: true })
 
       // Wait for aim animation to finish
       this.timer = setTimeout(() => {
         this.setState({ isAiming: false })
-        this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell}})
+        this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell}})
       }, 500)
     }
   }
 
   aimOnCell(cell) {
-    if(!this.props.tanks[this.props.currentSelectionID].selected) {
+    if(!this.props.units[this.props.currentSelectionID].selected) {
       return null
     }
     console.log('aiming')
     // aim cannon
 
-    this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], {x:cell.y, y:cell.x }) } })
+    this.props.dispatch({type: 'AIM', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell, angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], {x:cell.y, y:cell.x }) } })
 
   }
 
@@ -379,7 +379,7 @@ class MainConnect extends React.Component {
       return null
     }
 
-    // let tank = this.props.tanks[this.props.currentSelectionID]
+    // let tank = this.props.units[this.props.currentSelectionID]
     return (
       <div style={{...specsStyle}}>
         <div style={{padding: 20, fontSize: 10, background: 'transparent', color: '#ccc', cursor: 'pointer'}} onClick={() => {
@@ -393,18 +393,18 @@ class MainConnect extends React.Component {
   }
 
   renderGround() {
-    if(this.props.tanks.length === 0) {
+    if(this.props.units.length === 0) {
       return null
     }
 
     let sel = false
-    this.props.tanks.forEach((tank) => {
+    this.props.units.forEach((tank) => {
       if(tank.selected) {
         sel = true
       }
     })
     return (
-      <Ground debug={this.props.debugMode} tanks={this.props.tanks} cursor={sel ? 'crosshair' : 'normal'}
+      <Ground debug={this.props.debugMode} tanks={this.props.units} cursor={sel ? 'crosshair' : 'normal'}
       aim={this.aimOnCell.bind(this)} move={this.moveToCell.bind(this)}/>
     )
   }
@@ -434,7 +434,7 @@ class MainConnect extends React.Component {
 
     //Calculate target area
     let beamWidth = 0.5/2;
-    let tank = this.props.tanks[this.props.currentSelectionID];
+    let tank = this.props.units[this.props.currentSelectionID];
     let targetArea = [[
         tank.position.x + 0.5 + (beamWidth * Math.sin((tank.angle + 90) * (Math.PI / 180))),
         tank.position.y + 0.5 + (beamWidth * Math.cos((tank.angle + 90) * (Math.PI / 180)))
@@ -515,7 +515,7 @@ class MainConnect extends React.Component {
 
 const MSTP = (state) => {
 	return {
-    tanks: state.tanks.units,
+    units: state.unitReducer.units,
     app: state.app,
     currentSelectionID: state.app.currentSelectionID,
     debugMode: state.app.debugMode
