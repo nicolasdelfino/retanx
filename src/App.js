@@ -171,7 +171,7 @@ class MainConnect extends React.Component {
             }
            }}>
               <BasePosition position={this.coordinates(position, width, height)} >
-                <FootSoldier />
+                <FootSoldier rotate={shouldRotate} rotation={angle} />
               </BasePosition>
               <Outline specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
             </div>

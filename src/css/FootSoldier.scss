@@ -1,15 +1,15 @@
 .unitWrapper {
   position: relative;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.1);
   width: 100px;
   height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  // animation: rotateUnit 20s infinite;
+  //animation: rotateUnit 20s infinite;
   border-radius: 100px;
   .unit {
-    zoom: 0.15;
+    zoom: 0.1;
     .body {
       width: 100px;
       height: 70px;
@@ -26,15 +26,16 @@
         height: 50px;
         background: #4e5e7a;
         flex-direction: row;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-radius: 10px;
         justify-content: space-between;
         .arm {
           display: flex;
           width: 30px;
           height: 50px;
-          border-bottom-left-radius: 10px;
-          border-bottom-right-radius: 10px;
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
           &.left {
             background: #303c51;
             z-index: -1;
@@ -51,7 +52,7 @@
         width: 50px;
         height: 60px;
         border-radius: 10px;
-        margin-top: -20px;
+        margin-bottom: -20px;
       }
     }
   }
@@ -91,7 +92,7 @@
     margin-top: 0px;
   }
   50% {
-    margin-top: -20px;
+    margin-top: 20px;
   }
   100% {
     margin-top: 0px;
@@ -100,13 +101,13 @@
 
 @keyframes walking-arm-right {
   0% {
-    margin-top: -20px;
+    margin-top: 20px;
   }
   50% {
     margin-top: 0px;
   }
   100% {
-    margin-top: -20px;
+    margin-top: 20px;
   }
 }
 
@@ -130,14 +131,14 @@
     animation: shooting-body 0.3s infinite;
   }
   .arm.left {
-    margin-top: -30px;
-    margin-left: 10px;
-    transform: rotate(50deg);
+    margin-top: 40px;
+    margin-left: 5px;
+    transform: rotate(-20deg);
   }
   .arm.right {
-    margin-top: -30px;
-    margin-left: 0px;
-    transform: rotate(-30deg);
+    margin-top: 40px;
+    margin-right: 10px;
+    transform: rotate(30deg);
   }
   .head {
     transform: rotate(30deg);
@@ -145,22 +146,24 @@
   }
   .gunWrapper {
     position: relative;
+    z-index: 0;
     .gun {
       width: 60px;
-      height: 50px;
+      height: 70px;
       background: #73757a;
       position: absolute;
-      top: -25px;
-      left: 0px;
+      top: 35px;
+      left: 40px;
       z-index: -1;
-      animation: shooting-gun 0.1s infinite;
+      transform: rotate(-180deg);
+      animation: shooting-gun 0.05s infinite;
       .barrel {
         position: absolute;
         width: 30px;
         height: 120px;
         background: #73757a;
         top: -70px;
-        left: 20px;
+        left: 15px;
         border-top: 10px solid #93959b;
       }
     }
