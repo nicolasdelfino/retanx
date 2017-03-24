@@ -1,23 +1,26 @@
 import React from 'react';
-import './App.css';
+import './css/App.css';
 import { connect } from 'react-redux'
 import Ground from './grid/Ground'
-import TankPosition from './units/tank/TankPosition'
-import Body from './units/tank/Body'
-import Cannon from './units/tank/Cannon'
-import Tracks from './units/tank/Tracks'
-import Outline from './units/tank/Outline'
-import SpecsView from './units/tank/SpecsView'
+import BasePosition from './units/base/BasePosition'
+import Body from './units/tank/components/Body'
+import Cannon from './units/tank/components/Cannon'
+import Tracks from './units/tank/components/Tracks'
+import Outline from './units/base/Outline'
+import SpecsView from './units/tank/components/SpecsView'
+import FootSoldier from './units/soldiers/components/FootSoldier'
+import * as TYPES from './units/types/unitTypes'
 
 import sound_pew from './assets/pew.mp3'
 import sound_explosion from './assets/explosion.mp3'
 import logo from './retanx.png'
 
-// import randomColor from 'randomcolor'
-
 import { Dimensions, Grid } from './grid/Grid'
 import { AStar } from './grid/AStar'
 let _grid = null
+
+import { UnitUtils } from './units/utils/UnitUtils'
+let unitUtils = UnitUtils.getInstance()
 
 const mainStyle = {
   width: Dimensions().width, height: Dimensions().height,
@@ -35,6 +38,7 @@ class MainConnect extends React.Component {
     this.shootingTimer = null
     this.state = {
       isAiming: false,
+      isMoving: false,
       isFollowingPath: true,
       forceValUpdate: 0,
       shooting: false,
@@ -42,112 +46,20 @@ class MainConnect extends React.Component {
     }
   }
 
-  isPositionAvaliable(position) {
-    let isAvailable = true
-
-    if(_grid.suggestedPositionIsAnObstacleCell(position)) {
-      return false
+  addUnit(type) {
+    if(!type) {
+      type = TYPES.TANK_TYPE
     }
+    // currently just tanks
+    let unitPosition = unitUtils.getRandomPos(this.props.units)
 
-    // check units
-    this.props.tanks.forEach((tank, index) => {
-      if(tank.position.x === position.x && tank.position.y === position.y) {
-        isAvailable = false
-      }
-    })
-
-    return isAvailable
-  }
-
-  getRandomPosition() {
-    let columns = _grid.getCols()
-    let rows = _grid.getRows()
-    // console.log('columns', columns, 'rows', rows)
-    return {
-      x: Math.floor(Math.random() * columns),
-      y: Math.floor(Math.random() * rows)
-    }
-  }
-
-  getRandomPos() {
-    let foundPosition = false
-    let position = null
-    let maxTries = 9 * 5
-
-    if(this.props.tanks.length === 0) {
-      return this.getRandomPosition()
-    }
-
-    for(var i = 0; i < maxTries; i++) {
-      position = this.getRandomPosition()
-      // eslint-disable-next-line
-      foundPosition = this.isPositionAvaliable(position)
-
-      if(foundPosition) {
-        break;
-      }
-    }
-    return foundPosition ? position : undefined
-  }
-
-  shadeColor(color, percent) {
-
-      var R = parseInt(color.substring(1,3),16)
-      var G = parseInt(color.substring(3,5),16)
-      var B = parseInt(color.substring(5,7),16)
-
-      R = parseInt(R * (100 + percent) / 100, 10)
-      G = parseInt(G * (100 + percent) / 100, 10)
-      B = parseInt(B * (100 + percent) / 100, 10)
-
-      R = (R<255)?R:255;
-      G = (G<255)?G:255;
-      B = (B<255)?B:255;
-
-      var RR = ((R.toString(16).length===1)?"0"+R.toString(16):R.toString(16));
-      var GG = ((G.toString(16).length===1)?"0"+G.toString(16):G.toString(16));
-      var BB = ((B.toString(16).length===1)?"0"+B.toString(16):B.toString(16));
-
-      return "#"+RR+GG+BB;
-  }
-
-  addTank() {
-    let tankPosition = this.getRandomPos()
-
-    if(!tankPosition) {
-      console.log('no available position for a unit')
+    if(!unitPosition) {
+      console.log('No available position for unit')
       return
     }
 
-    // Colors
-    let baseBlue = '#131313'
-    let baseRed = '#131313'
-    let cabinBlue = '#32237d'
-    let cabinRed = '#7d2333'
-    let cannonBlue = '#6262da'
-    let cannonRed = '#d61818'
-
-    let baseColor = this.props.tanks.length % 2 ? baseBlue : baseRed
-    let cabinColor = this.props.tanks.length % 2 ? cabinBlue : cabinRed
-    let cannonColor = this.props.tanks.length % 2 ? cannonBlue : cannonRed
-
-    let randomize = false
-    const tankUnit = {
-      id:           this.props.tanks.length,
-      aimTarget:    {x: 0, y: 0},
-      position:     tankPosition,
-      width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,
-      height:       randomize ? Math.floor(Math.random() * 50) + 45 : 50,
-      cannonSize:   randomize ? Math.floor(Math.random() * 100) + 70 : 70,
-      background:   baseColor,
-      cabineColor:  cabinColor,
-      cannonColor:  cannonColor,
-      rotate:       'true',
-      selected:     false,
-      angle:        0
-    }
-
-    this.props.dispatch({ type: 'ADD_TANK', payload: tankUnit})
+    let unit = unitUtils.getUnit(type, unitPosition, this.props.units)
+    this.props.dispatch({ type: 'ADD_UNIT', payload: unit})
   }
 
   toggleDebug() {
@@ -156,7 +68,8 @@ class MainConnect extends React.Component {
 
   componentDidMount() {
     _grid = Grid.getInstance()
-    this.addTank()
+    this.addUnit(TYPES.TANK_TYPE)
+    // this.addUnit(TYPES.SOLDIER_TYPE)
   }
 
   coordinates(pos, width, height) {
@@ -200,50 +113,83 @@ class MainConnect extends React.Component {
     return (unit.selected) && (this.props.currentSelectionID === id) && (this.state.shooting) ? true : false
   }
 
-  renderTanks() {
-    let tanks = this.props.tanks
-    let units = []
+  renderUnits() {
+    let units     = this.props.units
+    let unitList  = []
 
-    tanks.forEach((tankUnit, index) => {
-      let shouldRotate  = tankUnit.rotate
-      let position      = tankUnit.position
-      let width         = tankUnit.width
-      let height        = tankUnit.height
-      let angle         = tankUnit.angle;
+    units.forEach((unit, index) => {
+      let shouldRotate  = unit.rotate
+      let position      = unit.position
+      let width         = unit.width
+      let height        = unit.height
+      let angle         = unit.angle
+      let type          = unit.type
 
-      units.push(
-        <div id={'tank_' + index} key={index}>
-        <div style={{'cursor': 'pointer'}} onClick={() => {
-          if(this.state.isAiming) {
-            return
-          }
-
-          if(tankUnit.selected) {
-            this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: tankUnit.id }})
-          }
-          else {
-            this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
-            // deselect all other units
-            this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
-          }
-         }}>
-          <TankPosition position={this.coordinates(position, width, height)} >
-            <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
-              <Tracks specs={tankUnit}/>
-            </Body>
-            <Cannon debug={this.props.debugMode} specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsTankShooting(tankUnit, index)}/>
-          </TankPosition>
-          <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+      if(type === TYPES.TANK_TYPE) {
+        // cast as tank unit
+        let tankUnit    = unit
+        unitList.push(
+          <div id={'tank_' + index} key={index}>
+          <div style={{'cursor': 'pointer'}} onClick={() => {
+            if(this.state.isAiming) { return }
+            if(tankUnit.selected) {
+              this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: tankUnit.id }})
+            }
+            else {
+              this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
+              // deselect all other units
+              this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
+            }
+           }}>
+            <BasePosition position={this.coordinates(position, width, height)} >
+              <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
+                <Tracks specs={tankUnit}/>
+              </Body>
+              <Cannon debug={this.props.debugMode} specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsTankShooting(tankUnit, index)}/>
+            </BasePosition>
+            <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+            </div>
+            <SpecsView specs={tankUnit}
+            details={this.showSpecs.bind(this)}
+            rotate={shouldRotate}
+            position={this.coordinates(position, width, height)}
+            rotation={angle}/>
           </div>
-          <SpecsView specs={tankUnit}
-          details={this.showSpecs.bind(this)}
-          rotate={shouldRotate}
-          position={this.coordinates(position, width, height)}
-          rotation={angle}/>
-        </div>
-      )
+        )
+      }
+      else if(type === TYPES.SOLDIER_TYPE) {
+        let soldierUnit = unit
+        unitList.push(
+          <div id={'tank_' + index} key={index}>
+          <div style={{'cursor': 'pointer'}} onClick={() => {
+            if(this.state.isAiming) { return }
+            if(soldierUnit.selected) {
+              this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: soldierUnit.id }})
+            }
+            else {
+              this.props.dispatch({type: 'SELECT_UNIT', payload: {id: soldierUnit.id }})
+              // deselect all other units
+              this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: soldierUnit.id }})
+            }
+           }}>
+              <BasePosition position={this.coordinates(position, width, height)} >
+                <FootSoldier isShooting={this.state.shooting} isMoving={this.state.isMoving} specs={soldierUnit} rotate={shouldRotate} rotation={angle} />
+              </BasePosition>
+              <Outline specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+            </div>
+            <SpecsView specs={soldierUnit}
+            details={this.showSpecs.bind(this)}
+            rotate={shouldRotate}
+            position={this.coordinates(position, width, height)}
+            rotation={angle}/>
+          </div>
+        )
+      }
+      else {
+        return null
+      }
     })
-    return units
+    return unitList
   }
 
   followPath(start, path) {
@@ -251,6 +197,7 @@ class MainConnect extends React.Component {
 
     let end = path[path.length -1]
     let animationCells = []
+    let unit = this.props.units[this.props.currentSelectionID]
 
     clearTimeout(this.timer)
 
@@ -267,10 +214,9 @@ class MainConnect extends React.Component {
 
     animationCells.push(end)
     // console.log('animationCells', animationCells, animationCells.length)
-
     animationCells.forEach((item, index) => {
       item.tempPathString = index
-      let delay = index * 1500
+      let delay = index * (1000 + this.props.units[this.props.currentSelectionID].aimDuration)
       this.timer = setTimeout(() => {
         // console.log('pos', _grid.getPositionForCell(item))
         let position = {
@@ -278,13 +224,29 @@ class MainConnect extends React.Component {
           y: item.x
         }
 
+        // used for controlling walk animation
+        this.setState({ isMoving: false })
+
         // aim cannon
-        this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], { x: position.y, y: position.x }) } })
+        this.props.dispatch({type: 'AIM', payload: {
+          id: this.props.units[this.props.currentSelectionID].id,
+          target: position,
+          angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], { x: position.y, y: position.x }) }})
 
         // move unit
         setTimeout(() => {
-          this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: position}})
-        }, 500)
+          this.setState({ isMoving: true })
+          this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: position}})
+
+          // check if animation end
+          if(index === animationCells.length -1) {
+            // TODO add travel duration (this.getSpeed())
+            setTimeout(() => {
+              this.setState({ isMoving: false })
+            }, 1000)
+          }
+
+        }, this.props.units[this.props.currentSelectionID].aimDuration)
 
       }, delay)
     })
@@ -293,7 +255,7 @@ class MainConnect extends React.Component {
   }
 
   moveToCell(cell) {
-    if(!this.props.tanks[this.props.currentSelectionID].selected) {
+    if(!this.props.units[this.props.currentSelectionID].selected) {
       return null
     }
 
@@ -301,7 +263,7 @@ class MainConnect extends React.Component {
     // A* - Wikipedia source: https://en.wikipedia.org/wiki/A*_search_algorithm
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let unit  = this.props.tanks[this.props.currentSelectionID]
+    let unit  = this.props.units[this.props.currentSelectionID]
     let start = _grid.getGrid()[unit.position.x][unit.position.y]
     let end   = _grid.getGrid()[cell.y][cell.x]
 
@@ -309,14 +271,17 @@ class MainConnect extends React.Component {
     start.obstacle = false
     start.showObstacle = false
 
-    let path = AStar(_grid, start, end, this.props.tanks, this.props.currentSelectionID)
+    let path = AStar(_grid, start, end, this.props.units, this.props.currentSelectionID)
     console.log('A* path', path)
 
     if(path.length === 0) {
       console.warn('No a * solution found')
 
       // aim cannon
-      this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], {x:cell.y, y:cell.x }) } })
+      this.props.dispatch({type: 'AIM', payload: {
+        id: this.props.units[this.props.currentSelectionID].id,
+        target: cell,
+        angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], {x:cell.y, y:cell.x }) }})
 
       return
     }
@@ -330,26 +295,23 @@ class MainConnect extends React.Component {
       // Clear aim time each time a new aim action is called (takes 1 second to aim)
       clearTimeout(this.timer)
       // Move cannon action (aim)
-      this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell } })
+      this.props.dispatch({type: 'AIM', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell } })
       this.setState({ isAiming: true })
 
       // Wait for aim animation to finish
       this.timer = setTimeout(() => {
         this.setState({ isAiming: false })
-        this.props.dispatch({type: 'MOVE', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell}})
+        this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell}})
       }, 500)
     }
   }
 
   aimOnCell(cell) {
-    if(!this.props.tanks[this.props.currentSelectionID].selected) {
+    if(!this.props.units[this.props.currentSelectionID].selected) {
       return null
     }
-    console.log('aiming')
     // aim cannon
-
-    this.props.dispatch({type: 'AIM', payload: {id: this.props.tanks[this.props.currentSelectionID].id, target: cell, angle: this.aimDegrees(this.props.tanks[this.props.currentSelectionID], {x:cell.y, y:cell.x }) } })
-
+    this.props.dispatch({type: 'AIM', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell, angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], {x:cell.y, y:cell.x }) } })
   }
 
   showSpecs() {
@@ -372,7 +334,7 @@ class MainConnect extends React.Component {
       return null
     }
 
-    // let tank = this.props.tanks[this.props.currentSelectionID]
+    // let tank = this.props.units[this.props.currentSelectionID]
     return (
       <div style={{...specsStyle}}>
         <div style={{padding: 20, fontSize: 10, background: 'transparent', color: '#ccc', cursor: 'pointer'}} onClick={() => {
@@ -386,18 +348,18 @@ class MainConnect extends React.Component {
   }
 
   renderGround() {
-    if(this.props.tanks.length === 0) {
+    if(this.props.units.length === 0) {
       return null
     }
 
     let sel = false
-    this.props.tanks.forEach((tank) => {
+    this.props.units.forEach((tank) => {
       if(tank.selected) {
         sel = true
       }
     })
     return (
-      <Ground debug={this.props.debugMode} tanks={this.props.tanks} cursor={sel ? 'crosshair' : 'normal'}
+      <Ground debug={this.props.debugMode} tanks={this.props.units} cursor={sel ? 'crosshair' : 'normal'}
       aim={this.aimOnCell.bind(this)} move={this.moveToCell.bind(this)}/>
     )
   }
@@ -427,7 +389,7 @@ class MainConnect extends React.Component {
 
     //Calculate target area
     let beamWidth = 0.5/2;
-    let tank = this.props.tanks[this.props.currentSelectionID];
+    let tank = this.props.units[this.props.currentSelectionID];
     let targetArea = [[
         tank.position.x + 0.5 + (beamWidth * Math.sin((tank.angle + 90) * (Math.PI / 180))),
         tank.position.y + 0.5 + (beamWidth * Math.cos((tank.angle + 90) * (Math.PI / 180)))
@@ -486,14 +448,15 @@ class MainConnect extends React.Component {
     return (
       <div>
         <div style={{flexDirection: 'column'}}>
-          <button onClick={this.addTank.bind(this)}>ADD TANK</button>
+          <button onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button>
+          <button onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button>
           <button onClick={this.toggleDebug.bind(this)}>TOGGLE DEBUG</button>
         </div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
           {this.renderGround()}
           {/* TANK  */}
-          {this.renderTanks()}
+          {this.renderUnits()}
           {/* SPECS VIEW  */}
           {this.renderSpecsView()}
           {/* SPACEBAR */}
@@ -508,7 +471,7 @@ class MainConnect extends React.Component {
 
 const MSTP = (state) => {
 	return {
-    tanks: state.tanks.units,
+    units: state.unitReducer.units,
     app: state.app,
     currentSelectionID: state.app.currentSelectionID,
     debugMode: state.app.debugMode

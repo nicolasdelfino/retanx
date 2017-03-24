@@ -44,7 +44,7 @@ class Cannon extends React.Component {
       width: w, height: h,
       background: this.props.specs.cabineColor, position: 'absolute', left: 'calc(50% - ' + (w) / 2 + 'px)', top: 'calc(50% - ' + (h) / 2 + 'px)',
       boxShadow: 'inset 0 0 10px #000, inset 0 0 10px #000, inset 0 0 10px rgba(0,0,0,0.8)',
-      transform: 'rotate(' + this.state.rotation + 'deg)', zIndex: 10, 'transition': 'all 0.5s ease', borderRadius: 10
+      transform: 'rotate(' + this.state.rotation + 'deg)', zIndex: 10, 'transition': 'all ' + this.props.specs.aimDuration / 1000 + 's ease', borderRadius: 10
     }
 
     let roundSize = this.props.specs.width / 1.5

@@ -2,10 +2,10 @@ const initState = {
   units: []
 }
 
-const tanks = (state = initState, action) => {
+const unitReducer = (state = initState, action) => {
   let specs = null
   switch (action.type) {
-    case 'ADD_TANK':
+    case 'ADD_UNIT':
     return {
       ...state,
       units: [...state.units, action.payload],
@@ -68,4 +68,4 @@ const tanks = (state = initState, action) => {
   }
 }
 
-export default tanks
+export default unitReducer

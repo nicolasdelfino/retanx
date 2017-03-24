@@ -19,12 +19,15 @@ export const Cell = function(Dimensions) {
     this.showObstacle = true
   }
 
-  this.addNeighbors = function(grid) {
+  this.addNeighbors = function(grid, aStarStyle) {
     let _x = this.x
     let _y = this.y
 
     this.addDefaultNeighbors(grid, _x, _y)
-    // this.addDiagonalNeighbors(grid, _x, _y) <- TODO
+
+    if(aStarStyle === 'advanced') {
+      this.addDiagonalNeighbors(grid, _x, _y)
+    }
   }
 
   this.addDefaultNeighbors = function(grid, _x, _y) {
