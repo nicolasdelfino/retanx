@@ -44,7 +44,7 @@ class MainConnect extends React.Component {
     }
   }
 
-  addTank() {
+  addUnit() {
     let tankPosition = unitUtils.getRandomPos(this.props.units)
 
     if(!tankPosition) {
@@ -52,33 +52,7 @@ class MainConnect extends React.Component {
       return
     }
 
-    // Colors
-    let baseBlue = '#131313'
-    let baseRed = '#131313'
-    let cabinBlue = '#32237d'
-    let cabinRed = '#7d2333'
-    let cannonBlue = '#6262da'
-    let cannonRed = '#d61818'
-
-    let baseColor = this.props.units.length % 2 ? baseBlue : baseRed
-    let cabinColor = this.props.units.length % 2 ? cabinBlue : cabinRed
-    let cannonColor = this.props.units.length % 2 ? cannonBlue : cannonRed
-
-    let randomize = false
-    const tankUnit = {
-      id:           this.props.units.length,
-      aimTarget:    {x: 0, y: 0},
-      position:     tankPosition,
-      width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,
-      height:       randomize ? Math.floor(Math.random() * 50) + 45 : 50,
-      cannonSize:   randomize ? Math.floor(Math.random() * 100) + 70 : 70,
-      background:   baseColor,
-      cabineColor:  cabinColor,
-      cannonColor:  cannonColor,
-      rotate:       'true',
-      selected:     false,
-      angle:        0
-    }
+    let tankUnit = unitUtils.getTankUnit(tankPosition, this.props.units)
 
     this.props.dispatch({ type: 'ADD_UNIT', payload: tankUnit})
   }
@@ -89,7 +63,7 @@ class MainConnect extends React.Component {
 
   componentDidMount() {
     _grid = Grid.getInstance()
-    this.addTank()
+    this.addUnit()
   }
 
   coordinates(pos, width, height) {
@@ -425,7 +399,7 @@ class MainConnect extends React.Component {
     return (
       <div>
         <div style={{flexDirection: 'column'}}>
-          <button onClick={this.addTank.bind(this)}>ADD TANK</button>
+          <button onClick={this.addUnit.bind(this)}>ADD UNIT</button>
           <button onClick={this.toggleDebug.bind(this)}>TOGGLE DEBUG</button>
         </div>
         <div className='main' style={{...mainStyle}}>
