@@ -9,7 +9,7 @@
   //animation: rotateUnit 20s infinite;
   border-radius: 100px;
   .unit {
-    zoom: 0.08;
+    zoom: 0.1;
     .body {
       width: 100px;
       height: 70px;
@@ -18,6 +18,7 @@
       align-items: center;
       justify-content: center;
       overflow: visible;
+      box-shadow: 0px 0px 220px #000;
       .arms {
         display: flex;
         position: absolute;

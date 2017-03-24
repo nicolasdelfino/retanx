@@ -23,11 +23,11 @@ class Cannon extends React.Component {
   }
 
   lasersight() {
-    if (!this.props.debug) {
+    if (!this.props.debugAim) {
       return null
     }
     return (
-      <div className='lasersight' />
+      <div className='lasersight tankSight' />
     )
   }
 

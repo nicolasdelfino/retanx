@@ -1,5 +1,6 @@
 import React from 'react'
 import '../../../css/FootSoldier.css';
+import '../../../css/App.css';
 export default class FootSoldier extends React.Component {
   constructor(props) {
     super(props)
@@ -26,6 +27,15 @@ export default class FootSoldier extends React.Component {
     return 'unit' + animation
   }
 
+  lasersight() {
+    if(!this.props.debugAim) {
+      return null
+    }
+    return (
+      <div className='lasersight soldierSight' />
+    )
+  }
+
   render() {
     return (
         <div className="unitWrapper" style={{transform: 'rotate(' + this.state.rotation + 'deg)', 'transition': 'all ' + this.props.specs.aimDuration / 1000 + 's ease'}}>
@@ -43,6 +53,7 @@ export default class FootSoldier extends React.Component {
               <div className="head" />
             </div>
           </div>
+          {this.lasersight()}
         </div>
     )
   }

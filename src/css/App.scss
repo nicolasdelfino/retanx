@@ -10,15 +10,17 @@
 .fval {
   color: white;
   opacity: 0.4;
-  background: black;
+  background: red;
   height: 12px;
 }
 .gval {
   color: white;
+  background: green;
   opacity: 0.3;
 }
 .hval {
   color: white;
+  background: blue;
   opacity: 0.3;
 }
 
@@ -85,6 +87,7 @@ html {
   height: 100%;
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 
 body {
@@ -118,21 +121,33 @@ body {
 @keyframes test {
   0% { opacity: 0}
   1% { opacity: 1; width: 100px; top: 100px; }
-  99% { width: 0px; top: 350px; }
+  99% { width: 0px; top: 650px; }
   100% { opacity: 0}
 }
 
 .lasersight {
   width: 1000px;
   height: 2px;
-  background: red;
-  opacity: 0.15;
-  outline: 1px solid #d16543;
+  background: transparent;
+  opacity: 0.85;
+  outline: 1px dotted #d16543;
   position: absolute;
   top: 100px;
   left: 23px;
   transform: rotate(90deg);
   transform-origin: 0% 0%;
+}
+
+.tankSight {
+  top: 100px;
+  left: 24px;
+}
+
+.soldierSight {
+  outline: 1px dashed yellow;
+  position: absolute;
+  top: 65px;
+  left: 52px;
 }
 
 .explosion {
@@ -146,11 +161,14 @@ body {
 
 .logo {
   position: absolute;
-  top: -120px;
-  left: 200px;
+  top: -200px;
+  left: 660px;
+  zoom: 0.5;
+
 }
 
 .ground {
+  margin-top: 0px;
   outline: 1px solid #095745;
 }
 

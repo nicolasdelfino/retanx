@@ -66,6 +66,10 @@ class MainConnect extends React.Component {
     this.props.dispatch({ type: 'TOGGLE_DEBUG' })
   }
 
+  toggleAim() {
+    this.props.dispatch({ type: 'TOGGLE_AIM' })
+  }
+
   componentDidMount() {
     _grid = Grid.getInstance()
     this.addUnit(TYPES.TANK_TYPE)
@@ -144,7 +148,10 @@ class MainConnect extends React.Component {
               <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
                 <Tracks specs={tankUnit}/>
               </Body>
-              <Cannon debug={this.props.debugMode} specs={tankUnit} rotate={shouldRotate} rotation={angle} shooting={this.getIsThisUnitShooting(tankUnit, index)}/>
+              <Cannon debugAim={this.props.aimMode}
+              specs={tankUnit} rotate={shouldRotate}
+              rotation={angle}
+              shooting={this.getIsThisUnitShooting(tankUnit, index)}/>
             </BasePosition>
             <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
             </div>
@@ -172,7 +179,13 @@ class MainConnect extends React.Component {
             }
            }}>
               <BasePosition position={this.coordinates(position, width, height)} >
-                <FootSoldier isShooting={this.getIsThisUnitShooting(soldierUnit, index)} isMoving={this.state.isMoving} specs={soldierUnit} rotate={shouldRotate} rotation={angle} />
+                <FootSoldier
+                isShooting={this.getIsThisUnitShooting(soldierUnit, index)}
+                isMoving={this.state.isMoving} specs={soldierUnit}
+                rotate={shouldRotate}
+                rotation={angle}
+                debugAim={this.props.aimMode}
+                />
               </BasePosition>
               <Outline specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
             </div>
@@ -446,9 +459,11 @@ class MainConnect extends React.Component {
     return (
       <div>
         <div style={{flexDirection: 'column'}}>
-          <button onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button>
-          <button onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button>
-          <button onClick={this.toggleDebug.bind(this)}>TOGGLE DEBUG</button>
+          <button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button>
+          <button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button>
+          <button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button>
+          <button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button>
+
         </div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
@@ -472,7 +487,8 @@ const MSTP = (state) => {
     units: state.unitReducer.units,
     app: state.app,
     currentSelectionID: state.app.currentSelectionID,
-    debugMode: state.app.debugMode
+    debugMode: state.app.debugMode,
+    aimMode: state.app.aimMode
   }
 }
 
