@@ -69,7 +69,6 @@ class MainConnect extends React.Component {
   componentDidMount() {
     _grid = Grid.getInstance()
     this.addUnit(TYPES.TANK_TYPE)
-    // this.addUnit(TYPES.SOLDIER_TYPE)
   }
 
   coordinates(pos, width, height) {
@@ -197,7 +196,6 @@ class MainConnect extends React.Component {
 
     let end = path[path.length -1]
     let animationCells = []
-    let unit = this.props.units[this.props.currentSelectionID]
 
     clearTimeout(this.timer)
 
