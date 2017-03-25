@@ -42,7 +42,8 @@
     transform: rotate(360deg); } }
 
 .gridItem {
-  background-image: url("../assets/tile_stone.jpg");
+  background: #212121;
+  outline: 1px solid rgba(0, 0, 0, 0.3);
   background-size: 100px 100px;
   flex: 1;
   transition: all 0s ease; }

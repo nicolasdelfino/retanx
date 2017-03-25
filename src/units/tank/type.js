@@ -32,9 +32,9 @@ export const TankType = function() {
   }
 
   this.setColors = function(baseColor, cabin, cannon) {
-    this.baseColor    = baseColor
-    this.cabinColor   = cabin
-    this.cannonColor  = cannon
+    this.baseColor    = '#595959'
+    this.cabinColor   = '#595959'
+    this.cannonColor  = '#595959'
   }
 
   this.getUnit = function() {
