@@ -6,7 +6,7 @@ export const TankType = function() {
   // A* category
   this.aStarStyle  = 'basic'
   // Rotate aim duration
-  this.aimDuration = 600
+  this.aimDuration = 200
   // Movement speed
   this.moveSpeed   = 2000
   // Colors

@@ -29,7 +29,7 @@ class Ground extends React.Component {
   }
 
   getCell(cell) {
-    return cell.diffCell ? 'gridItem' : 'gridItem waterItem'
+    return !cell.diffCell ? 'gridItem' : 'gridItem dirtPatch'
   }
 
   renderExplosion(isExploding) {
