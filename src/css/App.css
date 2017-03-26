@@ -42,15 +42,16 @@
     transform: rotate(360deg); } }
 
 .gridItem {
-  background-image: url("../assets/tile_stone.jpg");
-  background-size: 100px 100px;
+  background-image: url("../assets/tile_stone.png");
   flex: 1;
   transition: all 0s ease; }
 
+.waterItem {
+  background-image: url("../assets/waterItem0.png"); }
+
 .gridItemObstacle0 {
-  background-image: url("../assets/tile_wall0.jpg");
+  background-image: url("../assets/wall.png");
   flex: 1;
-  background-size: 100px 100px;
   transition: all 0s ease; }
 
 .gridItemObstacle1 {
@@ -102,8 +103,8 @@ body {
   background: red;
   outline: 1px solid #d16543;
   position: absolute;
-  top: 100px;
-  left: 23px;
+  top: 90px;
+  left: 21px;
   transform: rotate(90deg);
   transform-origin: 0% 0%;
   animation: test 0.3s infinite; }
@@ -114,7 +115,7 @@ body {
   1% {
     opacity: 1;
     width: 100px;
-    top: 100px; }
+    top: 90px; }
   99% {
     width: 0px;
     top: 650px; }
@@ -159,7 +160,8 @@ body {
 
 .ground {
   margin-top: 0px;
-  outline: 1px solid #095745; }
+  outline: 1px solid #000;
+  box-shadow: 0px 0px 106px 3px rgba(0, 0, 0, 0.75); }
 
 button {
   background: #095745;

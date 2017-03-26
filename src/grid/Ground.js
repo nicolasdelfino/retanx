@@ -28,6 +28,10 @@ class Ground extends React.Component {
     // return 'gridItemObstacle' + Math.floor(Math.random() * 3)
   }
 
+  getCell(cell) {
+    return cell.diffCell ? 'gridItem' : 'gridItem waterItem'
+  }
+
   renderExplosion(isExploding) {
     if (!isExploding) {
       return null;
@@ -62,7 +66,7 @@ class Ground extends React.Component {
         }
         else {
           row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i,true)}>
-          <div className='gridItem' style={{opacity: 1, flex:1, border: '0px dashed #7d725f'}}></div>
+          <div className={this.getCell(cell)} style={{opacity: 1, flex:1, border: '0px dashed #7d725f'}}></div>
           </div>)
         }
       }
