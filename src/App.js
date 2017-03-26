@@ -219,7 +219,6 @@ class MainConnect extends React.Component {
 
     let end = path[path.length -1]
     let animationCells = []
-    let otherCells = []
 
     clearTimeout(this.timer)
 

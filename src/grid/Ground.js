@@ -66,7 +66,7 @@ class Ground extends React.Component {
         }
         else {
           row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i,true)}>
-          <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .3s ease-in-out', 'transitionDelay': '.5s', flex:1, border: '0px dashed #7d725f'}}></div>
+          <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '.5s', flex:1, border: '0px dashed #7d725f'}}></div>
           </div>)
         }
       }
