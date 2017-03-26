@@ -23,7 +23,7 @@ class Body extends React.Component {
       width: w, height: h,
       borderRadius: 0, zoom: zoom, zIndex: 100, transform: 'rotate(' + this.state.rotation + 'deg)',
       border: '0px solid #000', boxShadow: '0px 0px 60px #000',
-      background: this.props.specs.background, 'transition': 'all 1s ease-out', transitionDelay: '0s'
+      background: this.props.specs.background, 'transition': 'all ' + this.props.specs.moveSpeed/1000 + 's ease-out', transitionDelay: '0s'
     }
     return (
       <div style={{...tankStyle}}>

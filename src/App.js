@@ -144,7 +144,7 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
             }
            }}>
-            <BasePosition position={this.coordinates(position, width, height)} >
+            <BasePosition moveSpeed={tankUnit.moveSpeed} position={this.coordinates(position, width, height)} >
               <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
                 <Tracks specs={tankUnit}/>
               </Body>
@@ -153,7 +153,7 @@ class MainConnect extends React.Component {
               rotation={angle}
               shooting={this.getIsThisUnitShooting(tankUnit, index)}/>
             </BasePosition>
-            <Outline specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+            <Outline moveSpeed={tankUnit.moveSpeed} specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
             </div>
             <SpecsView specs={tankUnit}
             details={this.showSpecs.bind(this)}
@@ -178,7 +178,7 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: soldierUnit.id }})
             }
            }}>
-              <BasePosition position={this.coordinates(position, width, height)} >
+              <BasePosition moveSpeed={soldierUnit.moveSpeed} position={this.coordinates(position, width, height)} >
                 <FootSoldier
                 isShooting={this.getIsThisUnitShooting(soldierUnit, index)}
                 isMoving={this.state.isMoving} specs={soldierUnit}
@@ -187,7 +187,7 @@ class MainConnect extends React.Component {
                 debugAim={this.props.aimMode}
                 />
               </BasePosition>
-              <Outline specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+              <Outline moveSpeed={soldierUnit.moveSpeed} specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
             </div>
             <SpecsView specs={soldierUnit}
             details={this.showSpecs.bind(this)}
@@ -227,7 +227,7 @@ class MainConnect extends React.Component {
     // console.log('animationCells', animationCells, animationCells.length)
     animationCells.forEach((item, index) => {
       item.tempPathString = index
-      let delay = index * (1000 + this.props.units[this.props.currentSelectionID].aimDuration)
+      let delay = index * (this.props.units[this.props.currentSelectionID].moveSpeed + this.props.units[this.props.currentSelectionID].aimDuration)
       this.timer = setTimeout(() => {
         // console.log('pos', _grid.getPositionForCell(item))
         let position = {
@@ -254,7 +254,7 @@ class MainConnect extends React.Component {
             // TODO add travel duration (this.getSpeed())
             setTimeout(() => {
               this.setState({ isMoving: false })
-            }, 1000)
+            }, this.props.units[this.props.currentSelectionID].moveSpeed)
           }
 
         }, this.props.units[this.props.currentSelectionID].aimDuration)

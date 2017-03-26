@@ -7,6 +7,8 @@ export const TankType = function() {
   this.aStarStyle  = 'basic'
   // Rotate aim duration
   this.aimDuration = 600
+  // Movement speed
+  this.moveSpeed   = 2000
   // Colors
   this.baseBlue    = '#131313'
   this.baseRed     = '#131313'
@@ -43,6 +45,7 @@ export const TankType = function() {
       type:         this.type,
       position:     this.position,
       aimTarget:    {x: 0, y: 0},
+      moveSpeed:    this.moveSpeed,
       aimDuration:  this.aimDuration,
       aStarStyle:   this.aStarStyle,
       width:        randomize ? Math.floor(Math.random() * 45) + 40 : 35,

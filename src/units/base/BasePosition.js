@@ -5,7 +5,7 @@ class BasePosition extends React.Component {
       <div style={{
         position: 'absolute',
         left: this.props.position.x, top: this.props.position.y,
-        'transition': 'all 1s ease'
+        'transition': 'all ' + this.props.moveSpeed/1000 + 's ease'
 
       }}>
         {this.props.children}
