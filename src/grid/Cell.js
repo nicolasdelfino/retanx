@@ -14,17 +14,21 @@ export const Cell = function(Dimensions) {
   this.obstacle = false
   this.showObstacle = false
   this.diffCell = false
+  this.opacity = 0.1
+  this.animOrgIndex = null
 
-  // if((Math.floor(Math.random() * 100) + 1) < 80) {
-  //   this.diffCell = true
-  //   this.obstacle = false
-  //   this.showObstacle = false
-  // }
 
   if((Math.floor(Math.random() * 100) + 1) < 22) {
     this.obstacle = true
     this.showObstacle = true
     this.diffCell = true
+  }
+
+  this.focus = function() {
+    this.opacity = 1
+    this.neighbors.forEach((neighbor) => {
+        neighbor.opacity += 0.5
+    })
   }
 
   this.addNeighbors = function(grid, aStarStyle) {
@@ -77,6 +81,6 @@ export const Cell = function(Dimensions) {
     this.isPath = false
     this.isPathDirectionTurn = false
     this.tempPathString = ''
-    // this.obstacle = false
+    this.animOrgIndex = null
   }
 }
