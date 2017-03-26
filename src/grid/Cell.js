@@ -14,6 +14,11 @@ export const Cell = function(Dimensions) {
   this.obstacle = false
   this.showObstacle = false
   this.diffCell = false
+  this.opacity = 0.6
+
+  this.isAnimationCell = false
+  this.animationPrevious = null
+  this.animationNext = null
 
   // if((Math.floor(Math.random() * 100) + 1) < 80) {
   //   this.diffCell = true

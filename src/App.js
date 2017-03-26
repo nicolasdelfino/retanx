@@ -209,19 +209,32 @@ class MainConnect extends React.Component {
 
     let end = path[path.length -1]
     let animationCells = []
+    let otherCells = []
 
     clearTimeout(this.timer)
 
-    for(var i = 0; i < path.length; i ++) {
+    for(let i = 0; i < path.length; i ++) {
       if(i > 0 && i < path.length -1) {
         let current = path[i]
         let previous = path[i -1]
         let next = path[i +1]
         if(previous.x !== next.x && previous.y !== next.y) {
+
           animationCells.push(current)
         }
+        else {
+          // otherCells.push(current)
+        }
       }
+      otherCells.push(path[i])
     }
+
+    otherCells.forEach((cell, index) => {
+      setTimeout(() => {
+        // beginning of FOW
+        cell.opacity = 1
+      }, index * 100)
+    })
 
     animationCells.push(end)
     // console.log('animationCells', animationCells, animationCells.length)
@@ -229,7 +242,6 @@ class MainConnect extends React.Component {
       item.tempPathString = index
       let delay = index * (this.props.units[this.props.currentSelectionID].moveSpeed + this.props.units[this.props.currentSelectionID].aimDuration)
       this.timer = setTimeout(() => {
-        // console.log('pos', _grid.getPositionForCell(item))
         let position = {
           x: item.y,
           y: item.x
@@ -249,9 +261,14 @@ class MainConnect extends React.Component {
           this.setState({ isMoving: true })
           this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: position}})
 
+          let unit = this.props.units[this.props.currentSelectionID]
+          _grid.getGrid()[unit.position.x][unit.position.y].opacity = 1
+
           // check if animation end
           if(index === animationCells.length -1) {
             // TODO add travel duration (this.getSpeed())
+            animationCells[index].opacity = 1
+
             setTimeout(() => {
               this.setState({ isMoving: false })
             }, this.props.units[this.props.currentSelectionID].moveSpeed)
