@@ -17,7 +17,6 @@ class Outline extends React.Component {
   render() {
     let w = this.props.specs.width + 60
     let h = this.props.specs.height + 30
-    console.log('specs', this.props.specs)
 
     // if(this.props.specs.outlineWidth && this.props.specs.outlineHeight) {
     //   w = this.props.specs.outlineWidth

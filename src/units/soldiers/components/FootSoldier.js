@@ -41,16 +41,16 @@ export default class FootSoldier extends React.Component {
         <div className="unitWrapper" style={{transform: 'rotate(' + this.state.rotation + 'deg)', 'transition': 'all ' + this.props.specs.aimDuration / 1000 + 's ease'}}>
           <div id="soldier" className={this.getCSS()}>
             <div className="gunWrapper">
-              <div className="gun">
-                <div className="barrel" />
+              <div className="gun" style={{background: this.props.specs.weaponColor}}>
+                <div className="barrel" style={{background: this.props.specs.barrelColor}}/>
               </div>
             </div>
-            <div className="body">
-              <div className="arms">
-                <div className="arm left"></div>
-                <div className="arm right"></div>
+            <div className="body" style={{background: this.props.specs.torsoColor}}>
+              <div className="arms" style={{background: this.props.specs.shoulderColor}}>
+                <div className="arm left" style={{background: this.props.specs.armsColor}}></div>
+                <div className="arm right" style={{background: this.props.specs.armsColor}}></div>
               </div>
-              <div className="head" />
+              <div className="head" style={{background: this.props.specs.headColor}}/>
             </div>
           </div>
           {this.lasersight()}
