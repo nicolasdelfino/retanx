@@ -107,7 +107,7 @@ class Ground extends React.Component {
         if(a && this.isCellInUse(i,x) ) {
           row.push(
             <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid #ffffff', flexDirection: 'row'}}>
+              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid transparent', flexDirection: 'row'}}>
               </div>
             </div>
           )
@@ -115,7 +115,7 @@ class Ground extends React.Component {
         else if(cell.isPath && cell.isPathDirectionTurn) {
           row.push(
             <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid yellow', flexDirection: 'row'}}>
+              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid transparent', flexDirection: 'row'}}>
               </div>
             </div>
           )
@@ -123,7 +123,7 @@ class Ground extends React.Component {
         else if(cell.isPath) {
           row.push(
             <div key={x} style={{ ...cellStyle, background: 'rgba(255,0,0,.05)', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#eb840c', border: '1px dotted red', flexDirection: 'row'}}>
+              <div className='debugItemCell' style={{flex:1, color: '#eb840c', border: '1px dashed red', flexDirection: 'row'}}>
               {cell.tempPathString}
               </div>
             </div>
@@ -133,21 +133,21 @@ class Ground extends React.Component {
           // {cell.x}, {cell.y}
           row.push(
             <div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
-              <div style={{opacity: 1, flex:1, border: '1px solid black', flexDirection: 'row', justifyContent: 'space-around'}}>
+              <div style={{opacity: 1, flex:1, border: '1px solid transparent', flexDirection: 'row', justifyContent: 'space-around'}}>
                 <div style={{display: 'flex', flex:1, background: 'transparent', height: size / 2, flexDirection: 'row'}}>
                   <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2}}>
-                    <span className="cell xy"></span>
+                    <span className="cell xy" style={{display: this.props.ascores ? 'flex' : 'none'}}></span>
                   </div>
                   <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, justifyContent: 'flex-end'}}>
-                    <span className="cell fval">F:{cell.f}</span>
+                    <span className="cell fval" style={{display: this.props.ascores ? 'flex' : 'none'}} >F:{cell.f}</span>
                   </div>
                 </div>
                 <div style={{display: 'flex', flex:1, background: 'transparent', height: size / 2, flexDirection: 'row'}}>
                   <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, alignItems:'flex-end'}}>
-                    <span className="cell gval">G:{cell.g}</span>
+                    <span className="cell gval" style={{display: this.props.ascores ? 'flex' : 'none'}} >G:{cell.g}</span>
                   </div>
                   <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, justifyContent: 'flex-end', alignItems:'flex-end'}}>
-                    <span className="cell hval">H:{cell.h}</span>
+                    <span className="cell hval" style={{display: this.props.ascores ? 'flex' : 'none'}} >H:{cell.h}</span>
                   </div>
                 </div>
               </div>

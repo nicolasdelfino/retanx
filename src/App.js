@@ -60,10 +60,17 @@ class MainConnect extends React.Component {
 
     let unit = unitUtils.getUnit(type, unitPosition, this.props.units)
     this.props.dispatch({ type: 'ADD_UNIT', payload: unit})
+
+    _grid.getGrid()[unitPosition.x][unitPosition.y].obstacle = false
+    _grid.getGrid()[unitPosition.x][unitPosition.y].opacity = 1
   }
 
   toggleDebug() {
     this.props.dispatch({ type: 'TOGGLE_DEBUG' })
+  }
+
+  toggleAscores() {
+    this.props.dispatch({ type: 'TOGGLE_ASCORES' })
   }
 
   toggleAim() {
@@ -204,6 +211,9 @@ class MainConnect extends React.Component {
     return unitList
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Follow path function, cuts out redundant cells
+
   followPath(start, path) {
     path.reverse()
 
@@ -219,25 +229,19 @@ class MainConnect extends React.Component {
         let previous = path[i -1]
         let next = path[i +1]
         if(previous.x !== next.x && previous.y !== next.y) {
-
+          current.isAnimationCell = true
+          current.animOrgIndex = i
           animationCells.push(current)
         }
-        else {
-          // otherCells.push(current)
-        }
       }
-      otherCells.push(path[i])
     }
 
-    otherCells.forEach((cell, index) => {
-      setTimeout(() => {
-        // beginning of FOW
-        cell.opacity = 1
-      }, index * 100)
-    })
-
+    end.animOrgIndex = path.length -1
     animationCells.push(end)
-    // console.log('animationCells', animationCells, animationCells.length)
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // Animate path
+
     animationCells.forEach((item, index) => {
       item.tempPathString = index
       let delay = index * (this.props.units[this.props.currentSelectionID].moveSpeed + this.props.units[this.props.currentSelectionID].aimDuration)
@@ -250,19 +254,26 @@ class MainConnect extends React.Component {
         // used for controlling walk animation
         this.setState({ isMoving: false })
 
+        let unit = this.props.units[this.props.currentSelectionID]
+
         // aim cannon
         this.props.dispatch({type: 'AIM', payload: {
           id: this.props.units[this.props.currentSelectionID].id,
           target: position,
           angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], { x: position.y, y: position.x }) }})
 
+
+          _grid.getGrid()[unit.position.x][unit.position.y].opacity = 1
+
+          //get cells between this one and last non animation cell
+          this.makeFOW(path, item.animOrgIndex)
+
         // move unit
         setTimeout(() => {
           this.setState({ isMoving: true })
           this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: position}})
 
-          let unit = this.props.units[this.props.currentSelectionID]
-          _grid.getGrid()[unit.position.x][unit.position.y].opacity = 1
+          this.makeFOW(path, item.animOrgIndex)
 
           // check if animation end
           if(index === animationCells.length -1) {
@@ -281,6 +292,23 @@ class MainConnect extends React.Component {
 
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // F.O.W.
+
+  makeFOW(path, animOrgIndex) {
+    for(var c = 0; c < path.length; c++) {
+      let tCell = path[c]
+      if(c <= animOrgIndex) {
+        setTimeout(() => {
+          tCell.focus()
+        }, c * 10)
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Move to cell
 
   moveToCell(cell) {
     if(!this.props.units[this.props.currentSelectionID].selected) {
@@ -333,6 +361,9 @@ class MainConnect extends React.Component {
       }, 500)
     }
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Aim, when clicking on obstacles
 
   aimOnCell(cell) {
     if(!this.props.units[this.props.currentSelectionID].selected) {
@@ -387,7 +418,7 @@ class MainConnect extends React.Component {
       }
     })
     return (
-      <Ground debug={this.props.debugMode} tanks={this.props.units} cursor={sel ? 'crosshair' : 'normal'}
+      <Ground debug={this.props.debugMode} ascores={this.props.debugAstarScores} tanks={this.props.units} cursor={sel ? 'crosshair' : 'normal'}
       aim={this.aimOnCell.bind(this)} move={this.moveToCell.bind(this)}/>
     )
   }
@@ -479,6 +510,7 @@ class MainConnect extends React.Component {
           <button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button>
           <button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button>
           <button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button>
+          <button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button>
           <button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button>
 
         </div>
@@ -505,7 +537,8 @@ const MSTP = (state) => {
     app: state.app,
     currentSelectionID: state.app.currentSelectionID,
     debugMode: state.app.debugMode,
-    aimMode: state.app.aimMode
+    aimMode: state.app.aimMode,
+    debugAstarScores: state.app.debugAstarScores
   }
 }
 
