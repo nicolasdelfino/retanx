@@ -8,7 +8,7 @@ export const SoldierType = function() {
   // Rotate aim duration
   this.aimDuration = 200
   // Movement speed
-  this.moveSpeed   = 6000
+  this.moveSpeed   = 4000
   // Colors
   this.torsoColor     = '#'
   this.shoulderColor  = '#'
