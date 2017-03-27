@@ -59,14 +59,14 @@ class Ground extends React.Component {
         var cell = _grid.getGrid()[i][x]
         if(cell.obstacle && cell.showObstacle) {
           row.push(<div key={x} style={{ ...cellStyle, background: 'black' }} onClick={() => this.clickCell(x,i,false)}>
-            <div className={this.getRandomObstacleCell()} style={{opacity: cell.opacity, flex:1, border: '0px dashed #7d725f', color: 'white'}}>
+            <div className={this.getRandomObstacleCell()} style={{opacity: cell.opacity, flex:1, border: '0px dashed transparent', color: 'white'}}>
               {this.renderExplosion(cell.isExploding)}
             </div>
           </div>)
         }
         else {
           row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i,true)}>
-          <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '.5s', flex:1, border: '0px dashed #7d725f'}}></div>
+          <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '.5s', flex:1, border: '0px dashed transparent'}}></div>
           </div>)
         }
       }
@@ -107,7 +107,7 @@ class Ground extends React.Component {
         if(a && this.isCellInUse(i,x) ) {
           row.push(
             <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid transparent', flexDirection: 'row'}}>
+              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '0px solid transparent', flexDirection: 'row'}}>
               </div>
             </div>
           )
@@ -115,7 +115,7 @@ class Ground extends React.Component {
         else if(cell.isPath && cell.isPathDirectionTurn) {
           row.push(
             <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '1px solid transparent', flexDirection: 'row'}}>
+              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '0px solid transparent', flexDirection: 'row'}}>
               </div>
             </div>
           )

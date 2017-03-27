@@ -14,7 +14,7 @@ export const Cell = function(Dimensions) {
   this.obstacle = false
   this.showObstacle = false
   this.diffCell = false
-  this.opacity = 0.1
+  this.opacity = 0
   this.animOrgIndex = null
 
 
