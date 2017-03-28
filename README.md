@@ -3,7 +3,7 @@
 </p>
 
 # RETANX
-React Redux tanks & A* 
+React strategy POC with A*, divs and CSS transitions  
 
 ## PRs are welcomed, to contribute make sure that:
 * Branch name references issue number if it adresses a feature / bug fix.
