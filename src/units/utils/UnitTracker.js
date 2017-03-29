@@ -21,10 +21,12 @@ export const UnitTracker = function() {
       console.log('Tracking ' + units.length + ' ' + tU)
       units.forEach((unit, index) => {
 
-        let element = $('#unit_' + unit.id + " .position"); // NO JQUERY PLEASE
+        //let element = $('#unit_' + unit.id + " .position"); // NO JQUERY PLEASE
+        let element = document.getElementById('unit_' + unit.id)
+        element = element.getElementsByClassName('position')
 
-        let x = Math.floor(element.offset().left) - mainX - unit.offset.x
-        let y = Math.floor(element.offset().top) - mainY - unit.offset.y
+        let x = parseInt(element[0].style.left) - mainX - unit.offset.x
+        let y = parseInt(element[0].style.top) - mainY - unit.offset.y
 
         console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
       })

@@ -26,6 +26,9 @@ import { UnitTracker } from './units/utils/UnitTracker'
 let tracker = UnitTracker.getInstance()
 let trackerInterval = null
 
+import { Utils } from './utils/Utils'
+let utils = Utils.getInstance()
+
 const mainStyle = {
   width: Dimensions().width, height: Dimensions().height,
   color: '#fff',
@@ -46,7 +49,8 @@ class MainConnect extends React.Component {
       isFollowingPath: true,
       forceValUpdate: 0,
       shooting: false,
-      refresh: 0
+      refresh: 0,
+      totalDivs: 0
     }
   }
 
@@ -54,7 +58,11 @@ class MainConnect extends React.Component {
     _grid = Grid.getInstance()
     this.addUnit(TYPES.TANK_TYPE)
 
-
+    setInterval(() => {
+      this.setState({
+        totalDivs: utils.getTotalDivs()
+      })
+    }, 1000)
   }
 
   addUnit(type) {
@@ -540,19 +548,19 @@ class MainConnect extends React.Component {
   }
 
   renderNumDivs() {
-    return <p>div total: 1000</p>
+    return <div className='totalDivs'>Total divs: {this.state.totalDivs}</div>
   }
 
 	render() {
     return (
       <div>
-        <div style={{flexDirection: 'column'}}>
-          <button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button>
-          <button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button>
-          <button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button>
-          <button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button>
-          <button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button>
-
+        <div className='dashboard' style={{flexDirection: 'column'}}>
+          <div><button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
+          <div><button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
+          <div><button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
+          <div><button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
+          <div><button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
+          {this.renderNumDivs()}
         </div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
@@ -565,8 +573,6 @@ class MainConnect extends React.Component {
           {this.handleKeyInput()}
           {/* RETANX LOGO */}
           {this.renderLogo()}
-          {/* RETANX LOGO */}
-          {this.renderNumDivs()}
         </div>
       </div>
     )

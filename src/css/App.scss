@@ -1,6 +1,26 @@
 .App {
   text-align: center;
 }
+
+.totalDivs {
+  color: red;
+  font-size: 11px;
+  padding: 2px;
+  background: rgb(36, 36, 36);
+  width: 120px;
+  margin: 2px;
+  text-transform: uppercase;
+}
+
+.dashboard {
+  background: black;
+  padding: 10px;
+
+  button {
+    margin: 2px;
+  }
+}
+
 .cell {
   padding: 6px;
   font-size: 12px;
