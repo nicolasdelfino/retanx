@@ -18,11 +18,6 @@ class Outline extends React.Component {
     let w = this.props.specs.width + 60
     let h = this.props.specs.height + 30
 
-    // if(this.props.specs.outlineWidth && this.props.specs.outlineHeight) {
-    //   w = this.props.specs.outlineWidth
-    //   h = this.props.specs.outlineHeight
-    // }
-
     const outlineStyle = {
       position: 'absolute',
       left: this.props.position.x - 30, top: this.props.position.y - 15,
