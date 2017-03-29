@@ -16,7 +16,9 @@ export const UnitTracker = function() {
       let main = $('.main')
       let mainX = Math.floor(main.offset().left)
       let mainY = Math.floor(main.offset().top)
-      console.group('TRACKING')
+      console.group('UNIT TRACKER')
+      let tU = units.length < 2 ? 'UNIT' : 'UNITS'
+      console.log('Tracking ' + units.length + ' ' + tU)
       units.forEach((unit, index) => {
         let element = $('#unit_' + unit.id + " .position");
         let x = Math.floor(element.offset().left) - mainX - unit.offset.x

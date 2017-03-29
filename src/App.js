@@ -135,16 +135,16 @@ class MainConnect extends React.Component {
   renderUnits() {
     let units     = this.props.units
     let unitList  = []
-
-    let trackerUnits = units.map((unit) => {
-      return {id: unit.id, offset: {x: unit.offsetPX, y: unit.offsetPY}}
-    })
-
-    tracker.setUnits(trackerUnits)
-    clearInterval(trackerInterval)
-    trackerInterval = setInterval(() => {
-      tracker.trackUnits()
-    }, 2000)
+    //
+    // let trackerUnits = units.map((unit) => {
+    //   return {id: unit.id, offset: {x: unit.offsetPX, y: unit.offsetPY}}
+    // })
+    //
+    // tracker.setUnits(trackerUnits)
+    // clearInterval(trackerInterval)
+    // trackerInterval = setInterval(() => {
+    //   tracker.trackUnits()
+    // }, 2000)
 
 
     units.forEach((unit, index) => {
@@ -236,6 +236,19 @@ class MainConnect extends React.Component {
   // Follow path function, cuts out redundant cells
 
   followPath(start, path) {
+
+    // track the position of units when something is moving
+    let units     = this.props.units
+    let trackerUnits = units.map((unit) => {
+      return {id: unit.id, offset: {x: unit.offsetPX, y: unit.offsetPY}}
+    })
+
+    tracker.setUnits(trackerUnits)
+    clearInterval(trackerInterval)
+    trackerInterval = setInterval(() => {
+      tracker.trackUnits()
+    }, 250)
+
     path.reverse()
 
     let end = path[path.length -1]
@@ -302,6 +315,9 @@ class MainConnect extends React.Component {
 
             setTimeout(() => {
               this.setState({ isMoving: false })
+              // stop tracking unit positions
+              clearInterval(trackerInterval)
+              console.log('** Unit arrived at target cell **')
             }, this.props.units[this.props.currentSelectionID].moveSpeed)
           }
 
