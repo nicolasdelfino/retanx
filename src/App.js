@@ -237,13 +237,13 @@ class MainConnect extends React.Component {
     // track the position of units when something is moving
     let units     = this.props.units
     let trackerUnits = units.map((unit) => {
-      return {id: unit.id, offset: {x: unit.offsetPX, y: unit.offsetPY}}
+      return {id: unit.id}
     })
 
     tracker.setUnits(trackerUnits)
     clearInterval(trackerInterval)
     trackerInterval = setInterval(() => {
-      tracker.trackUnits()
+      tracker.trackUnits(this.props.currentSelectionID)
     }, 250)
 
     path.reverse()

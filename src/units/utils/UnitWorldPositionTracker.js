@@ -8,7 +8,7 @@ export const UnitWorldPositionTracker = function() {
     let units = []
 
     //getters
-    function trackUnits() {
+    function trackUnits(activeUnit) {
       if(units.length === 0) {
         return
       }
@@ -16,7 +16,7 @@ export const UnitWorldPositionTracker = function() {
       let main = $('.main')
       let mainX = Math.floor(main.offset().left)
       let mainY = Math.floor(main.offset().top)
-      console.group('UNIT TRACKER')
+      console.group('U.W.P TRACKER')
       let tU = units.length < 2 ? 'UNIT' : 'UNITS'
       console.log('Tracking ' + units.length + ' ' + tU)
       units.forEach((unit, index) => {
@@ -26,7 +26,14 @@ export const UnitWorldPositionTracker = function() {
         let x = Math.floor(element.offset().left) - Math.floor(mainX)
         let y = Math.floor(element.offset().top) - Math.floor(mainY)
 
-        console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
+        if(index === activeUnit) {
+          // console.group('%c *** ACTIVE UNIT ***', 'background: #000; color: #bada55');
+          console.log('%c**', 'background: #000; color: #bada55', '#unit_' + unit.id, '=> x:', x, 'y:', y)
+          // console.groupEnd()
+        }
+        else {
+          console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
+        }
       })
       console.groupEnd()
     }
