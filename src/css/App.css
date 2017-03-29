@@ -13,8 +13,9 @@
 .dashboard {
   background: black;
   padding: 10px; }
-  .dashboard button {
-    margin: 2px; }
+
+.dashboard button {
+  margin: 2px; }
 
 .cell {
   padding: 6px;
@@ -103,7 +104,7 @@ html {
   margin-top: 20px; }
 
 body {
-  background: #1d1d1d;
+  background: #000;
   display: flex;
   align-self: center;
   justify-content: center;
