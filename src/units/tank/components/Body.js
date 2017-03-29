@@ -21,13 +21,15 @@ class Body extends React.Component {
 
     const tankStyle = {
       width: w, height: h,
-      borderRadius: 0, zoom: zoom, zIndex: 100, transform: 'rotate(' + this.state.rotation + 'deg)',
+      borderRadius: 0, zoom: zoom, transform: 'rotate(' + this.state.rotation + 'deg)',
       border: '0px solid #000', boxShadow: '0px 0px 60px #000',
       background: this.props.specs.background, 'transition': 'all ' + this.props.specs.moveSpeed/1000 + 's ease-out', transitionDelay: '0s'
     }
     return (
-      <div style={{...tankStyle}}>
-       <div style={{color: '#000'}}>{this.props.children}</div>
+      <div style={{display: 'flex', width: 100, height: 100, alignItems: 'center', justifyContent:'center', position: 'absolute'}}>
+        <div style={{...tankStyle}}>
+         <div style={{color: '#000'}}>{this.props.children}</div>
+        </div>
       </div>
     )
   }

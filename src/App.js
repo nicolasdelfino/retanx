@@ -143,23 +143,14 @@ class MainConnect extends React.Component {
   renderUnits() {
     let units     = this.props.units
     let unitList  = []
-    //
-    // let trackerUnits = units.map((unit) => {
-    //   return {id: unit.id, offset: {x: unit.offsetPX, y: unit.offsetPY}}
-    // })
-    //
-    // tracker.setUnits(trackerUnits)
-    // clearInterval(trackerInterval)
-    // trackerInterval = setInterval(() => {
-    //   tracker.trackUnits()
-    // }, 2000)
-
 
     units.forEach((unit, index) => {
       let shouldRotate  = unit.rotate
       let position      = unit.position
       let width         = unit.width
       let height        = unit.height
+      let cellWidth     = unit.cellWidth
+      let cellHeight    = unit.cellHeight
       let angle         = unit.angle
       let type          = unit.type
       let id            = unit.id
@@ -180,7 +171,7 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
             }
            }}>
-            <BasePosition moveSpeed={tankUnit.moveSpeed} position={this.coordinates(position, width, height)} >
+            <BasePosition moveSpeed={tankUnit.moveSpeed} position={this.coordinates(position, cellWidth, cellHeight)} >
               <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
                 <Tracks specs={tankUnit}/>
               </Body>
@@ -189,12 +180,12 @@ class MainConnect extends React.Component {
               rotation={angle}
               shooting={this.getIsThisUnitShooting(tankUnit, index)}/>
             </BasePosition>
-            <Outline moveSpeed={tankUnit.moveSpeed} specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+            <Outline moveSpeed={tankUnit.moveSpeed} specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
             </div>
             <SpecsView specs={tankUnit}
             details={this.showSpecs.bind(this)}
             rotate={shouldRotate}
-            position={this.coordinates(position, width, height)}
+            position={this.coordinates(position, cellWidth, cellHeight)}
             rotation={angle}/>
           </div>
         )
@@ -214,7 +205,7 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: soldierUnit.id }})
             }
            }}>
-              <BasePosition moveSpeed={soldierUnit.moveSpeed} position={this.coordinates(position, width, height)} >
+              <BasePosition moveSpeed={soldierUnit.moveSpeed} position={this.coordinates(position, cellWidth, cellHeight)} >
                 <FootSoldier
                 isShooting={this.getIsThisUnitShooting(soldierUnit, index)}
                 isMoving={this.state.isMoving} specs={soldierUnit}
@@ -223,12 +214,12 @@ class MainConnect extends React.Component {
                 debugAim={this.props.aimMode}
                 />
               </BasePosition>
-              <Outline moveSpeed={soldierUnit.moveSpeed} specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+              <Outline moveSpeed={soldierUnit.moveSpeed} specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
             </div>
             <SpecsView specs={soldierUnit}
             details={this.showSpecs.bind(this)}
             rotate={shouldRotate}
-            position={this.coordinates(position, width, height)}
+            position={this.coordinates(position, cellWidth, cellHeight)}
             rotation={angle}/>
           </div>
         )

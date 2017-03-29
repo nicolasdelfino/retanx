@@ -22,8 +22,9 @@ export const TankType = function() {
   // Id & position
   this.id          = null
   this.position    = null
-  this.offsetPX    = 35
-  this.offsetPY    = 27
+  // cell width height properties
+  this.cellWidth   = 100
+  this.cellHeight  = 100
   // Randomize colors
   let randomize    = false
 
@@ -53,14 +54,14 @@ export const TankType = function() {
       width:        randomize ? Math.floor(Math.random() * 45) + 40 : 30,
       height:       randomize ? Math.floor(Math.random() * 50) + 45 : 45,
       cannonSize:   randomize ? Math.floor(Math.random() * 100) + 70 : 70,
+      cellWidth:    this.cellWidth,
+      cellHeight:   this.cellHeight,
       background:   this.baseColor,
       cabineColor:  this.cabinColor,
       cannonColor:  this.cannonColor,
       rotate:       'true',
       selected:     false,
-      angle:        0,
-      offsetPX:     this.offsetPX,
-      offsetPY:     this.offsetPY
+      angle:        0
     }
   }
 }
