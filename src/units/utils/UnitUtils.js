@@ -55,6 +55,7 @@ export const UnitUtils = function() {
     }
     //___________________________________________________________________________
     function getUnit(unitType, unitPosition, units) {
+      console.log('unit utils', units)
       let unit = null
       switch (unitType) {
         case TYPES.TANK_TYPE:

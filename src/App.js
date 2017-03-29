@@ -22,6 +22,10 @@ let _grid = null
 import { UnitUtils } from './units/utils/UnitUtils'
 let unitUtils = UnitUtils.getInstance()
 
+import { UnitTracker } from './utils/UnitTracker'
+let tracker = UnitTracker.getInstance()
+let trackerInterval = null
+
 const mainStyle = {
   width: Dimensions().width, height: Dimensions().height,
   color: '#fff',
@@ -46,8 +50,16 @@ class MainConnect extends React.Component {
     }
   }
 
+  componentDidMount() {
+    _grid = Grid.getInstance()
+    this.addUnit(TYPES.TANK_TYPE)
+
+
+  }
+
   addUnit(type) {
     if(!type) {
+      // default to use tank type
       type = TYPES.TANK_TYPE
     }
     // currently just tanks
@@ -63,6 +75,8 @@ class MainConnect extends React.Component {
 
     _grid.getGrid()[unitPosition.x][unitPosition.y].obstacle = false
     _grid.getGrid()[unitPosition.x][unitPosition.y].opacity = 1
+
+
   }
 
   toggleDebug() {
@@ -75,11 +89,6 @@ class MainConnect extends React.Component {
 
   toggleAim() {
     this.props.dispatch({ type: 'TOGGLE_AIM' })
-  }
-
-  componentDidMount() {
-    _grid = Grid.getInstance()
-    this.addUnit(TYPES.TANK_TYPE)
   }
 
   coordinates(pos, width, height) {
@@ -127,6 +136,17 @@ class MainConnect extends React.Component {
     let units     = this.props.units
     let unitList  = []
 
+    let trackerUnits = units.map((unit) => {
+      return unit.id
+    })
+
+    tracker.setUnits(trackerUnits)
+    clearInterval(trackerInterval)
+    trackerInterval = setInterval(() => {
+      tracker.getUnits()
+    }, 2000)
+
+
     units.forEach((unit, index) => {
       let shouldRotate  = unit.rotate
       let position      = unit.position
@@ -134,12 +154,13 @@ class MainConnect extends React.Component {
       let height        = unit.height
       let angle         = unit.angle
       let type          = unit.type
+      let id            = unit.id
 
       if(type === TYPES.TANK_TYPE) {
         // cast as tank unit
         let tankUnit    = unit
         unitList.push(
-          <div id={'tank_' + index} key={index}>
+          <div id={'unit_' + id} key={index}>
           <div style={{'cursor': 'pointer'}} onClick={() => {
             if(this.state.isAiming) { return }
             if(tankUnit.selected) {
@@ -173,7 +194,7 @@ class MainConnect extends React.Component {
       else if(type === TYPES.SOLDIER_TYPE) {
         let soldierUnit = unit
         unitList.push(
-          <div id={'tank_' + index} key={index}>
+          <div id={'unit_' + id} key={index}>
           <div style={{'cursor': 'pointer'}} onClick={() => {
             if(this.state.isAiming) { return }
             if(soldierUnit.selected) {

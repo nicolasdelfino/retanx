@@ -56,7 +56,8 @@ export const TankType = function() {
       cannonColor:  this.cannonColor,
       rotate:       'true',
       selected:     false,
-      angle:        0
+      angle:        0,
+      idTrack:      this.idTrack
     }
   }
 }

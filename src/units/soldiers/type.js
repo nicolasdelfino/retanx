@@ -9,6 +9,8 @@ export const SoldierType = function() {
   this.aimDuration = 200
   // Movement speed
   this.moveSpeed   = 4000
+  // id tracker
+  this.idTrack     = ''
   // Colors
   this.torsoColor     = '#'
   this.shoulderColor  = '#'
@@ -58,7 +60,8 @@ export const SoldierType = function() {
       barrelColor:    this.barrelColor,
       rotate:         'true',
       selected:       false,
-      angle:          0
+      angle:          0,
+      idTrack:      this.idTrack
     }
   }
 }
