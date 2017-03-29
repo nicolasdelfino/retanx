@@ -15,12 +15,12 @@ class SpecsView extends React.Component {
   }
 
   render() {
-    const w = this.props.specs.width + 60
-    const h = this.props.specs.height + 30
+    const w = this.props.specs.cellWidth
+    const h = this.props.specs.cellHeight
 
     const specsAreaStyle = {
       position: 'absolute',
-      left: this.props.position.x - 30, top: this.props.position.y - 15,
+      left: this.props.position.x - 25, top: this.props.position.y - 25,
       width: w, height: h,
       zIndex: 300, transform: 'rotate(' + this.state.rotation + 'deg)',
       background: 'transparent', 'transition': 'all 2s ease', pointerEvents: 'none'
@@ -29,9 +29,9 @@ class SpecsView extends React.Component {
     const specsStyle = {
       position: 'absolute',
       left: 0, top: 0,
-      width: 20, height: 20, borderRadius: 20,
+      width: 10, height: 10, borderRadius: 10,
       zIndex: 101, transform: 'rotate(' + this.state.rotation + 'deg)', border: '1px solid #2c9a23',
-      background: 'transparent', 'transition': 'all 2s ease', pointerEvents: 'auto', cursor: 'pointer'
+      background: 'rgb(0, 0, 0)', 'transition': 'all 1s ease', pointerEvents: 'auto', cursor: 'pointer'
     }
 
     if(!this.props.specs.selected) {

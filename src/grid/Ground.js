@@ -56,7 +56,7 @@ class Ground extends React.Component {
     for (let i = 0; i < cols; i++) {
       let row = []
       for (let x = 0; x < rows; x++) {
-        var cell = _grid.getGrid()[i][x]
+        let cell = _grid.getGrid()[i][x]
         if(cell.obstacle && cell.showObstacle) {
           row.push(<div key={x} style={{ ...cellStyle, background: 'black' }} onClick={() => this.clickCell(x,i,false)}>
             <div className={this.getRandomObstacleCell()} style={{opacity: cell.opacity, flex:1, border: '0px dashed transparent', color: 'white'}}>
@@ -66,7 +66,7 @@ class Ground extends React.Component {
         }
         else {
           row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i,true)}>
-          <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '.5s', flex:1, border: '0px dashed transparent'}}></div>
+          <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '0s', flex:1, border: '0px dashed transparent'}}></div>
           </div>)
         }
       }
