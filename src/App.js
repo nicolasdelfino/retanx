@@ -22,7 +22,7 @@ let _grid = null
 import { UnitFactory } from './units/utils/UnitFactory'
 let unitFactory = UnitFactory.getInstance()
 
-import { UnitTracker } from './utils/UnitTracker'
+import { UnitTracker } from './units/utils/UnitTracker'
 let tracker = UnitTracker.getInstance()
 let trackerInterval = null
 
