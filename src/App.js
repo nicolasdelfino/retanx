@@ -7,6 +7,7 @@ import Body from './units/tank/components/Body'
 import Cannon from './units/tank/components/Cannon'
 import Tracks from './units/tank/components/Tracks'
 import Outline from './units/base/Outline'
+import HP from './units/base/HitPoints'
 import SpecsView from './units/tank/components/SpecsView'
 import FootSoldier from './units/soldiers/components/FootSoldier'
 import * as TYPES from './units/types/unitTypes'
@@ -83,8 +84,6 @@ class MainConnect extends React.Component {
 
     _grid.getGrid()[unitPosition.x][unitPosition.y].obstacle = false
     _grid.getGrid()[unitPosition.x][unitPosition.y].opacity = 1
-
-
   }
 
   toggleDebug() {
@@ -177,6 +176,7 @@ class MainConnect extends React.Component {
               specs={tankUnit} rotate={shouldRotate}
               rotation={angle}
               shooting={this.getIsThisUnitShooting(tankUnit, index)}/>
+              <HP specs={tankUnit} />
             </BasePosition>
             <Outline moveSpeed={tankUnit.moveSpeed} specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
             </div>
@@ -211,6 +211,7 @@ class MainConnect extends React.Component {
                 rotation={angle}
                 debugAim={this.props.aimMode}
                 />
+                <HP specs={soldierUnit} />
               </BasePosition>
               <Outline moveSpeed={soldierUnit.moveSpeed} specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
             </div>

@@ -27,6 +27,8 @@ export const TankType = function() {
   this.cellHeight  = 100
   // mass
   this.mass        = 1000
+  // hit points
+  this.hitPoints   = 50
   // Randomize colors
   let randomize    = false
 
@@ -64,7 +66,8 @@ export const TankType = function() {
       rotate:       'true',
       selected:     false,
       angle:        0,
-      mass:         this.mass
+      mass:         this.mass,
+      hp:           this.hitPoints
     }
   }
 }
