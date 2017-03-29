@@ -23,8 +23,8 @@ export const UnitTracker = function() {
 
         let element = $('#unit_' + unit.id + " .position"); // NO JQUERY PLEASE
 
-        let x = Math.floor(element.offset().left) - mainX - unit.offset.x
-        let y = Math.floor(element.offset().top) - mainY - unit.offset.y
+        let x = Math.floor(element.offset().left) - Math.floor(mainX)
+        let y = Math.floor(element.offset().top) - Math.floor(mainY) 
 
         console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
       })
