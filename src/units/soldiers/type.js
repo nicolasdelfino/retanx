@@ -24,6 +24,8 @@ export const SoldierType = function() {
   // cell width height properties
   this.cellWidth   = 100
   this.cellHeight  = 100
+  // mass
+  this.mass        = 100
 
   this.setId = function(id) {
     this.id = id
@@ -66,8 +68,7 @@ export const SoldierType = function() {
       rotate:         'true',
       selected:       false,
       angle:          0,
-      offsetPX:       this.offsetPX,
-      offsetPY:       this.offsetPY
+      mass:           this.mass
     }
   }
 }
