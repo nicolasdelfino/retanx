@@ -28,7 +28,7 @@ class SpecsView extends React.Component {
 
     const specsStyle = {
       position: 'absolute',
-      left: -30, top: -30,
+      left: 0, top: 0,
       width: 20, height: 20, borderRadius: 20,
       zIndex: 101, transform: 'rotate(' + this.state.rotation + 'deg)', border: '1px solid #2c9a23',
       background: 'transparent', 'transition': 'all 2s ease', pointerEvents: 'auto', cursor: 'pointer'
