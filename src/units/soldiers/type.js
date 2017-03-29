@@ -21,6 +21,8 @@ export const SoldierType = function() {
   // Id & position
   this.id          = null
   this.position    = null
+  this.offsetPX    = 0
+  this.offsetPY    = 0
 
   this.setId = function(id) {
     this.id = id
@@ -61,7 +63,8 @@ export const SoldierType = function() {
       rotate:         'true',
       selected:       false,
       angle:          0,
-      idTrack:      this.idTrack
+      offsetPX:       this.offsetPX,
+      offsetPY:       this.offsetPY
     }
   }
 }

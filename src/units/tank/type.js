@@ -22,6 +22,8 @@ export const TankType = function() {
   // Id & position
   this.id          = null
   this.position    = null
+  this.offsetPX    = 35
+  this.offsetPY    = 27
   // Randomize colors
   let randomize    = false
 
@@ -57,7 +59,8 @@ export const TankType = function() {
       rotate:       'true',
       selected:     false,
       angle:        0,
-      idTrack:      this.idTrack
+      offsetPX:     this.offsetPX,
+      offsetPY:     this.offsetPY
     }
   }
 }

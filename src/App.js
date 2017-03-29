@@ -137,13 +137,13 @@ class MainConnect extends React.Component {
     let unitList  = []
 
     let trackerUnits = units.map((unit) => {
-      return unit.id
+      return {id: unit.id, offset: {x: unit.offsetPX, y: unit.offsetPY}}
     })
 
     tracker.setUnits(trackerUnits)
     clearInterval(trackerInterval)
     trackerInterval = setInterval(() => {
-      tracker.getUnits()
+      tracker.trackUnits()
     }, 2000)
 
 
