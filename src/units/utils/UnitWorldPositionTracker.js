@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-export const UnitTracker = function() {
+export const UnitWorldPositionTracker = function() {
 
   let instance = null
 
@@ -24,7 +24,7 @@ export const UnitTracker = function() {
         let element = $('#unit_' + unit.id + " .position"); // NO JQUERY PLEASE
 
         let x = Math.floor(element.offset().left) - Math.floor(mainX)
-        let y = Math.floor(element.offset().top) - Math.floor(mainY) 
+        let y = Math.floor(element.offset().top) - Math.floor(mainY)
 
         console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
       })

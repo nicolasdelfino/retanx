@@ -22,8 +22,8 @@ let _grid = null
 import { UnitFactory } from './units/utils/UnitFactory'
 let unitFactory = UnitFactory.getInstance()
 
-import { UnitTracker } from './units/utils/UnitTracker'
-let tracker = UnitTracker.getInstance()
+import { UnitWorldPositionTracker } from './units/utils/UnitWorldPositionTracker'
+let tracker = UnitWorldPositionTracker.getInstance()
 let trackerInterval = null
 
 import { Utils } from './utils/Utils'
@@ -147,8 +147,6 @@ class MainConnect extends React.Component {
     units.forEach((unit, index) => {
       let shouldRotate  = unit.rotate
       let position      = unit.position
-      let width         = unit.width
-      let height        = unit.height
       let cellWidth     = unit.cellWidth
       let cellHeight    = unit.cellHeight
       let angle         = unit.angle
