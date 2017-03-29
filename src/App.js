@@ -19,8 +19,8 @@ import { Dimensions, Grid } from './grid/Grid'
 import { AStar } from './grid/AStar'
 let _grid = null
 
-import { UnitUtils } from './units/utils/UnitUtils'
-let unitUtils = UnitUtils.getInstance()
+import { UnitFactory } from './units/utils/UnitFactory'
+let unitFactory = UnitFactory.getInstance()
 
 import { UnitTracker } from './utils/UnitTracker'
 let tracker = UnitTracker.getInstance()
@@ -63,14 +63,14 @@ class MainConnect extends React.Component {
       type = TYPES.TANK_TYPE
     }
     // currently just tanks
-    let unitPosition = unitUtils.getRandomPos(this.props.units)
+    let unitPosition = unitFactory.getRandomPos(this.props.units)
 
     if(!unitPosition) {
       console.log('No available position for unit')
       return
     }
 
-    let unit = unitUtils.getUnit(type, unitPosition, this.props.units)
+    let unit = unitFactory.getUnit(type, unitPosition, this.props.units)
     this.props.dispatch({ type: 'ADD_UNIT', payload: unit})
 
     _grid.getGrid()[unitPosition.x][unitPosition.y].obstacle = false
@@ -539,6 +539,10 @@ class MainConnect extends React.Component {
     return <div className='logo'><img src={logo} alt='logo'/></div>
   }
 
+  renderNumDivs() {
+    return <p>div total: 1000</p>
+  }
+
 	render() {
     return (
       <div>
@@ -561,6 +565,8 @@ class MainConnect extends React.Component {
           {this.handleKeyInput()}
           {/* RETANX LOGO */}
           {this.renderLogo()}
+          {/* RETANX LOGO */}
+          {this.renderNumDivs()}
         </div>
       </div>
     )
