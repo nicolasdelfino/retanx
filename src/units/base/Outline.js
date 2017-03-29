@@ -15,20 +15,13 @@ class Outline extends React.Component {
   }
 
   render() {
-    let w = this.props.specs.width + 60
-    let h = this.props.specs.height + 30
-
-    // if(this.props.specs.outlineWidth && this.props.specs.outlineHeight) {
-    //   w = this.props.specs.outlineWidth
-    //   h = this.props.specs.outlineHeight
-    // }
+    let w = this.props.specs.width * 1.5
+    let h = this.props.specs.height * 1.2
 
     const outlineStyle = {
-      position: 'absolute',
-      left: this.props.position.x - 30, top: this.props.position.y - 15,
       width: w, height: h, opacity: 1, animation: 'fade 1s linear infinite',
-      zIndex: 100, transform: 'rotate(' + this.state.rotation + 'deg)', borderRadius: 2,
-      border: '1px solid #05e400', background: 'transparent', 'transition': 'all ' + this.props.moveSpeed/1000 +'s ease', transitionDelay: '0s'
+      transform: 'rotate(' + this.state.rotation + 'deg)', borderRadius: 2,
+      border: '1px solid #05e400', background: 'transparent'
     }
 
     if(!this.props.specs.selected) {
@@ -36,7 +29,12 @@ class Outline extends React.Component {
     }
 
     return (
+      <div className='outline'
+      style={{display: 'flex', position: 'absolute', left: this.props.position.x, top: this.props.position.y, zIndex: 300,
+      'transition': 'all ' + this.props.moveSpeed/1000 +'s ease',
+      width: this.props.specs.cellWidth, height: this.props.specs.cellHeight, alignItems: 'center', justifyContent: 'center'}}>
         <div style={{...outlineStyle}} />
+      </div>
     )
   }
 }

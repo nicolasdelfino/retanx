@@ -75,13 +75,15 @@ class Cannon extends React.Component {
       border: '1px solid rgba(0,0,0,0.3)', zIndex: 10}
 
     return (
-      <div style={{...outer, zIndex: 100}}>
+      <div style={{display: 'flex', width: 100, height: 100,alignItems: 'center', justifyContent:'center', zIndex: 100}}>
+      <div style={{...outer}}>
         <div style={{...round}} />
         <div style={{...inner}} />
         <div style={{...hatch}} />
         <div style={{...hatchKnob}} />
         {this.shoot()}
         {this.lasersight()}
+      </div>
       </div>
     )
   }

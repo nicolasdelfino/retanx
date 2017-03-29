@@ -6,7 +6,7 @@ let _grid = Grid.getInstance()
 import { TankType } from '../tank/type'
 import { SoldierType } from '../soldiers/type'
 
-export const UnitUtils = function() {
+export const UnitFactory = function() {
   var instance = null
 
   function createUtils() {
@@ -55,6 +55,7 @@ export const UnitUtils = function() {
     }
     //___________________________________________________________________________
     function getUnit(unitType, unitPosition, units) {
+      console.log('unit utils', units)
       let unit = null
       switch (unitType) {
         case TYPES.TANK_TYPE:

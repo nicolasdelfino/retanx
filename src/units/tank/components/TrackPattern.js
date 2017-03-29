@@ -1,5 +1,9 @@
 import React from 'react';
 class TrackPattern extends React.Component {
+  shouldComponentUpdate() {
+    return false
+  }
+  
   tracks() {
     let trackHeight = 2
     let t = []

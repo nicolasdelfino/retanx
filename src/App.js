@@ -19,8 +19,15 @@ import { Dimensions, Grid } from './grid/Grid'
 import { AStar } from './grid/AStar'
 let _grid = null
 
-import { UnitUtils } from './units/utils/UnitUtils'
-let unitUtils = UnitUtils.getInstance()
+import { UnitFactory } from './units/utils/UnitFactory'
+let unitFactory = UnitFactory.getInstance()
+
+import { UnitWorldPositionTracker } from './units/utils/UnitWorldPositionTracker'
+let tracker = UnitWorldPositionTracker.getInstance()
+let trackerInterval = null
+
+import { Utils } from './utils/Utils'
+let utils = Utils.getInstance()
 
 const mainStyle = {
   width: Dimensions().width, height: Dimensions().height,
@@ -42,27 +49,42 @@ class MainConnect extends React.Component {
       isFollowingPath: true,
       forceValUpdate: 0,
       shooting: false,
-      refresh: 0
+      refresh: 0,
+      totalDivs: 0
     }
+  }
+
+  componentDidMount() {
+    _grid = Grid.getInstance()
+    this.addUnit(TYPES.TANK_TYPE)
+
+    setInterval(() => {
+      this.setState({
+        totalDivs: utils.getTotalDivs()
+      })
+    }, 1000)
   }
 
   addUnit(type) {
     if(!type) {
+      // default to use tank type
       type = TYPES.TANK_TYPE
     }
     // currently just tanks
-    let unitPosition = unitUtils.getRandomPos(this.props.units)
+    let unitPosition = unitFactory.getRandomPos(this.props.units)
 
     if(!unitPosition) {
       console.log('No available position for unit')
       return
     }
 
-    let unit = unitUtils.getUnit(type, unitPosition, this.props.units)
+    let unit = unitFactory.getUnit(type, unitPosition, this.props.units)
     this.props.dispatch({ type: 'ADD_UNIT', payload: unit})
 
     _grid.getGrid()[unitPosition.x][unitPosition.y].obstacle = false
     _grid.getGrid()[unitPosition.x][unitPosition.y].opacity = 1
+
+
   }
 
   toggleDebug() {
@@ -75,11 +97,6 @@ class MainConnect extends React.Component {
 
   toggleAim() {
     this.props.dispatch({ type: 'TOGGLE_AIM' })
-  }
-
-  componentDidMount() {
-    _grid = Grid.getInstance()
-    this.addUnit(TYPES.TANK_TYPE)
   }
 
   coordinates(pos, width, height) {
@@ -130,16 +147,17 @@ class MainConnect extends React.Component {
     units.forEach((unit, index) => {
       let shouldRotate  = unit.rotate
       let position      = unit.position
-      let width         = unit.width
-      let height        = unit.height
+      let cellWidth     = unit.cellWidth
+      let cellHeight    = unit.cellHeight
       let angle         = unit.angle
       let type          = unit.type
+      let id            = unit.id
 
       if(type === TYPES.TANK_TYPE) {
         // cast as tank unit
         let tankUnit    = unit
         unitList.push(
-          <div id={'tank_' + index} key={index}>
+          <div id={'unit_' + id} key={index}>
           <div style={{'cursor': 'pointer'}} onClick={() => {
             if(this.state.isAiming) { return }
             if(tankUnit.selected) {
@@ -151,7 +169,7 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
             }
            }}>
-            <BasePosition moveSpeed={tankUnit.moveSpeed} position={this.coordinates(position, width, height)} >
+            <BasePosition moveSpeed={tankUnit.moveSpeed} position={this.coordinates(position, cellWidth, cellHeight)} >
               <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
                 <Tracks specs={tankUnit}/>
               </Body>
@@ -160,12 +178,12 @@ class MainConnect extends React.Component {
               rotation={angle}
               shooting={this.getIsThisUnitShooting(tankUnit, index)}/>
             </BasePosition>
-            <Outline moveSpeed={tankUnit.moveSpeed} specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+            <Outline moveSpeed={tankUnit.moveSpeed} specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
             </div>
             <SpecsView specs={tankUnit}
             details={this.showSpecs.bind(this)}
             rotate={shouldRotate}
-            position={this.coordinates(position, width, height)}
+            position={this.coordinates(position, cellWidth, cellHeight)}
             rotation={angle}/>
           </div>
         )
@@ -173,7 +191,7 @@ class MainConnect extends React.Component {
       else if(type === TYPES.SOLDIER_TYPE) {
         let soldierUnit = unit
         unitList.push(
-          <div id={'tank_' + index} key={index}>
+          <div id={'unit_' + id} key={index}>
           <div style={{'cursor': 'pointer'}} onClick={() => {
             if(this.state.isAiming) { return }
             if(soldierUnit.selected) {
@@ -185,7 +203,7 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: soldierUnit.id }})
             }
            }}>
-              <BasePosition moveSpeed={soldierUnit.moveSpeed} position={this.coordinates(position, width, height)} >
+              <BasePosition moveSpeed={soldierUnit.moveSpeed} position={this.coordinates(position, cellWidth, cellHeight)} >
                 <FootSoldier
                 isShooting={this.getIsThisUnitShooting(soldierUnit, index)}
                 isMoving={this.state.isMoving} specs={soldierUnit}
@@ -194,12 +212,12 @@ class MainConnect extends React.Component {
                 debugAim={this.props.aimMode}
                 />
               </BasePosition>
-              <Outline moveSpeed={soldierUnit.moveSpeed} specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, width, height)} rotation={angle}/>
+              <Outline moveSpeed={soldierUnit.moveSpeed} specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
             </div>
             <SpecsView specs={soldierUnit}
             details={this.showSpecs.bind(this)}
             rotate={shouldRotate}
-            position={this.coordinates(position, width, height)}
+            position={this.coordinates(position, cellWidth, cellHeight)}
             rotation={angle}/>
           </div>
         )
@@ -215,6 +233,19 @@ class MainConnect extends React.Component {
   // Follow path function, cuts out redundant cells
 
   followPath(start, path) {
+
+    // track the position of units when something is moving
+    let units     = this.props.units
+    let trackerUnits = units.map((unit) => {
+      return {id: unit.id, offset: {x: unit.offsetPX, y: unit.offsetPY}}
+    })
+
+    tracker.setUnits(trackerUnits)
+    clearInterval(trackerInterval)
+    trackerInterval = setInterval(() => {
+      tracker.trackUnits()
+    }, 250)
+
     path.reverse()
 
     let end = path[path.length -1]
@@ -281,6 +312,9 @@ class MainConnect extends React.Component {
 
             setTimeout(() => {
               this.setState({ isMoving: false })
+              // stop tracking unit positions
+              clearInterval(trackerInterval)
+              console.log('** Unit arrived at target cell **')
             }, this.props.units[this.props.currentSelectionID].moveSpeed)
           }
 
@@ -502,16 +536,20 @@ class MainConnect extends React.Component {
     return <div className='logo'><img src={logo} alt='logo'/></div>
   }
 
+  renderNumDivs() {
+    return <div className='totalDivs'>Total divs: {this.state.totalDivs}</div>
+  }
+
 	render() {
     return (
       <div>
-        <div style={{flexDirection: 'column'}}>
-          <button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button>
-          <button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button>
-          <button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button>
-          <button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button>
-          <button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button>
-
+        <div className='dashboard' style={{flexDirection: 'column'}}>
+          <div><button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
+          <div><button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
+          <div><button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
+          <div><button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
+          <div><button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
+          {this.renderNumDivs()}
         </div>
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}

@@ -9,6 +9,8 @@ export const SoldierType = function() {
   this.aimDuration = 200
   // Movement speed
   this.moveSpeed   = 4000
+  // id tracker
+  this.idTrack     = ''
   // Colors
   this.torsoColor     = '#'
   this.shoulderColor  = '#'
@@ -19,6 +21,9 @@ export const SoldierType = function() {
   // Id & position
   this.id          = null
   this.position    = null
+  // cell width height properties
+  this.cellWidth   = 100
+  this.cellHeight  = 100
 
   this.setId = function(id) {
     this.id = id
@@ -46,8 +51,10 @@ export const SoldierType = function() {
       moveSpeed:      this.moveSpeed,
       aimDuration:    this.aimDuration,
       aStarStyle:     this.aStarStyle,
-      width:          100,
-      height:         100,
+      width:          20,
+      height:         20,
+      cellWidth:      this.cellWidth,
+      cellHeight:     this.cellHeight,
       outlineWidth:   20,
       outlineHeight:  20,
       torsoColor:     this.torsoColor,
@@ -58,7 +65,9 @@ export const SoldierType = function() {
       barrelColor:    this.barrelColor,
       rotate:         'true',
       selected:       false,
-      angle:          0
+      angle:          0,
+      offsetPX:       this.offsetPX,
+      offsetPY:       this.offsetPY
     }
   }
 }

@@ -2,6 +2,11 @@ import React from 'react';
 import TrackPattern from './TrackPattern'
 
 class Tracks extends React.Component {
+
+  shouldComponentUpdate() {
+    return false
+  }
+
   render() {
     let w = 20
     let h = this.props.specs.height
