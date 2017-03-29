@@ -49,7 +49,7 @@ export const Grid = function() {
        return grid[cell.x][cell.y].position
      }
 
-     function makeObstaclesOfInactiveUnits(units, startIndex) {
+     function makeObstaclesOfUnitsWithHigherMass(activeUnit, units, startIndex) {
        let n = units.filter((unit, index) => {
          return index !== startIndex
        })
@@ -61,8 +61,9 @@ export const Grid = function() {
            // eslint-disable-next-line
            n.forEach((unit) => {
              if(grid[e][r].x === unit.position.x && grid[e][r].y === unit.position.y ) {
-              //  console.warn('obstacle found', grid[e][r])
-               grid[e][r].obstacle = true
+               if(unit.mass >= activeUnit.mass) {
+                 grid[e][r].obstacle = true
+               }
              }
            })
          }
@@ -91,7 +92,7 @@ export const Grid = function() {
         resetCells: resetCells,
         addCellNeighbors: addCellNeighbors,
         getPositionForCell: getPositionForCell,
-        makeObstaclesOfInactiveUnits: makeObstaclesOfInactiveUnits,
+        makeObstaclesOfUnitsWithHigherMass: makeObstaclesOfUnitsWithHigherMass,
         suggestedPositionIsAnObstacleCell: suggestedPositionIsAnObstacleCell
      }
   }
