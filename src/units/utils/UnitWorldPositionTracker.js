@@ -19,6 +19,7 @@ export const UnitWorldPositionTracker = function() {
       console.group('U.W.P TRACKER')
       let tU = units.length < 2 ? 'UNIT' : 'UNITS'
       console.log('Tracking ' + units.length + ' ' + tU)
+      let movement = []
       units.forEach((unit, index) => {
 
         let element = $('#unit_' + unit.id + " .position"); // NO JQUERY PLEASE
@@ -34,8 +35,12 @@ export const UnitWorldPositionTracker = function() {
         else {
           console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
         }
+
+        movement.push({id: unit.id, position: {x: x, y: y}})
       })
       console.groupEnd()
+
+      return movement
     }
 
     //setters
