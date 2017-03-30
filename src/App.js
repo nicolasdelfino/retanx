@@ -541,9 +541,13 @@ class MainConnect extends React.Component {
     return <div className='totalDivs'>Total divs: {this.state.totalDivs}</div>
   }
 
+  getMainCSS() {
+    return this.state.shooting === true ?  'mainFire' : ''
+  }
+
 	render() {
     return (
-      <div>
+      <div id='board' className={this.getMainCSS()}>
         <div className='dashboard' style={{flexDirection: 'column'}}>
           <div><button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
           <div><button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
