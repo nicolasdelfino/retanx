@@ -7,6 +7,20 @@ export const UnitWorldPositionTracker = function() {
   function createUnitTracker() {
     let units = []
 
+    function getBankersRounding(value) {
+      var intVal   = Math.floor(value);
+      var floatVal = value % 1;
+      if (floatVal !== 0.5) {
+          return Math.round(value);
+      } else {
+        if (intVal % 2 === 0) {
+            return intVal;
+        } else {
+            return intVal + 1;
+        }
+      }
+    }
+
     //getters
     function trackUnits(activeUnit) {
       if(units.length === 0) {
@@ -19,13 +33,18 @@ export const UnitWorldPositionTracker = function() {
       console.group('U.W.P TRACKER')
       let tU = units.length < 2 ? 'UNIT' : 'UNITS'
       console.log('Tracking ' + units.length + ' ' + tU)
-      let movement = []
+
+      let movingUnits = []
       units.forEach((unit, index) => {
 
         let element = $('#unit_' + unit.id + " .position"); // NO JQUERY PLEASE
 
-        let x = Math.floor(element.offset().left) - Math.floor(mainX)
-        let y = Math.floor(element.offset().top) - Math.floor(mainY)
+        let xx = Math.floor(element.offset().left) - Math.floor(mainX)
+        let yy = Math.floor(element.offset().top) - Math.floor(mainY)
+
+        //https://en.wikipedia.org/wiki/Rounding#Round_half_to_even
+        let x = getBankersRounding(xx / 100)
+        let y = getBankersRounding(yy / 100)
 
         if(index === activeUnit) {
           // console.group('%c *** ACTIVE UNIT ***', 'background: #000; color: #bada55');
@@ -36,11 +55,11 @@ export const UnitWorldPositionTracker = function() {
           console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
         }
 
-        movement.push({id: unit.id, position: {x: x, y: y}})
+        movingUnits.push({id:unit.id, x: x, y: y})
       })
       console.groupEnd()
 
-      return movement
+      return movingUnits
     }
 
     //setters

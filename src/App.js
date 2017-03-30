@@ -16,17 +16,30 @@ import sound_pew from './assets/pew.mp3'
 import sound_explosion from './assets/explosion.mp3'
 import logo from './retanx.png'
 
+//__________________________________________________________________________________
+// Grid and aStar
 import { Dimensions, Grid } from './grid/Grid'
 import { AStar } from './grid/AStar'
 let _grid = null
 
+//__________________________________________________________________________________
+// Unit factory
 import { UnitFactory } from './units/utils/UnitFactory'
 let unitFactory = UnitFactory.getInstance()
 
+//__________________________________________________________________________________
+// Position tracker
 import { UnitWorldPositionTracker } from './units/utils/UnitWorldPositionTracker'
 let tracker = UnitWorldPositionTracker.getInstance()
 let trackerInterval = null
 
+//__________________________________________________________________________________
+// Collision manager
+import { WorldCollision } from './units/utils/WorldCollision'
+let collisionManager = WorldCollision.getInstance()
+
+//__________________________________________________________________________________
+// Generic Utils
 import { Utils } from './utils/Utils'
 let utils = Utils.getInstance()
 
@@ -244,7 +257,8 @@ class MainConnect extends React.Component {
     tracker.setUnits(trackerUnits)
     clearInterval(trackerInterval)
     trackerInterval = setInterval(() => {
-      tracker.trackUnits(this.props.currentSelectionID)
+      // perform unit collision check
+      collisionManager.trackCollisions(tracker.trackUnits(this.props.currentSelectionID))
     }, 250)
 
     path.reverse()

@@ -7,48 +7,67 @@
   align-items: center;
   justify-content: center;
   border-radius: 100px; }
-  .unitWrapper .unit {
-    zoom: 0.1; }
-    .unitWrapper .unit .body {
-      width: 100px;
-      height: 70px;
-      background: #696e77;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: visible;
-      box-shadow: 0px 0px 220px #000; }
-      .unitWrapper .unit .body .arms {
-        display: flex;
-        position: absolute;
-        flex: 1;
-        width: 150px;
-        height: 50px;
-        background: #4e5e7a;
-        flex-direction: row;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        border-radius: 10px;
-        justify-content: space-between; }
-        .unitWrapper .unit .body .arms .arm {
-          display: flex;
-          width: 30px;
-          height: 50px;
-          border-top-left-radius: 10px;
-          border-top-right-radius: 10px; }
-          .unitWrapper .unit .body .arms .arm.left {
-            background: #303c51;
-            z-index: -1; }
-          .unitWrapper .unit .body .arms .arm.right {
-            background: #303c51;
-            z-index: -1; }
-      .unitWrapper .unit .body .head {
-        position: relative;
-        background: #2a477c;
-        width: 50px;
-        height: 60px;
-        border-radius: 10px;
-        margin-bottom: -20px; }
+
+.unitWrapper .unit {
+  zoom: 1; }
+
+.unitWrapper .unit .body {
+  width: 100px;
+  height: 70px;
+  background: #696e77;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  box-shadow: 0px 0px 220px #000; }
+
+.unitWrapper .unit .body .arms {
+  display: flex;
+  position: absolute;
+  flex: 1;
+  width: 150px;
+  height: 50px;
+  background: #4e5e7a;
+  flex-direction: row;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-radius: 10px;
+  justify-content: space-between; }
+
+.unitWrapper .unit .body .arms .arm {
+  display: flex;
+  width: 30px;
+  height: 50px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px; }
+
+.unitWrapper .unit .body .arms .arm.left {
+  background: #303c51;
+  z-index: -1; }
+
+.unitWrapper .unit .body .arms .arm.right {
+  background: #303c51;
+  z-index: -1; }
+
+.unitWrapper .unit .body .head {
+  position: relative;
+  background: #2a477c;
+  width: 50px;
+  height: 60px;
+  border-radius: 10px;
+  margin-bottom: -20px; }
+
+.bloodPool {
+  opacity: 0.7;
+  animation: deathAnimation 1s ease-in; }
+
+@keyframes deathAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0, 0); }
+  100% {
+    opacity: 0.7;
+    transform: scale(1, 1); } }
 
 .walking .body {
   animation: walking-body 0.3s infinite; }
@@ -115,24 +134,26 @@
 .shooting .gunWrapper {
   position: relative;
   z-index: 0; }
-  .shooting .gunWrapper .gun {
-    width: 60px;
-    height: 70px;
-    background: #73757a;
-    position: absolute;
-    top: 35px;
-    left: 40px;
-    z-index: -1;
-    transform: rotate(-180deg);
-    animation: shooting-gun 0.05s infinite; }
-    .shooting .gunWrapper .gun .barrel {
-      position: absolute;
-      width: 30px;
-      height: 120px;
-      background: #73757a;
-      top: -70px;
-      left: 15px;
-      border-top: 10px solid #93959b; }
+
+.shooting .gunWrapper .gun {
+  width: 60px;
+  height: 70px;
+  background: #73757a;
+  position: absolute;
+  top: 35px;
+  left: 40px;
+  z-index: -1;
+  transform: rotate(-180deg);
+  animation: shooting-gun 0.05s infinite; }
+
+.shooting .gunWrapper .gun .barrel {
+  position: absolute;
+  width: 30px;
+  height: 120px;
+  background: #73757a;
+  top: -70px;
+  left: 15px;
+  border-top: 10px solid #93959b; }
 
 @keyframes shooting-gun {
   0% {

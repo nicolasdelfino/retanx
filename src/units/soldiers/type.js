@@ -29,6 +29,8 @@ export const SoldierType = function() {
   // hit points
   this.hitPoints   = 10
   this.hpPosTop    = 20
+  // status
+  this.alive       = false
 
   this.setId = function(id) {
     this.id = id
@@ -73,7 +75,8 @@ export const SoldierType = function() {
       angle:          0,
       mass:           this.mass,
       hp:             this.hitPoints,
-      hpPosTop:       this.hpPosTop
+      hpPosTop:       this.hpPosTop,
+      alive:          this.alive
     }
   }
 }

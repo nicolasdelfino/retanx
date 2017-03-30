@@ -4,12 +4,30 @@ export const WorldCollision = function() {
 
   function createWorldCollision() {
 
-    //getters
-    function trackCollisions(arr) {
+    function trackCollisions(movingUnits) {
 
+      let collisionUnitId = null
+
+      let movementX = movingUnits.map(function(unitPosition){ return unitPosition.x });
+      let collisionX = movementX.some(function(pos, x){
+          if(movementX.indexOf(pos) !== x) {
+            return true
+          }
+          return false
+      });
+
+      let movementY = movingUnits.map(function(unitPosition){ return unitPosition.y });
+      let collisionY = movementY.some(function(pos, y){
+        if(movementY.indexOf(pos) !== y) {
+          return true
+        }
+        return false
+      });
+
+      if(collisionX && collisionY) {
+        console.warn('%ccollision', 'color:red')
+      }
     }
-
-    //setters
 
     return {
         trackCollisions: trackCollisions

@@ -36,7 +36,11 @@ export default class FootSoldier extends React.Component {
     )
   }
 
-  render() {
+  renderUnit() {
+    return this.props.specs.alive === true ? this.renderSoldier() : this.renderBlood()
+  }
+
+  renderSoldier() {
     return (
         <div className="unitWrapper" style={{transform: 'rotate(' + this.state.rotation + 'deg)', 'transition': 'all ' + this.props.specs.aimDuration / 1000 + 's ease'}}>
           <div id="soldier" className={this.getCSS()}>
@@ -56,5 +60,15 @@ export default class FootSoldier extends React.Component {
           {this.lasersight()}
         </div>
     )
+  }
+
+  renderBlood() {
+    return <div style={{display: 'flex', width: this.props.specs.cellWidth, height: this.props.specs.cellHeight, alignItems: 'center', justifyContent: 'center'}}>
+      <div className='bloodPool' style={{width: 20, height: 20, borderRadius: 10, background: 'red'}} />
+    </div>
+  }
+
+  render() {
+    return <div>{this.renderUnit()}</div>
   }
 }
