@@ -11,6 +11,9 @@ class HP extends React.Component {
   }
 
   render() {
+    if(!this.props.specs.alive) {
+      return null
+    }
     return <div className='HP'
     style={{position: 'absolute', display: 'flex', top: 0, left: 0, background: 'transparent',
     width: this.props.specs.cellWidth, height: this.props.specs.cellHeight,

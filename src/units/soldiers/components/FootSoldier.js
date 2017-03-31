@@ -64,7 +64,7 @@ export default class FootSoldier extends React.Component {
 
   renderBlood() {
     return <div style={{display: 'flex', width: this.props.specs.cellWidth, height: this.props.specs.cellHeight, alignItems: 'center', justifyContent: 'center'}}>
-      <div className='bloodPool' style={{width: 20, height: 20, borderRadius: 10, background: 'red'}} />
+      <div className='bloodPool' style={{width: 10, height: 10, borderRadius: 5, background: 'red'}} />
     </div>
   }
 

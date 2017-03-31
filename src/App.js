@@ -264,9 +264,10 @@ class MainConnect extends React.Component {
         if(this.props.units[roadKill.id].alive) {
           console.log('setting state')
           this.props.units[roadKill.id].alive = false
+          this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
         }
       }
-    }, 200)
+    }, 100)
 
     path.reverse()
 

@@ -62,7 +62,7 @@
 // DEATH
 .bloodPool {
   opacity: 0.7;
-  animation: deathAnimation .3s ease-in;
+  animation: deathAnimation .4s ease-in;
 }
 
 @keyframes deathAnimation {
@@ -70,9 +70,9 @@
     opacity: 0;
     transform: scale(0, 0);
   }
-  100% {
-    opacity: 0.7;
-    transform: scale(1, 1);
+  50% {
+    opacity: 0.6;
+    transform: scale(0.5, 0.5);
   }
 }
 

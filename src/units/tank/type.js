@@ -30,6 +30,8 @@ export const TankType = function() {
   // hit points
   this.hitPoints   = 20
   this.hpPosTop    = 0
+  // status
+  this.alive       = true
   // Randomize colors
   let randomize    = false
 
@@ -69,7 +71,8 @@ export const TankType = function() {
       angle:        0,
       mass:         this.mass,
       hp:           this.hitPoints,
-      hpPosTop:     this.hpPosTop
+      hpPosTop:     this.hpPosTop,
+      alive:        this.alive
     }
   }
 }
