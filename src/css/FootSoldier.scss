@@ -9,7 +9,7 @@
   //animation: rotateUnit 20s infinite;
   border-radius: 100px;
   .unit {
-    zoom: 1;
+    zoom: 0.12;
     .body {
       width: 100px;
       height: 70px;
@@ -62,7 +62,7 @@
 // DEATH
 .bloodPool {
   opacity: 0.7;
-  animation: deathAnimation 1s ease-in;
+  animation: deathAnimation .3s ease-in;
 }
 
 @keyframes deathAnimation {

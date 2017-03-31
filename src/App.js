@@ -257,9 +257,16 @@ class MainConnect extends React.Component {
     tracker.setUnits(trackerUnits)
     clearInterval(trackerInterval)
     trackerInterval = setInterval(() => {
-      // perform unit collision check
-      collisionManager.trackCollisions(tracker.trackUnits(this.props.currentSelectionID))
-    }, 250)
+      // unit collision check
+      let roadKill = collisionManager.trackCollisions(tracker.trackUnits(this.props.currentSelectionID))
+      if(roadKill) {
+        console.warn('%cROADKILL', 'color:red', roadKill)
+        if(this.props.units[roadKill.id].alive) {
+          console.log('setting state')
+          this.props.units[roadKill.id].alive = false
+        }
+      }
+    }, 200)
 
     path.reverse()
 

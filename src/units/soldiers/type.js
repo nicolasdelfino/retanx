@@ -30,7 +30,7 @@ export const SoldierType = function() {
   this.hitPoints   = 10
   this.hpPosTop    = 20
   // status
-  this.alive       = false
+  this.alive       = true
 
   this.setId = function(id) {
     this.id = id

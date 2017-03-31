@@ -46,7 +46,9 @@ export const UnitWorldPositionTracker = function() {
         let x = getBankersRounding(xx / 100)
         let y = getBankersRounding(yy / 100)
 
+        let isActive = false
         if(index === activeUnit) {
+          isActive = true
           // console.group('%c *** ACTIVE UNIT ***', 'background: #000; color: #bada55');
           console.log('%c**', 'background: #000; color: #bada55', '#unit_' + unit.id, '=> x:', x, 'y:', y)
           // console.groupEnd()
@@ -55,7 +57,7 @@ export const UnitWorldPositionTracker = function() {
           console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
         }
 
-        movingUnits.push({id:unit.id, x: x, y: y})
+        movingUnits.push({id:unit.id, active: isActive, x: x, y: y})
       })
       console.groupEnd()
 

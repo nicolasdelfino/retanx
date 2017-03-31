@@ -6,27 +6,25 @@ export const WorldCollision = function() {
 
     function trackCollisions(movingUnits) {
 
-      let collisionUnitId = null
-
-      let movementX = movingUnits.map(function(unitPosition){ return unitPosition.x });
-      let collisionX = movementX.some(function(pos, x){
-          if(movementX.indexOf(pos) !== x) {
-            return true
+      //let collisions = getDuplicates(movingUnits)
+      let collideUnit
+      movingUnits.forEach((unit, index) => {
+        movingUnits.forEach((compare, index) => {
+          if(unit.active
+            && !compare.active
+            && compare.id !== unit.id
+            && compare.x === unit.x
+            && compare.y === unit.y) {
+            collideUnit = compare
           }
-          return false
-      });
+        })
+      })
 
-      let movementY = movingUnits.map(function(unitPosition){ return unitPosition.y });
-      let collisionY = movementY.some(function(pos, y){
-        if(movementY.indexOf(pos) !== y) {
-          return true
-        }
-        return false
-      });
-
-      if(collisionX && collisionY) {
-        console.warn('%ccollision', 'color:red')
+      if(collideUnit) {
+        // console.warn('%ccollideUnit', 'color:red', collideUnit)
+        return collideUnit
       }
+      return false
     }
 
     return {
