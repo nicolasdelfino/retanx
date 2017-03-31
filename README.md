@@ -6,7 +6,7 @@
 React strategy POC with A*, divs and CSS transitions.
 
 **DISCLAIMER** <br />
-*I´m fully aware of how stupid this non-canvas route is... still, it´s fun to see how far we can go!*
+*This non-canvas route is stupid at best... still, it´s fun to see how far we can go!*
 
 #### Run it
 Do a **yarn add** or **npm install**, then **yarn run watch-css** in one tab for scss changes and **yarn start** in another to start RETANX
