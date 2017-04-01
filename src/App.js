@@ -6,7 +6,6 @@ import BasePosition from './units/base/BasePosition'
 import Body from './units/tank/components/Body'
 import Cannon from './units/tank/components/Cannon'
 import Tracks from './units/tank/components/Tracks'
-import HealthBar from './units/tank/components/HealthBar'
 import Outline from './units/base/Outline'
 import HP from './units/base/HitPoints'
 import SpecsView from './units/tank/components/SpecsView'
@@ -576,7 +575,7 @@ class MainConnect extends React.Component {
           } else if (grid[x][y].obstacle) {
             kill = true;
           }
-          
+
           if (kill) {
             (new Audio(sound_explosion)).play();
             grid[x][y].isExploding = true;
@@ -590,7 +589,7 @@ class MainConnect extends React.Component {
               this.setState({refresh: this.state.refresh+1});
             }, 800);
           }
-          
+
         }
       }
     }

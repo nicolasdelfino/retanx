@@ -28,11 +28,11 @@ export const TankType = function() {
   // mass
   this.mass        = 1000
   // hit points
-  this.hitPoints   = 8
+  this.hitPoints   = 12
   this.hpPosTop    = 0
   // status
   this.alive       = true
-  
+
   this.range       = 5
   this.health      = 1000
   this.maxHealth   = 1000

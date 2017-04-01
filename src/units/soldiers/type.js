@@ -27,7 +27,7 @@ export const SoldierType = function() {
   // mass
   this.mass        = 100
   // hit points
-  this.hitPoints   = 10
+  this.hitPoints   = 4
   this.hpPosTop    = 20
   // status
   this.alive       = true
