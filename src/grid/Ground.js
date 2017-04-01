@@ -41,6 +41,9 @@ class Ground extends React.Component {
     )
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  // GROUND
+
   renderGround() {
     let amount = _grid.getDivider()
     let rows = _grid.getRows()
@@ -88,16 +91,8 @@ class Ground extends React.Component {
     return inUse
   }
 
-  // cellHasUnitObstacle(x,y) {
-  //   let inUse = false
-  //   this.props.units.forEach((unit) => {
-  //     if(unit.position.x === x && unit.position.y === y && ) {
-  //       inUse = true
-  //     }
-  //   })
-  //
-  //   return inUse
-  // }
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  // DEBUG A*
 
   renderDebug() {
     let amount = _grid.getDivider()
@@ -172,6 +167,9 @@ class Ground extends React.Component {
     }
     return grid
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  // DEBUG OBSTACLES
 
   renderDebugObstacles() {
     let amount = _grid.getDivider()

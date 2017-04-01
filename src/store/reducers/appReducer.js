@@ -4,7 +4,7 @@ const initState = {
   currentSelectionID: 0,
   debugMode: false,
   debugAstarScores: false,
-  debugObstacles: true,
+  debugObstacles: false,
   aimMode: false
 }
 

@@ -181,14 +181,7 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: tankUnit.id }})
             }
             else {
-              this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
-
-              _grid.resetCells()
-
-              _grid.makeObstaclesOfUnitsWithHigherMass(units[tankUnit.id], units, tankUnit.id)
-
-              // deselect all other units
-              this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
+              this.selectUnit(units, tankUnit.id)
             }
            }}>
             <BasePosition moveSpeed={tankUnit.moveSpeed} position={this.coordinates(position, cellWidth, cellHeight)} >
@@ -222,14 +215,7 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: soldierUnit.id }})
             }
             else {
-              this.props.dispatch({type: 'SELECT_UNIT', payload: {id: soldierUnit.id }})
-
-              _grid.resetCells()
-
-              _grid.makeObstaclesOfUnitsWithHigherMass(units[soldierUnit.id], units, soldierUnit.id)
-
-              // deselect all other units
-              this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: soldierUnit.id }})
+              this.selectUnit(units, soldierUnit.id)
             }
            }}>
               <BasePosition moveSpeed={soldierUnit.moveSpeed} position={this.coordinates(position, cellWidth, cellHeight)} >
@@ -257,6 +243,17 @@ class MainConnect extends React.Component {
       }
     })
     return unitList
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Select unit
+  selectUnit(units, id) {
+    this.props.dispatch({type: 'SELECT_UNIT', payload: {id: id }})
+    _grid.resetCells()
+    _grid.makeObstaclesOfUnitsWithHigherMass(units[id], units, id)
+
+    // deselect all other units
+    this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: id }})
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////

@@ -61,7 +61,7 @@ export const Grid = function() {
            // eslint-disable-next-line
            n.forEach((unit) => {
              if(grid[e][r].x === unit.position.x && grid[e][r].y === unit.position.y ) {
-               if(unit.mass >= activeUnit.mass) {
+               if(unit.mass >= activeUnit.mass && unit.alive) {
                  grid[e][r].unitObstacle = true
                }
              }
