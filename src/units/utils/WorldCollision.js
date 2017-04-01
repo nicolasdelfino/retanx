@@ -6,7 +6,6 @@ export const WorldCollision = function() {
 
     function trackCollisions(movingUnits) {
 
-      //let collisions = getDuplicates(movingUnits)
       let collideUnit
       movingUnits.forEach((unit, index) => {
         movingUnits.forEach((compare, index) => {

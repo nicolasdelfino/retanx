@@ -27,12 +27,18 @@ export const UnitWorldPositionTracker = function() {
         return
       }
 
+      const log = true
+
       let main = $('.main')
       let mainX = Math.floor(main.offset().left)
       let mainY = Math.floor(main.offset().top)
-      console.group('U.W.P TRACKER')
+      if(log) {
+        console.group('U.W.P TRACKER')
+      }
       let tU = units.length < 2 ? 'UNIT' : 'UNITS'
-      console.log('Tracking ' + units.length + ' ' + tU)
+      if(log) {
+        console.log('Tracking ' + units.length + ' ' + tU)
+      }
 
       let movingUnits = []
       units.forEach((unit, index) => {
@@ -50,11 +56,15 @@ export const UnitWorldPositionTracker = function() {
         if(index === activeUnit) {
           isActive = true
           // console.group('%c *** ACTIVE UNIT ***', 'background: #000; color: #bada55');
-          console.log('%c**', 'background: #000; color: #bada55', '#unit_' + unit.id, '=> x:', x, 'y:', y)
+          if(log) {
+            console.log('%c**', 'background: #000; color: #bada55', '#unit_' + unit.id, '=> x:', x, 'y:', y)
+          }
           // console.groupEnd()
         }
         else {
-          console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
+          if(log) {
+            console.log('#unit_' + unit.id, '=> x:', x, 'y:', y)
+          }
         }
 
         movingUnits.push({id:unit.id, active: isActive, x: x, y: y})

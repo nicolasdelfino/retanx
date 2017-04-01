@@ -53,7 +53,7 @@ export let AStar = (_grid, start, end, units, currentSelectionID) => {
     for(var j = 0; j < neighbors.length; j++) {
       var neighbor = neighbors[j]
 
-      if(!closedSet.includes(neighbor) && !neighbor.obstacle) {
+      if(!closedSet.includes(neighbor) && !neighbor.obstacle && !neighbor.unitObstacle) {
         let tentativeG = current.g + 1
         if(openSet.includes(neighbor)) {
           if(tentativeG < neighbor.g) {

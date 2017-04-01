@@ -47,10 +47,10 @@ class Ground extends React.Component {
     let cols = _grid.getCols()
     let size = Dimensions().width / amount
     let grid = []
-    let borderColor = '#efefef'
+    let borderColor = 'rgb(239,239,239)'
 
     const cellStyle = {
-      display: 'flex', fontSize:10, color: '#ccc',width: size, height: size, background: 'black', border: '0px solid ' + borderColor
+      display: 'flex', fontSize:10, color: 'rgb(204,204,204)',width: size, height: size, background: 'rgb(0,0,0)', border: '0px solid ' + borderColor
     }
 
     for (let i = 0; i < cols; i++) {
@@ -58,15 +58,15 @@ class Ground extends React.Component {
       for (let x = 0; x < rows; x++) {
         let cell = _grid.getGrid()[i][x]
         if(cell.obstacle && cell.showObstacle) {
-          row.push(<div key={x} style={{ ...cellStyle, background: 'black' }} onClick={() => this.clickCell(x,i,false)}>
-            <div className={this.getRandomObstacleCell()} style={{opacity: cell.opacity, flex:1, border: '0px dashed transparent', color: 'white'}}>
+          row.push(<div key={x} style={{ ...cellStyle, background: 'rgb(0,0,0)' }} onClick={() => this.clickCell(x,i,false)}>
+            <div className={this.getRandomObstacleCell()} style={{opacity: cell.opacity, flex:1, border: '0px dashed rgba(0,0,0,0)', color: 'rgb(255,255,255)'}}>
               {this.renderExplosion(cell.isExploding)}
             </div>
           </div>)
         }
         else {
           row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i,true)}>
-          <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '0s', flex:1, border: '0px dashed transparent'}}></div>
+          <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '0s', flex:1, border: '0px dashed rgba(0,0,0,0)'}}></div>
           </div>)
         }
       }
@@ -103,10 +103,10 @@ class Ground extends React.Component {
     let rows = _grid.getRows()
     let cols = _grid.getCols()
     let grid = []
-    let borderColor = '#efefef'
+    let borderColor = 'rgb(239,239,239)'
 
     const cellStyle = {
-      display: 'flex', fontSize:12, color: '#05e400',width: size, height: size, background: 'transparent', border: '0px solid ' + borderColor
+      display: 'flex', fontSize:12, color: 'rgb(5,228,0)',width: size, height: size, background: 'rgba(0,0,0,0)', border: '0px solid ' + borderColor
     }
 
     for (let i = 0; i < cols; i++) {
@@ -117,24 +117,24 @@ class Ground extends React.Component {
         var a = false
         if(a && this.isCellInUse(i,x) ) {
           row.push(
-            <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '0px solid transparent', flexDirection: 'row'}}>
+            <div key={x} style={{ ...cellStyle, background: 'rgba(0,0,0,0)', color: 'rgb(5,228,0)' }} onClick={() => this.clickCell(x,i)}>
+              <div className='debugItemCell' style={{flex:1, color: 'rgb(5,228,0)', border: '0px solid rgba(0,0,0,0)', flexDirection: 'row'}}>
               </div>
             </div>
           )
         }
         else if(cell.isPath && cell.isPathDirectionTurn) {
           row.push(
-            <div key={x} style={{ ...cellStyle, background: 'transparent', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#05e400', border: '0px solid transparent', flexDirection: 'row'}}>
+            <div key={x} style={{ ...cellStyle, background: 'rgba(0,0,0,0)', color: 'rgb(5,228,0)' }} onClick={() => this.clickCell(x,i)}>
+              <div className='debugItemCell' style={{flex:1, color: 'rgb(5,228,0)', border: '0px solid rgba(0,0,0,0)', flexDirection: 'row'}}>
               </div>
             </div>
           )
         }
         else if(cell.isPath) {
           row.push(
-            <div key={x} style={{ ...cellStyle, background: 'rgba(255,0,0,.05)', color: '#05e400' }} onClick={() => this.clickCell(x,i)}>
-              <div className='debugItemCell' style={{flex:1, color: '#eb840c', border: '1px dashed red', flexDirection: 'row'}}>
+            <div key={x} style={{ ...cellStyle, background: 'rgba(255,0,0,0.05)', color: 'rgb(5,228,0)' }} onClick={() => this.clickCell(x,i)}>
+              <div className='debugItemCell' style={{flex:1, color: 'rgb(235,132,12)', border: '1px dashed rgb(255,0,0)', flexDirection: 'row'}}>
               {cell.tempPathString}
               </div>
             </div>
@@ -144,20 +144,20 @@ class Ground extends React.Component {
           // {cell.x}, {cell.y}
           row.push(
             <div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i)}>
-              <div style={{opacity: 1, flex:1, border: '1px solid transparent', flexDirection: 'row', justifyContent: 'space-around'}}>
-                <div style={{display: 'flex', flex:1, background: 'transparent', height: size / 2, flexDirection: 'row'}}>
-                  <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2}}>
+              <div style={{opacity: 1, flex:1, border: '1px solid rgba(0,0,0,0)', flexDirection: 'row', justifyContent: 'space-around'}}>
+                <div style={{display: 'flex', flex:1, background: 'rgba(0,0,0,0)', height: size / 2, flexDirection: 'row'}}>
+                  <div style={{display: 'flex', flex:1, background: 'rgba(0,0,0,0)', width: size / 2}}>
                     <span className="cell xy" style={{display: this.props.ascores ? 'flex' : 'none'}}></span>
                   </div>
-                  <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, justifyContent: 'flex-end'}}>
+                  <div style={{display: 'flex', flex:1, background: 'rgba(0,0,0,0)', width: size / 2, justifyContent: 'flex-end'}}>
                     <span className="cell fval" style={{display: this.props.ascores ? 'flex' : 'none'}} >F:{cell.f}</span>
                   </div>
                 </div>
-                <div style={{display: 'flex', flex:1, background: 'transparent', height: size / 2, flexDirection: 'row'}}>
-                  <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, alignItems:'flex-end'}}>
+                <div style={{display: 'flex', flex:1, background: 'rgba(0,0,0,0)', height: size / 2, flexDirection: 'row'}}>
+                  <div style={{display: 'flex', flex:1, background: 'rgba(0,0,0,0)', width: size / 2, alignItems:'flex-end'}}>
                     <span className="cell gval" style={{display: this.props.ascores ? 'flex' : 'none'}} >G:{cell.g}</span>
                   </div>
-                  <div style={{display: 'flex', flex:1, background: 'transparent', width: size / 2, justifyContent: 'flex-end', alignItems:'flex-end'}}>
+                  <div style={{display: 'flex', flex:1, background: 'rgba(0,0,0,0)', width: size / 2, justifyContent: 'flex-end', alignItems:'flex-end'}}>
                     <span className="cell hval" style={{display: this.props.ascores ? 'flex' : 'none'}} >H:{cell.h}</span>
                   </div>
                 </div>
@@ -179,7 +179,7 @@ class Ground extends React.Component {
     let grid = []
 
     const cellStyle = {
-      display: 'flex', color: '#007ee4', width: size, height: size, background: 'transparent', outline: '1px dotted #007ee4'
+      display: 'flex', width: size, height: size, background: 'rgba(0,126,228,0.1)', outline: '1px solid #007ee4'
     }
 
     for (let i = 0; i < cols; i++) {
@@ -196,7 +196,7 @@ class Ground extends React.Component {
         }
         else {
           row.push(
-            <div key={x} style={{ ...cellStyle, background: 'transparent', outline: 'none'}}>
+            <div key={x} style={{ ...cellStyle, background: 'rgba(0,0,0,0)', outline: 'none'}}>
               <div style={{flex:1, flexDirection: 'row'}}>
               </div>
             </div>

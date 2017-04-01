@@ -16,29 +16,29 @@ import sound_pew from './assets/pew.mp3'
 import sound_explosion from './assets/explosion.mp3'
 import logo from './retanx.png'
 
-//__________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////////////////
 // Grid and aStar
 import { Dimensions, Grid } from './grid/Grid'
 import { AStar } from './grid/AStar'
 let _grid = null
 
-//__________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////////////////
 // Unit factory
 import { UnitFactory } from './units/utils/UnitFactory'
 let unitFactory = UnitFactory.getInstance()
 
-//__________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////////////////
 // Position tracker
 import { UnitWorldPositionTracker } from './units/utils/UnitWorldPositionTracker'
 let tracker = UnitWorldPositionTracker.getInstance()
 let trackerInterval = null
 
-//__________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////////////////
 // Collision manager
 import { WorldCollision } from './units/utils/WorldCollision'
 let collisionManager = WorldCollision.getInstance()
 
-//__________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////////////////
 // Generic Utils
 import { Utils } from './utils/Utils'
 let utils = Utils.getInstance()
@@ -271,13 +271,21 @@ class MainConnect extends React.Component {
     tracker.setUnits(trackerUnits)
     clearInterval(trackerInterval)
     trackerInterval = setInterval(() => {
-      // unit collision check
+
+      if(this.props.units.length === 1) {
+        return
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////
+      // UNIT COLLISION
+
       let roadKill = collisionManager.trackCollisions(tracker.trackUnits(this.props.currentSelectionID))
       if(roadKill) {
         console.warn('%cROADKILL', 'color:red', roadKill)
         if(this.props.units[roadKill.id].alive) {
-          console.log('setting state')
-          this.props.units[roadKill.id].alive = false
+          let killedUnit = this.props.units[roadKill.id]
+          killedUnit.alive = false
+          _grid.getGrid()[killedUnit.position.x][killedUnit.position.y].unitObstacle = false
           this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
         }
       }
@@ -590,7 +598,7 @@ class MainConnect extends React.Component {
           <div><button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
           <div><button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
           <div><button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
-          <div><button style={{background: 'blue'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
+          <div><button style={{background: '#007ee4'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
           {this.renderNumDivs()}
         </div>
         <div className='main' style={{...mainStyle}}>
