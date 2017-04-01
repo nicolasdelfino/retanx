@@ -28,7 +28,7 @@ export const TankType = function() {
   // mass
   this.mass        = 1000
   // hit points
-  this.hitPoints   = 20
+  this.hitPoints   = 8
   this.hpPosTop    = 0
   // status
   this.alive       = true

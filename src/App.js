@@ -188,7 +188,6 @@ class MainConnect extends React.Component {
               <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
                 <Tracks specs={tankUnit}/>
               </Body>
-              <HealthBar unit={tankUnit}/>
               <Cannon debugAim={this.props.aimMode}
               specs={tankUnit} rotate={shouldRotate}
               rotation={angle}
