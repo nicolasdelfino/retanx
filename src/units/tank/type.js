@@ -32,6 +32,11 @@ export const TankType = function() {
   this.hpPosTop    = 0
   // status
   this.alive       = true
+  
+  this.range       = 5
+  this.health      = 1000
+  this.maxHealth   = 1000
+
   // Randomize colors
   let randomize    = false
 
@@ -72,7 +77,10 @@ export const TankType = function() {
       mass:         this.mass,
       hp:           this.hitPoints,
       hpPosTop:     this.hpPosTop,
-      alive:        this.alive
+      alive:        this.alive,
+      range:        this.range,
+      health:       this.health,
+      maxHealth:    this.maxHealth
     }
   }
 }

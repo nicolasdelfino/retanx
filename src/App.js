@@ -6,6 +6,7 @@ import BasePosition from './units/base/BasePosition'
 import Body from './units/tank/components/Body'
 import Cannon from './units/tank/components/Cannon'
 import Tracks from './units/tank/components/Tracks'
+import HealthBar from './units/tank/components/HealthBar'
 import Outline from './units/base/Outline'
 import HP from './units/base/HitPoints'
 import SpecsView from './units/tank/components/SpecsView'
@@ -194,6 +195,7 @@ class MainConnect extends React.Component {
               <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
                 <Tracks specs={tankUnit}/>
               </Body>
+              <HealthBar unit={tankUnit}/>
               <Cannon debugAim={this.props.aimMode}
               specs={tankUnit} rotate={shouldRotate}
               rotation={angle}
@@ -545,21 +547,54 @@ class MainConnect extends React.Component {
         targetArea[0][1] + (range * Math.cos((tank.angle) * (Math.PI / 180)))
     ]);
 
+    //Temp debug-crap to display calculated targetArea
+    /*let previewDivs = document.getElementsByClassName('tmp');
+    for (let i = previewDivs.length-1; i >= 0; i--)
+      document.body.removeChild(previewDivs[i]);
+    let cannonPos = { x: ((tank.position.x-0.5)*100), y: ((tank.position.y-0.5)*100) };
+    for (let i = 0; i < 4; i++) {
+      let elm = document.createElement('div');
+      //console.error(targetArea[i][0], targetArea[i][1]);
+      elm.setAttribute('style', 'position: absolute; top: ' + ((targetArea[i][1]*50)+cannonPos.y) + 'px; left: ' + ((targetArea[i][0]*50)+cannonPos.x) + 'px; width: 5px; height: 5px; background-color: red;');
+      elm.setAttribute('class', 'tmp');
+      document.body.appendChild(elm);
+    }*/
+
     //Find obstacles within target area, and blow em up!
     let grid = _grid.getGrid();
     for (let x = 0; x < grid.length; x++) {
       for (let y = 0; y < grid[x].length; y++) {
-        if (grid[x][y].obstacle) {
-          if (this.pointInPolygon(x+0.5, y+0.5, targetArea)) {
+        if (this.pointInPolygon(x+0.5, y+0.5, targetArea)) {
+
+          let kill = false;
+          let unit = this.props.units.find((unit) => { return (unit.position.x === x && unit.position.y === y); }); //Look for unit in current position
+          if (unit) {
+            if (unit.id === this.props.currentSelectionID) { //No friendly fire
+              unit = null;
+            } else {
+              unit.health -= 100;
+              if (unit.health <= 0) {
+                kill = true;
+              }
+            }
+          } else if (grid[x][y].obstacle) {
+            kill = true;
+          }
+          
+          if (kill) {
             (new Audio(sound_explosion)).play();
             grid[x][y].isExploding = true;
             this.setState({refresh: this.state.refresh+1}); //TODO: Ugly-ass-hack, make the cell a state component instead?
             setTimeout(() => {
               grid[x][y].isExploding = false;
               grid[x][y].obstacle = false;
+              if (unit) {
+                //TODO: Remove unit from state
+              }
               this.setState({refresh: this.state.refresh+1});
             }, 800);
           }
+          
         }
       }
     }
