@@ -77,7 +77,7 @@ class Ground extends React.Component {
 
   isCellInUse(x,y) {
     let inUse = false
-    this.props.tanks.forEach((tank) => {
+    this.props.units.forEach((tank) => {
       if(tank.position.x === x && tank.position.y === y) {
         inUse = true
       }
@@ -85,6 +85,17 @@ class Ground extends React.Component {
 
     return inUse
   }
+
+  // cellHasUnitObstacle(x,y) {
+  //   let inUse = false
+  //   this.props.units.forEach((unit) => {
+  //     if(unit.position.x === x && unit.position.y === y && ) {
+  //       inUse = true
+  //     }
+  //   })
+  //
+  //   return inUse
+  // }
 
   renderDebug() {
     let amount = _grid.getDivider()
@@ -160,6 +171,43 @@ class Ground extends React.Component {
     return grid
   }
 
+  renderDebugObstacles() {
+    let amount = _grid.getDivider()
+    let size = Dimensions().width / amount
+    let rows = _grid.getRows()
+    let cols = _grid.getCols()
+    let grid = []
+
+    const cellStyle = {
+      display: 'flex', color: '#007ee4', width: size, height: size, background: 'transparent', outline: '1px dotted #007ee4'
+    }
+
+    for (let i = 0; i < cols; i++) {
+      let row = []
+      for (let x = 0; x < rows; x++) {
+        var cell = _grid.getGrid()[i][x]
+        if( (cell.obstacle && cell.showObstacle) || cell.unitObstacle) {
+          row.push(
+            <div key={x} style={{ ...cellStyle}}>
+              <div style={{flex:1, flexDirection: 'row'}}>
+              </div>
+            </div>
+          )
+        }
+        else {
+          row.push(
+            <div key={x} style={{ ...cellStyle, background: 'transparent', outline: 'none'}}>
+              <div style={{flex:1, flexDirection: 'row'}}>
+              </div>
+            </div>
+          )
+        }
+      }
+      grid.push(<div key={i} style={{flexDirection: 'row'}}>{row}</div>)
+    }
+    return grid
+  }
+
   render() {
     return (
       <div className='ground'>
@@ -172,6 +220,14 @@ class Ground extends React.Component {
           pointerEvents: 'none'
         }}>
           {this.props.debug ? this.renderDebug() : null}
+        </div>
+
+        <div style={{
+          display: 'flex', position: 'absolute', top: 0, left: 0, opacity: 1,
+          width: Dimensions().width, height: Dimensions().height, flexDirection: 'row',
+          pointerEvents: 'none'
+        }}>
+          {this.props.debugObstacles ? this.renderDebugObstacles() : null}
         </div>
       </div>
     )

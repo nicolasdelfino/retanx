@@ -62,7 +62,7 @@ export const Grid = function() {
            n.forEach((unit) => {
              if(grid[e][r].x === unit.position.x && grid[e][r].y === unit.position.y ) {
                if(unit.mass >= activeUnit.mass) {
-                 grid[e][r].obstacle = true
+                 grid[e][r].unitObstacle = true
                }
              }
            })

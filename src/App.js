@@ -111,6 +111,10 @@ class MainConnect extends React.Component {
     this.props.dispatch({ type: 'TOGGLE_AIM' })
   }
 
+  toggleObstacles() {
+    this.props.dispatch({ type: 'TOGGLE_OBSTACLES' })
+  }
+
   coordinates(pos, width, height) {
     // console.log('pos', pos)
     let size = Dimensions().width / _grid.getDivider()
@@ -177,6 +181,11 @@ class MainConnect extends React.Component {
             }
             else {
               this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
+
+              _grid.resetCells()
+
+              _grid.makeObstaclesOfUnitsWithHigherMass(units[tankUnit.id], units, tankUnit.id)
+
               // deselect all other units
               this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
             }
@@ -212,6 +221,11 @@ class MainConnect extends React.Component {
             }
             else {
               this.props.dispatch({type: 'SELECT_UNIT', payload: {id: soldierUnit.id }})
+
+              _grid.resetCells()
+
+              _grid.makeObstaclesOfUnitsWithHigherMass(units[soldierUnit.id], units, soldierUnit.id)
+
               // deselect all other units
               this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: soldierUnit.id }})
             }
@@ -474,7 +488,7 @@ class MainConnect extends React.Component {
       }
     })
     return (
-      <Ground debug={this.props.debugMode} ascores={this.props.debugAstarScores} tanks={this.props.units} cursor={sel ? 'crosshair' : 'normal'}
+      <Ground debugObstacles={this.props.debugObstacles} debug={this.props.debugMode} ascores={this.props.debugAstarScores} units={this.props.units} cursor={sel ? 'crosshair' : 'normal'}
       aim={this.aimOnCell.bind(this)} move={this.moveToCell.bind(this)}/>
     )
   }
@@ -576,6 +590,7 @@ class MainConnect extends React.Component {
           <div><button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
           <div><button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
           <div><button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
+          <div><button style={{background: 'blue'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
           {this.renderNumDivs()}
         </div>
         <div className='main' style={{...mainStyle}}>
@@ -602,7 +617,8 @@ const MSTP = (state) => {
     currentSelectionID: state.app.currentSelectionID,
     debugMode: state.app.debugMode,
     aimMode: state.app.aimMode,
-    debugAstarScores: state.app.debugAstarScores
+    debugAstarScores: state.app.debugAstarScores,
+    debugObstacles: state.app.debugObstacles
   }
 }
 

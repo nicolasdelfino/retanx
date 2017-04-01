@@ -12,10 +12,10 @@
 
 .dashboard {
   background: black;
-  padding: 10px; }
+  padding: 5px; }
 
 .dashboard button {
-  margin: 2px; }
+  margin: 1px; }
 
 .cell {
   padding: 6px;
