@@ -265,7 +265,6 @@ class MainConnect extends React.Component {
       return {id: unit.id}
     })
 
-    tracker.setUnits(trackerUnits)
     clearInterval(trackerInterval)
     trackerInterval = setInterval(() => {
 

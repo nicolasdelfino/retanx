@@ -13,9 +13,8 @@
 .dashboard {
   background: black;
   padding: 2px; }
-
-.dashboard button {
-  margin: 1px; }
+  .dashboard button {
+    margin: 1px; }
 
 .cell {
   padding: 6px;
