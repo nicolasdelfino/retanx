@@ -261,25 +261,22 @@ class MainConnect extends React.Component {
 
     // track the position of units when something is moving
     let units     = this.props.units
-    let trackerUnits = units.map((unit) => {
-      return {id: unit.id}
-    })
 
     clearInterval(trackerInterval)
     trackerInterval = setInterval(() => {
 
-      if(this.props.units.length === 1) {
+      if(units.length === 1) {
         return
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////
       // UNIT COLLISION
 
-      let roadKill = collisionManager.trackCollisions(tracker.trackUnits(this.props.units, this.props.currentSelectionID))
+      let roadKill = collisionManager.trackCollisions(tracker.trackUnits(units, this.props.currentSelectionID))
       if(roadKill) {
-        if(this.props.units[roadKill.id].alive) {
+        if(units[roadKill.id].alive) {
           console.warn('%cROADKILL', 'color:red', roadKill)
-          let killedUnit = this.props.units[roadKill.id]
+          let killedUnit = units[roadKill.id]
           killedUnit.alive = false
           _grid.getGrid()[killedUnit.position.x][killedUnit.position.y].unitObstacle = false
           this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
