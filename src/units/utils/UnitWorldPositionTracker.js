@@ -5,7 +5,6 @@ export const UnitWorldPositionTracker = function() {
   let instance = null
 
   function createUnitTracker() {
-    let units = []
 
     function getBankersRounding(value) {
       var intVal   = Math.floor(value);
@@ -47,7 +46,6 @@ export const UnitWorldPositionTracker = function() {
 
       let movingUnits = []
       liveUnits.forEach((unit, index) => {
-
         let element = $('#unit_' + unit.id + " .position"); // NO JQUERY PLEASE
 
         let xx = Math.floor(element.offset().left) - Math.floor(mainX)
@@ -60,11 +58,9 @@ export const UnitWorldPositionTracker = function() {
         let isActive = false
         if(index === activeUnit) {
           isActive = true
-          // console.group('%c *** ACTIVE UNIT ***', 'background: #000; color: #bada55');
           if(log) {
             console.log('%c**', 'background: #000; color: #bada55', '#unit_' + unit.id, '=> x:', x, 'y:', y)
           }
-          // console.groupEnd()
         }
         else {
           if(log) {
@@ -86,12 +82,8 @@ export const UnitWorldPositionTracker = function() {
     function turnOff() {
       this.isOn = false
     }
-    function setUnits(val) {
-      units = val
-    }
 
     return {
-        setUnits: setUnits,
         trackUnits: trackUnits,
         turnOn: turnOn,
         turnOff: turnOff
