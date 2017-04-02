@@ -7,9 +7,9 @@
   align-items: center;
   justify-content: center;
   //animation: rotateUnit 20s infinite;
-  border-radius: 100px; 
+  border-radius: 100px;
   .unit {
-    zoom: 0.1;
+    zoom: 0.12;
     .body {
       width: 100px;
       height: 70px;
@@ -56,6 +56,23 @@
         margin-bottom: -20px;
       }
     }
+  }
+}
+
+// DEATH
+.bloodPool {
+  opacity: 0.7;
+  animation: deathAnimation .4s ease-in;
+}
+
+@keyframes deathAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0, 0);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.5, 0.5);
   }
 }
 

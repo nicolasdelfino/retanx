@@ -25,9 +25,18 @@ export const TankType = function() {
   // cell width height properties
   this.cellWidth   = 100
   this.cellHeight  = 100
+  // mass
+  this.mass        = 1000
+  // hit points
+  this.hitPoints   = 12
+  this.hpPosTop    = 0
+  // status
+  this.alive       = true
+
   this.range       = 5
   this.health      = 1000
   this.maxHealth   = 1000
+
   // Randomize colors
   let randomize    = false
 
@@ -65,6 +74,10 @@ export const TankType = function() {
       rotate:       'true',
       selected:     false,
       angle:        0,
+      mass:         this.mass,
+      hp:           this.hitPoints,
+      hpPosTop:     this.hpPosTop,
+      alive:        this.alive,
       range:        this.range,
       health:       this.health,
       maxHealth:    this.maxHealth

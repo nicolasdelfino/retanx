@@ -6,8 +6,8 @@ import BasePosition from './units/base/BasePosition'
 import Body from './units/tank/components/Body'
 import Cannon from './units/tank/components/Cannon'
 import Tracks from './units/tank/components/Tracks'
-import HealthBar from './units/tank/components/HealthBar'
 import Outline from './units/base/Outline'
+import HP from './units/base/HitPoints'
 import SpecsView from './units/tank/components/SpecsView'
 import FootSoldier from './units/soldiers/components/FootSoldier'
 import * as TYPES from './units/types/unitTypes'
@@ -16,17 +16,30 @@ import sound_pew from './assets/pew.mp3'
 import sound_explosion from './assets/explosion.mp3'
 import logo from './retanx.png'
 
+////////////////////////////////////////////////////////////////////////////////////////////
+// Grid and aStar
 import { Dimensions, Grid } from './grid/Grid'
 import { AStar } from './grid/AStar'
 let _grid = null
 
+////////////////////////////////////////////////////////////////////////////////////////////
+// Unit factory
 import { UnitFactory } from './units/utils/UnitFactory'
 let unitFactory = UnitFactory.getInstance()
 
+////////////////////////////////////////////////////////////////////////////////////////////
+// Position tracker
 import { UnitWorldPositionTracker } from './units/utils/UnitWorldPositionTracker'
 let tracker = UnitWorldPositionTracker.getInstance()
 let trackerInterval = null
 
+////////////////////////////////////////////////////////////////////////////////////////////
+// Collision manager
+import { WorldCollision } from './units/utils/WorldCollision'
+let collisionManager = WorldCollision.getInstance()
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// Generic Utils
 import { Utils } from './utils/Utils'
 let utils = Utils.getInstance()
 
@@ -84,8 +97,6 @@ class MainConnect extends React.Component {
 
     _grid.getGrid()[unitPosition.x][unitPosition.y].obstacle = false
     _grid.getGrid()[unitPosition.x][unitPosition.y].opacity = 1
-
-
   }
 
   toggleDebug() {
@@ -98,6 +109,10 @@ class MainConnect extends React.Component {
 
   toggleAim() {
     this.props.dispatch({ type: 'TOGGLE_AIM' })
+  }
+
+  toggleObstacles() {
+    this.props.dispatch({ type: 'TOGGLE_OBSTACLES' })
   }
 
   coordinates(pos, width, height) {
@@ -165,20 +180,18 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: tankUnit.id }})
             }
             else {
-              this.props.dispatch({type: 'SELECT_UNIT', payload: {id: tankUnit.id }})
-              // deselect all other units
-              this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: tankUnit.id }})
+              this.selectUnit(units, tankUnit.id)
             }
            }}>
             <BasePosition moveSpeed={tankUnit.moveSpeed} position={this.coordinates(position, cellWidth, cellHeight)} >
               <Body specs={tankUnit} speed={this.getSpeed(position)} rotate={shouldRotate} rotation={angle}>
                 <Tracks specs={tankUnit}/>
               </Body>
-              <HealthBar unit={tankUnit}/>
               <Cannon debugAim={this.props.aimMode}
               specs={tankUnit} rotate={shouldRotate}
               rotation={angle}
               shooting={this.getIsThisUnitShooting(tankUnit, index)}/>
+              <HP specs={tankUnit} />
             </BasePosition>
             <Outline moveSpeed={tankUnit.moveSpeed} specs={tankUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
             </div>
@@ -200,9 +213,7 @@ class MainConnect extends React.Component {
               this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: soldierUnit.id }})
             }
             else {
-              this.props.dispatch({type: 'SELECT_UNIT', payload: {id: soldierUnit.id }})
-              // deselect all other units
-              this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: soldierUnit.id }})
+              this.selectUnit(units, soldierUnit.id)
             }
            }}>
               <BasePosition moveSpeed={soldierUnit.moveSpeed} position={this.coordinates(position, cellWidth, cellHeight)} >
@@ -213,6 +224,7 @@ class MainConnect extends React.Component {
                 rotation={angle}
                 debugAim={this.props.aimMode}
                 />
+                <HP specs={soldierUnit} />
               </BasePosition>
               <Outline moveSpeed={soldierUnit.moveSpeed} specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
             </div>
@@ -232,6 +244,17 @@ class MainConnect extends React.Component {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
+  // Select unit
+  selectUnit(units, id) {
+    this.props.dispatch({type: 'SELECT_UNIT', payload: {id: id }})
+    _grid.resetCells()
+    _grid.makeObstaclesOfUnitsWithHigherMass(units[id], units, id)
+
+    // deselect all other units
+    this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: id }})
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////
   // Follow path function, cuts out redundant cells
 
   followPath(start, path) {
@@ -245,8 +268,25 @@ class MainConnect extends React.Component {
     tracker.setUnits(trackerUnits)
     clearInterval(trackerInterval)
     trackerInterval = setInterval(() => {
-      tracker.trackUnits(this.props.currentSelectionID)
-    }, 250)
+
+      if(this.props.units.length === 1) {
+        return
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////
+      // UNIT COLLISION
+
+      let roadKill = collisionManager.trackCollisions(tracker.trackUnits(this.props.units, this.props.currentSelectionID))
+      if(roadKill) {
+        if(this.props.units[roadKill.id].alive) {
+          console.warn('%cROADKILL', 'color:red', roadKill)
+          let killedUnit = this.props.units[roadKill.id]
+          killedUnit.alive = false
+          _grid.getGrid()[killedUnit.position.x][killedUnit.position.y].unitObstacle = false
+          this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
+        }
+      }
+    }, 100)
 
     path.reverse()
 
@@ -453,7 +493,7 @@ class MainConnect extends React.Component {
       }
     })
     return (
-      <Ground debug={this.props.debugMode} ascores={this.props.debugAstarScores} tanks={this.props.units} cursor={sel ? 'crosshair' : 'normal'}
+      <Ground debugObstacles={this.props.debugObstacles} debug={this.props.debugMode} ascores={this.props.debugAstarScores} units={this.props.units} cursor={sel ? 'crosshair' : 'normal'}
       aim={this.aimOnCell.bind(this)} move={this.moveToCell.bind(this)}/>
     )
   }
@@ -535,7 +575,7 @@ class MainConnect extends React.Component {
           } else if (grid[x][y].obstacle) {
             kill = true;
           }
-          
+
           if (kill) {
             (new Audio(sound_explosion)).play();
             grid[x][y].isExploding = true;
@@ -549,7 +589,7 @@ class MainConnect extends React.Component {
               this.setState({refresh: this.state.refresh+1});
             }, 800);
           }
-          
+
         }
       }
     }
@@ -575,15 +615,20 @@ class MainConnect extends React.Component {
     return <div className='totalDivs'>Total divs: {this.state.totalDivs}</div>
   }
 
+  getMainCSS() {
+    return this.state.shooting === true ?  'mainFire' : ''
+  }
+
 	render() {
     return (
-      <div>
+      <div id='board' className={this.getMainCSS()}>
         <div className='dashboard' style={{flexDirection: 'column'}}>
           <div><button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
           <div><button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
           <div><button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
           <div><button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
           <div><button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
+          <div><button style={{background: '#007ee4'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
           {this.renderNumDivs()}
         </div>
         <div className='main' style={{...mainStyle}}>
@@ -610,7 +655,8 @@ const MSTP = (state) => {
     currentSelectionID: state.app.currentSelectionID,
     debugMode: state.app.debugMode,
     aimMode: state.app.aimMode,
-    debugAstarScores: state.app.debugAstarScores
+    debugAstarScores: state.app.debugAstarScores,
+    debugObstacles: state.app.debugObstacles
   }
 }
 

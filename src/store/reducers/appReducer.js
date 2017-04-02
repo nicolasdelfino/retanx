@@ -4,6 +4,7 @@ const initState = {
   currentSelectionID: 0,
   debugMode: false,
   debugAstarScores: false,
+  debugObstacles: false,
   aimMode: false
 }
 
@@ -34,6 +35,11 @@ const app = (state = initState, action) => {
       return {
         ...state,
         aimMode: !state.aimMode
+    }
+    case 'TOGGLE_OBSTACLES':
+      return {
+        ...state,
+        debugObstacles: !state.debugObstacles
     }
     case 'TOGGLE_ASCORES':
       return {

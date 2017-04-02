@@ -6,7 +6,7 @@ export let AStar = (_grid, start, end, units, currentSelectionID) => {
   _grid.resetCells()
 
   // pass tanks to grid and make them obstacles
-  _grid.makeObstaclesOfInactiveUnits(units, currentSelectionID)
+  _grid.makeObstaclesOfUnitsWithHigherMass(units[currentSelectionID], units, currentSelectionID)
 
   // Add possible cell neighbors, pass unit A* style
   let aStarStyle = units[currentSelectionID].aStarStyle
@@ -53,7 +53,7 @@ export let AStar = (_grid, start, end, units, currentSelectionID) => {
     for(var j = 0; j < neighbors.length; j++) {
       var neighbor = neighbors[j]
 
-      if(!closedSet.includes(neighbor) && !neighbor.obstacle) {
+      if(!closedSet.includes(neighbor) && !neighbor.obstacle && !neighbor.unitObstacle) {
         let tentativeG = current.g + 1
         if(openSet.includes(neighbor)) {
           if(tentativeG < neighbor.g) {

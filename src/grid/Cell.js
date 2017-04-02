@@ -13,8 +13,9 @@ export const Cell = function(Dimensions) {
   this.tempPathString = ''
   this.obstacle = false
   this.showObstacle = false
+  this.unitObstacle = false
   this.diffCell = false
-  this.opacity = 0.4
+  this.opacity = 0.3
   this.animOrgIndex = null
 
 
@@ -82,5 +83,6 @@ export const Cell = function(Dimensions) {
     this.isPathDirectionTurn = false
     this.tempPathString = ''
     this.animOrgIndex = null
+    this.unitObstacle = false
   }
 }
