@@ -13,8 +13,9 @@
 .dashboard {
   background: black;
   padding: 2px; }
-  .dashboard button {
-    margin: 1px; }
+
+.dashboard button {
+  margin: 1px; }
 
 .cell {
   padding: 6px;
@@ -58,6 +59,7 @@
 
 .gridItem {
   background-image: url("../assets/tile_stone.png");
+  background-size: 50px 50px;
   flex: 1;
   transition: all 0s ease; }
 
@@ -70,12 +72,13 @@
 .gridItemObstacle0 {
   background-image: url("../assets/wall.png");
   flex: 1;
+  background-size: 50px 50px;
   transition: all 0s ease; }
 
 .gridItemObstacle1 {
   background-image: url("../assets/tile_wall1.jpg");
   flex: 1;
-  background-size: 100px 100px;
+  background-size: 50px 50px;
   transition: all 0s ease; }
 
 .gridItemObstacle2 {
@@ -116,7 +119,7 @@ body {
   cursor: default; }
 
 .beam {
-  width: 100px;
+  width: 50px;
   height: 2px;
   background: red;
   outline: 1px solid #d16543;
@@ -125,14 +128,14 @@ body {
   left: 21px;
   transform: rotate(90deg);
   transform-origin: 0% 0%;
-  animation: test 0.3s infinite; }
+  animation: beamFire 0.3s infinite; }
 
-@keyframes test {
+@keyframes beamFire {
   0% {
     opacity: 0; }
   1% {
     opacity: 1;
-    width: 100px;
+    width: 50px;
     top: 90px; }
   99% {
     width: 0px;

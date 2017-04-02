@@ -48,7 +48,7 @@ class Ground extends React.Component {
     let amount = _grid.getDivider()
     let rows = _grid.getRows()
     let cols = _grid.getCols()
-    let size = Dimensions().width / amount
+    let size = Dimensions().tileSize
     let grid = []
     let borderColor = 'rgb(239,239,239)'
 
@@ -62,14 +62,14 @@ class Ground extends React.Component {
         let cell = _grid.getGrid()[i][x]
         if(cell.obstacle && cell.showObstacle) {
           row.push(<div key={x} style={{ ...cellStyle, background: 'rgb(0,0,0)' }} onClick={() => this.clickCell(x,i,false)}>
-            <div className={this.getRandomObstacleCell()} style={{opacity: cell.opacity, flex:1, border: '0px dashed rgba(0,0,0,0)', color: 'rgb(255,255,255)'}}>
+            <div className={this.getRandomObstacleCell()} style={{opacity: cell.opacity, flex:1, border: '0px dashed rgba(0,0,0,0)', color: 'rgb(255,255,255)', backgroundSize: size + 'px ' + size + 'px'}}>
               {this.renderExplosion(cell.isExploding)}
             </div>
           </div>)
         }
         else {
           row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i,true)}>
-            <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '.5s', flex:1, border: '0px dashed transparent'}}>
+            <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '.5s', flex:1, border: '0px dashed transparent', backgroundSize: size + 'px ' + size + 'px'}}>
               {this.renderExplosion(cell.isExploding)}
             </div>
           </div>)
@@ -96,7 +96,7 @@ class Ground extends React.Component {
 
   renderDebug() {
     let amount = _grid.getDivider()
-    let size = Dimensions().width / amount
+    let size = Dimensions().tileSize
     let rows = _grid.getRows()
     let cols = _grid.getCols()
     let grid = []
@@ -173,7 +173,7 @@ class Ground extends React.Component {
 
   renderDebugObstacles() {
     let amount = _grid.getDivider()
-    let size = Dimensions().width / amount
+    let size = Dimensions().tileSize
     let rows = _grid.getRows()
     let cols = _grid.getCols()
     let grid = []

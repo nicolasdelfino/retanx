@@ -4,7 +4,8 @@ import { Cell } from './Cell'
 export const Dimensions = () => ({
   width: 900,
   height: 500,
-  divider: 9
+  divider: 9,
+  tileSize: 100
 })
 
 export const Grid = function() {
@@ -14,8 +15,8 @@ export const Grid = function() {
   function createGrid() {
      var grid     = []
      let divider  = Dimensions().divider
-     let cols     = Dimensions().width / 100
-     let rows     = Dimensions().height / 100
+     let cols     = Dimensions().width / Dimensions().tileSize
+     let rows     = Dimensions().height / Dimensions().tileSize
 
      for(var s = 0; s < cols; s++) {
        grid[s] = new Array(rows)

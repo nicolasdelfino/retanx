@@ -117,7 +117,7 @@ class MainConnect extends React.Component {
 
   coordinates(pos, width, height) {
     // console.log('pos', pos)
-    let size = Dimensions().width / _grid.getDivider()
+    let size = Dimensions().tileSize
     return {
       x: pos.x * size + (size / 2 - width / 2),
       y: pos.y * size + (size / 2 - height / 2)
