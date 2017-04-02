@@ -22,8 +22,13 @@ export const UnitWorldPositionTracker = function() {
     }
 
     //getters
-    function trackUnits(activeUnit) {
-      if(units.length === 0) {
+    function trackUnits(allUnits, activeUnit) {
+      // get live ones
+      let liveUnits = allUnits.filter((unit) => {
+        return unit.alive === true
+      })
+
+      if(liveUnits.length <= 1) {
         return
       }
 
@@ -35,13 +40,13 @@ export const UnitWorldPositionTracker = function() {
       if(log) {
         console.group('U.W.P TRACKER')
       }
-      let tU = units.length < 2 ? 'UNIT' : 'UNITS'
+      let tU = liveUnits.length < 2 ? 'UNIT' : 'UNITS'
       if(log) {
-        console.log('Tracking ' + units.length + ' ' + tU)
+        console.log('Tracking ' + liveUnits.length + ' ' + tU)
       }
 
       let movingUnits = []
-      units.forEach((unit, index) => {
+      liveUnits.forEach((unit, index) => {
 
         let element = $('#unit_' + unit.id + " .position"); // NO JQUERY PLEASE
 

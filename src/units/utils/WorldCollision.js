@@ -6,6 +6,14 @@ export const WorldCollision = function() {
 
     function trackCollisions(movingUnits) {
 
+      if(!movingUnits) {
+        return
+      }
+      
+      if(movingUnits.length <= 1) {
+        return
+      }
+
       let collideUnit
       movingUnits.forEach((unit, index) => {
         movingUnits.forEach((compare, index) => {

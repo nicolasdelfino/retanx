@@ -276,10 +276,10 @@ class MainConnect extends React.Component {
       ////////////////////////////////////////////////////////////////////////////////////////////
       // UNIT COLLISION
 
-      let roadKill = collisionManager.trackCollisions(tracker.trackUnits(this.props.currentSelectionID))
+      let roadKill = collisionManager.trackCollisions(tracker.trackUnits(this.props.units, this.props.currentSelectionID))
       if(roadKill) {
-        console.warn('%cROADKILL', 'color:red', roadKill)
         if(this.props.units[roadKill.id].alive) {
+          console.warn('%cROADKILL', 'color:red', roadKill)
           let killedUnit = this.props.units[roadKill.id]
           killedUnit.alive = false
           _grid.getGrid()[killedUnit.position.x][killedUnit.position.y].unitObstacle = false
