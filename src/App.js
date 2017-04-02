@@ -270,7 +270,7 @@ class MainConnect extends React.Component {
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////
-      // UNIT COLLISION
+      // UNIT COLLISIONS
 
       let roadKill = collisionManager.trackCollisions(tracker.trackUnits(units, this.props.currentSelectionID))
       if(roadKill) {
