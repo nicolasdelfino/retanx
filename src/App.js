@@ -466,7 +466,6 @@ class MainConnect extends React.Component {
           this.hideSpecs()
         }}>
         CLOSE SPECS
-
         </div>
       </div>
     )
@@ -491,8 +490,8 @@ class MainConnect extends React.Component {
 
   handleKeyInput() {
     document.body.onkeydown = (e) => {
-        if(e.keyCode === 32){
-            if(!this.state.shooting) {
+        if(e.keyCode === 65){
+            if(!this.state.shooting && this.props.units[this.props.currentSelectionID].selected) {
               this.setState({ shooting: true })
               this.handleShotFired()
               this.shootingTimer = setInterval(() => { this.handleShotFired(); }, 300)
@@ -501,7 +500,7 @@ class MainConnect extends React.Component {
     }
 
     document.body.onkeyup = (e) => {
-        if(e.keyCode === 32){
+        if(e.keyCode === 65){
             this.setState({ shooting: false })
             clearInterval(this.shootingTimer)
         }
@@ -578,7 +577,7 @@ class MainConnect extends React.Component {
                 //TODO: Remove unit from state
               }
               this.setState({refresh: this.state.refresh+1});
-            }, 800);
+            }, 400);
           }
 
         }
@@ -629,9 +628,11 @@ class MainConnect extends React.Component {
           <div><button style={{background: this.props.debugObstacles ? 'red' : 'black', color: this.props.debugObstacles ? 'black' : 'red'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
 
           {this.renderNumDivs()}
-        </div>
-        <div id='board' className={this.getMainCSS()}>
 
+          <div className='instructions'>PRESS A TO FIRE</div>
+        </div>
+        <div id='board'>
+            <div className={this.getMainCSS()}>
             {/*  GRID */}
             {this.renderGround()}
             {/* TANK  */}
@@ -640,7 +641,7 @@ class MainConnect extends React.Component {
             {this.renderSpecsView()}
             {/* SPACEBAR */}
             {this.handleKeyInput()}
-
+            </div>
         </div>
       </div>
     )

@@ -2,8 +2,8 @@ import { Cell } from './Cell'
 
 // Grid singleton
 export const Dimensions = () => ({
-  width: 500,
-  height: 500,
+  width: 1000,
+  height: 2000,
   divider: 9,
   tileSize: 100
 })
