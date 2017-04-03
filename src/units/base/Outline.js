@@ -21,7 +21,7 @@ class Outline extends React.Component {
     const outlineStyle = {
       width: w, height: h, opacity: 1, animation: 'fade 0.8s linear infinite',
       transform: 'rotate(' + this.state.rotation + 'deg)',
-      border: '1px solid #adff00', background: 'transparent'
+      border: '2px solid red', background: 'transparent'
     }
 
     if(!this.props.specs.selected) {

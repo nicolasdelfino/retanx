@@ -617,16 +617,24 @@ class MainConnect extends React.Component {
 
 	render() {
     return (
+      <div>
+      <div className={this.state.shooting ? 'dashboard mainFire' : 'dashboard'} style={{flexDirection: 'column'}}>
+        <div><button onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
+
+        <div><button onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
+
+        <div><button style={{background: this.props.debugMode ? 'red' : 'black', color: this.props.debugMode ? 'black' : 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
+
+        <div><button style={{background: this.props.debugAstarScores ? 'red' : 'black', color: this.props.debugAstarScores ? 'black' : 'red'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
+
+        <div><button style={{background: this.props.aimMode ? 'red' : 'black', color: this.props.aimMode ? 'black' : 'red'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
+
+        <div><button style={{background: this.props.debugObstacles ? 'red' : 'black', color: this.props.debugObstacles ? 'black' : 'red'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
+
+        {this.renderNumDivs()}
+      </div>
       <div id='board' className={this.getMainCSS()}>
-        <div className='dashboard' style={{flexDirection: 'column'}}>
-          <div><button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
-          <div><button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
-          <div><button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
-          <div><button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
-          <div><button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
-          <div><button style={{background: '#007ee4'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
-          {this.renderNumDivs()}
-        </div>
+
         <div className='main' style={{...mainStyle}}>
           {/*  GRID */}
           {this.renderGround()}
@@ -639,6 +647,7 @@ class MainConnect extends React.Component {
           {/* RETANX LOGO */}
           {this.renderLogo()}
         </div>
+      </div>
       </div>
     )
 	}
