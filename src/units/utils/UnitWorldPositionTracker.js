@@ -33,7 +33,7 @@ export const UnitWorldPositionTracker = function() {
 
       const log = true
 
-      let main = $('.main')
+      let main = $('#board')
       let mainX = Math.floor(main.offset().left)
       let mainY = Math.floor(main.offset().top)
       if(log) {
