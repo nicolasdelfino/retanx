@@ -13,10 +13,6 @@
   margin: 0px;
 }
 
-#board {
-
-}
-
 .dashboard {
   position: fixed;
   z-index: 1000;
@@ -126,16 +122,33 @@
 html {
   height: 100%;
   display: flex;
+  align-items: flex-start;
   justify-content: center;
-  margin-top: 20px;
 }
 
 body {
   background: #000;
+}
+
+.wrapper {
+  position: relative;
   display: flex;
   align-self: center;
   justify-content: center;
-  // overflow: hidden;
+  align-items: flex-start;
+  margin-top: 100px;
+}
+
+#board {
+  display: flex;
+  margin-bottom: 100px;
+  border: 2px solid red;
+  align-self: center;
+}
+
+.ground {
+  display: flex;
+  outline: 1px solid #000;
 }
 
 .crosshair {
@@ -203,11 +216,6 @@ body {
 .logo {
   zoom: 0.5;
 
-}
-
-.ground {
-  margin-top: 0px;
-  outline: 1px solid #000;
 }
 
 button {

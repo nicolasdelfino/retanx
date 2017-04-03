@@ -43,14 +43,6 @@ let collisionManager = WorldCollision.getInstance()
 import { Utils } from './utils/Utils'
 let utils = Utils.getInstance()
 
-const mainStyle = {
-  width: Dimensions().width, height: Dimensions().height,
-  color: '#fff',
-  background: '#e8e8e8',
-  position: 'relative',
-  border: '0px solid #402c1b'
-}
-
 class MainConnect extends React.Component {
 
   constructor(props) {
@@ -70,7 +62,7 @@ class MainConnect extends React.Component {
 
   componentDidMount() {
     _grid = Grid.getInstance()
-    this.addUnit(TYPES.TANK_TYPE)
+    this.addUnit(TYPES.TANK_TYPE, true)
 
     setInterval(() => {
       this.setState({
@@ -79,13 +71,16 @@ class MainConnect extends React.Component {
     }, 1000)
   }
 
-  addUnit(type) {
+  addUnit(type, firstUnit) {
     if(!type) {
       // default to use tank type
       type = TYPES.TANK_TYPE
     }
-    // currently just tanks
-    let unitPosition = unitFactory.getRandomPos(this.props.units)
+    console.log('firstUnit', firstUnit)
+    // pick random position
+    let unitPosition = firstUnit === true ? { x: Math.floor(_grid.getCols() / 2), y: 3 } : unitFactory.getRandomPos(this.props.units)
+
+    console.warn(unitPosition)
 
     if(!unitPosition) {
       console.log('No available position for unit')
@@ -612,43 +607,41 @@ class MainConnect extends React.Component {
   }
 
   getMainCSS() {
-    return this.state.shooting === true ?  'mainFire' : ''
+    return this.state.shooting === true ?  'mainFire' : 'noFire'
   }
 
 	render() {
     return (
-      <div>
-      <div className={this.state.shooting ? 'dashboard mainFire' : 'dashboard'} style={{flexDirection: 'column'}}>
-        {/* RETANX LOGO */}
-        {this.renderLogo()}
-        <div><button onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
+      <div className='wrapper'>
+        <div className={this.state.shooting ? 'dashboard mainFire' : 'dashboard'} style={{flexDirection: 'column'}}>
+          {/* RETANX LOGO */}
+          {this.renderLogo()}
+          <div><button onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
 
-        <div><button onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
+          <div><button onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
 
-        <div><button style={{background: this.props.debugMode ? 'red' : 'black', color: this.props.debugMode ? 'black' : 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
+          <div><button style={{background: this.props.debugMode ? 'red' : 'black', color: this.props.debugMode ? 'black' : 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
 
-        <div><button style={{background: this.props.debugAstarScores ? 'red' : 'black', color: this.props.debugAstarScores ? 'black' : 'red'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
+          <div><button style={{background: this.props.debugAstarScores ? 'red' : 'black', color: this.props.debugAstarScores ? 'black' : 'red'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
 
-        <div><button style={{background: this.props.aimMode ? 'red' : 'black', color: this.props.aimMode ? 'black' : 'red'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
+          <div><button style={{background: this.props.aimMode ? 'red' : 'black', color: this.props.aimMode ? 'black' : 'red'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
 
-        <div><button style={{background: this.props.debugObstacles ? 'red' : 'black', color: this.props.debugObstacles ? 'black' : 'red'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
+          <div><button style={{background: this.props.debugObstacles ? 'red' : 'black', color: this.props.debugObstacles ? 'black' : 'red'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
 
-        {this.renderNumDivs()}
-      </div>
-      <div id='board' className={this.getMainCSS()}>
+          {this.renderNumDivs()}
+        </div>
+        <div id='board' className={this.getMainCSS()}>
 
-        <div className='main' style={{...mainStyle}}>
-          {/*  GRID */}
-          {this.renderGround()}
-          {/* TANK  */}
-          {this.renderUnits()}
-          {/* SPECS VIEW  */}
-          {this.renderSpecsView()}
-          {/* SPACEBAR */}
-          {this.handleKeyInput()}
+            {/*  GRID */}
+            {this.renderGround()}
+            {/* TANK  */}
+            {this.renderUnits()}
+            {/* SPECS VIEW  */}
+            {this.renderSpecsView()}
+            {/* SPACEBAR */}
+            {this.handleKeyInput()}
 
         </div>
-      </div>
       </div>
     )
 	}

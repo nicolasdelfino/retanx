@@ -111,14 +111,29 @@
 html {
   height: 100%;
   display: flex;
-  justify-content: center;
-  margin-top: 20px; }
+  align-items: flex-start;
+  justify-content: center; }
 
 body {
-  background: #000;
+  background: #000; }
+
+.wrapper {
+  position: relative;
   display: flex;
   align-self: center;
-  justify-content: center; }
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 100px; }
+
+#board {
+  display: flex;
+  margin-bottom: 100px;
+  border: 2px solid red;
+  align-self: center; }
+
+.ground {
+  display: flex;
+  outline: 1px solid #000; }
 
 .crosshair {
   cursor: crosshair; }
@@ -184,10 +199,6 @@ body {
 
 .logo {
   zoom: 0.5; }
-
-.ground {
-  margin-top: 0px;
-  outline: 1px solid #000; }
 
 button {
   background: #095745;
