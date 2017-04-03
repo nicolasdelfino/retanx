@@ -45,7 +45,6 @@ class Ground extends React.Component {
   // GROUND
 
   renderGround() {
-    let amount = _grid.getDivider()
     let rows = _grid.getRows()
     let cols = _grid.getCols()
     let size = Dimensions().tileSize
@@ -95,7 +94,6 @@ class Ground extends React.Component {
   // DEBUG A*
 
   renderDebug() {
-    let amount = _grid.getDivider()
     let size = Dimensions().tileSize
     let rows = _grid.getRows()
     let cols = _grid.getCols()
@@ -172,7 +170,6 @@ class Ground extends React.Component {
   // DEBUG OBSTACLES
 
   renderDebugObstacles() {
-    let amount = _grid.getDivider()
     let size = Dimensions().tileSize
     let rows = _grid.getRows()
     let cols = _grid.getCols()

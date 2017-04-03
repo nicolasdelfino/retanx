@@ -619,6 +619,8 @@ class MainConnect extends React.Component {
     return (
       <div>
       <div className={this.state.shooting ? 'dashboard mainFire' : 'dashboard'} style={{flexDirection: 'column'}}>
+        {/* RETANX LOGO */}
+        {this.renderLogo()}
         <div><button onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
 
         <div><button onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
@@ -644,8 +646,7 @@ class MainConnect extends React.Component {
           {this.renderSpecsView()}
           {/* SPACEBAR */}
           {this.handleKeyInput()}
-          {/* RETANX LOGO */}
-          {this.renderLogo()}
+
         </div>
       </div>
       </div>

@@ -18,6 +18,7 @@
   left: 20px;
   align-items: center;
   justify-content: center;
+  zoom: 0.8;
   background: red;
   padding: 2px; }
 
@@ -49,10 +50,6 @@
   color: white;
   background: blue;
   opacity: 0.1; }
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px; }
 
 .App-header {
   background-color: #222;
@@ -121,8 +118,7 @@ body {
   background: #000;
   display: flex;
   align-self: center;
-  justify-content: center;
-  overflow: hidden; }
+  justify-content: center; }
 
 .crosshair {
   cursor: crosshair; }
@@ -187,15 +183,11 @@ body {
   z-index: 10000; }
 
 .logo {
-  position: absolute;
-  top: -200px;
-  left: 660px;
   zoom: 0.5; }
 
 .ground {
   margin-top: 0px;
-  outline: 1px solid #000;
-  box-shadow: 0px 0px 106px 3px rgba(0, 0, 0, 0.75); }
+  outline: 1px solid #000; }
 
 button {
   background: #095745;

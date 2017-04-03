@@ -3,7 +3,7 @@ import { Cell } from './Cell'
 // Grid singleton
 export const Dimensions = () => ({
   width: 900,
-  height: 500,
+  height: 1600,
   divider: 9,
   tileSize: 100
 })
