@@ -4,8 +4,8 @@ export const Cell = function(Dimensions) {
   this.f    = 0
   this.g    = 0
   this.h    = 0
-  this.cols  = Dimensions().width / 100
-  this.rows  = Dimensions().height / 100
+  this.cols  = Dimensions().width / Dimensions().tileSize
+  this.rows  = Dimensions().height / Dimensions().tileSize
   this.neighbors  = []
   this.previous   = undefined
   this.isPath     = false
@@ -15,7 +15,7 @@ export const Cell = function(Dimensions) {
   this.showObstacle = false
   this.unitObstacle = false
   this.diffCell = false
-  this.opacity = 0.3
+  this.opacity = 0
   this.animOrgIndex = null
 
 

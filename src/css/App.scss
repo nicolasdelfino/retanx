@@ -4,21 +4,40 @@
 
 .totalDivs {
   color: red;
-  font-size: 11px;
-  padding: 2px;
-  background: rgb(36, 36, 36);
-  width: 120px;
-  margin: 2px;
+  font-size: 10px;
+  padding: 4px;
+  background: black;
+  width: calc(100% -1px);
+  text-align: center;
   text-transform: uppercase;
+  margin: 0px;
 }
 
 .dashboard {
-  background: black;
+  position: fixed;
+  z-index: 1000;
+  top: 20px;
+  left: 20px;
+  align-items: center;
+  justify-content: center;
+  zoom: 0.8;
+  background: red;
   padding: 2px;
 
   button {
-    margin: 1px;
+    width: 100%;
+    background: black;
+    padding: 2px;
+    color: red;
+    font-size: 10px;
+    outline: 1px solid red;
   }
+}
+
+.instructions {
+  padding-top: 10px;
+  text-align: center;
+  font-size: 12px;
 }
 
 .cell {
@@ -44,11 +63,6 @@
   opacity: 0.1;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
 .App-header {
   background-color: #222;
   height: 150px;
@@ -67,7 +81,7 @@
 
 .gridItem {
   background-image: url("../assets/tile_stone.png");
-  // background-size: 50px 50px;
+  background-size: 50px 50px;
   flex: 1;
   transition: all 0s ease;
 }
@@ -83,13 +97,13 @@
 .gridItemObstacle0 {
   background-image: url("../assets/wall.png");
   flex: 1;
-  // background-size: 100px 100px;
+  background-size: 50px 50px;
   transition: all 0s ease;
 }
 .gridItemObstacle1 {
   background-image: url("../assets/tile_wall1.jpg");
   flex: 1;
-  background-size: 100px 100px;
+  background-size: 50px 50px;
   transition: all 0s ease;
 }
 .gridItemObstacle2 {
@@ -114,16 +128,41 @@
 html {
   height: 100%;
   display: flex;
+  align-items: flex-start;
   justify-content: center;
-  margin-top: 20px;
 }
 
 body {
   background: #000;
+}
+
+.wrapper {
+  position: relative;
   display: flex;
   align-self: center;
   justify-content: center;
-  overflow: hidden;
+  align-items: flex-start;
+  margin-top: 100px;
+}
+
+#board {
+  display: flex;
+  margin-bottom: 100px;
+  // border: 2px solid red;
+  align-self: center;
+  transform: scale(.2);
+  opacity: 0;
+  animation: zoomIn 2s ease normal forwards;
+}
+
+@keyframes zoomIn {
+  0% { transform: scale(.2); opacity: 0;}
+  100% { transform: scale(1); opacity: 1;}
+}
+
+.ground {
+  display: flex;
+  outline: 1px solid #000;
 }
 
 .crosshair {
@@ -135,7 +174,7 @@ body {
 }
 
 .beam {
-  width: 100px;
+  width: 50px;
   height: 2px;
   background: red;
   outline: 1px solid #d16543;
@@ -143,12 +182,12 @@ body {
   top: 90px; left: 21px;
   transform: rotate(90deg);
   transform-origin: 0% 0%;
-  animation: test 0.3s infinite;
+  animation: beamFire 0.3s infinite;
 }
 
-@keyframes test {
+@keyframes beamFire {
   0% { opacity: 0}
-  1% { opacity: 1; width: 100px; top: 90px; }
+  1% { opacity: 1; width: 50px; top: 90px; }
   99% { width: 0px; top: 650px; }
   100% { opacity: 0}
 }
@@ -189,17 +228,8 @@ body {
 }
 
 .logo {
-  position: absolute;
-  top: -200px;
-  left: 660px;
   zoom: 0.5;
 
-}
-
-.ground {
-  margin-top: 0px;
-  outline: 1px solid #000;
-  box-shadow: 0px 0px 106px 3px rgba(0,0,0,0.75);
 }
 
 button {

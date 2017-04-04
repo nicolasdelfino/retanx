@@ -43,14 +43,6 @@ let collisionManager = WorldCollision.getInstance()
 import { Utils } from './utils/Utils'
 let utils = Utils.getInstance()
 
-const mainStyle = {
-  width: Dimensions().width, height: Dimensions().height,
-  color: '#fff',
-  background: '#e8e8e8',
-  position: 'relative',
-  border: '0px solid #402c1b'
-}
-
 class MainConnect extends React.Component {
 
   constructor(props) {
@@ -70,7 +62,7 @@ class MainConnect extends React.Component {
 
   componentDidMount() {
     _grid = Grid.getInstance()
-    this.addUnit(TYPES.TANK_TYPE)
+    this.addUnit(TYPES.TANK_TYPE, true)
 
     setInterval(() => {
       this.setState({
@@ -79,13 +71,16 @@ class MainConnect extends React.Component {
     }, 1000)
   }
 
-  addUnit(type) {
+  addUnit(type, firstUnit) {
     if(!type) {
       // default to use tank type
       type = TYPES.TANK_TYPE
     }
-    // currently just tanks
-    let unitPosition = unitFactory.getRandomPos(this.props.units)
+    console.log('firstUnit', firstUnit)
+    // pick random position
+    let unitPosition = firstUnit === true ? { x: Math.floor(_grid.getCols() / 2), y: 3 } : unitFactory.getRandomPos(this.props.units)
+
+    console.warn(unitPosition)
 
     if(!unitPosition) {
       console.log('No available position for unit')
@@ -117,7 +112,7 @@ class MainConnect extends React.Component {
 
   coordinates(pos, width, height) {
     // console.log('pos', pos)
-    let size = Dimensions().width / _grid.getDivider()
+    let size = Dimensions().tileSize
     return {
       x: pos.x * size + (size / 2 - width / 2),
       y: pos.y * size + (size / 2 - height / 2)
@@ -270,7 +265,7 @@ class MainConnect extends React.Component {
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////
-      // UNIT COLLISION
+      // UNIT COLLISIONS
 
       let roadKill = collisionManager.trackCollisions(tracker.trackUnits(units, this.props.currentSelectionID))
       if(roadKill) {
@@ -471,7 +466,6 @@ class MainConnect extends React.Component {
           this.hideSpecs()
         }}>
         CLOSE SPECS
-
         </div>
       </div>
     )
@@ -496,8 +490,8 @@ class MainConnect extends React.Component {
 
   handleKeyInput() {
     document.body.onkeydown = (e) => {
-        if(e.keyCode === 32){
-            if(!this.state.shooting) {
+        if(e.keyCode === 65){
+            if(!this.state.shooting && this.props.units[this.props.currentSelectionID].selected) {
               this.setState({ shooting: true })
               this.handleShotFired()
               this.shootingTimer = setInterval(() => { this.handleShotFired(); }, 300)
@@ -506,7 +500,7 @@ class MainConnect extends React.Component {
     }
 
     document.body.onkeyup = (e) => {
-        if(e.keyCode === 32){
+        if(e.keyCode === 65){
             this.setState({ shooting: false })
             clearInterval(this.shootingTimer)
         }
@@ -583,7 +577,7 @@ class MainConnect extends React.Component {
                 //TODO: Remove unit from state
               }
               this.setState({refresh: this.state.refresh+1});
-            }, 800);
+            }, 400);
           }
 
         }
@@ -612,32 +606,42 @@ class MainConnect extends React.Component {
   }
 
   getMainCSS() {
-    return this.state.shooting === true ?  'mainFire' : ''
+    return this.state.shooting === true ?  'mainFire' : 'noFire'
   }
 
 	render() {
     return (
-      <div id='board' className={this.getMainCSS()}>
-        <div className='dashboard' style={{flexDirection: 'column'}}>
-          <div><button style={{background: 'blue'}} onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
-          <div><button style={{background: 'green'}} onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
-          <div><button style={{background: 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
-          <div><button style={{background: 'darkred'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
-          <div><button style={{background: 'purple'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
-          <div><button style={{background: '#007ee4'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
-          {this.renderNumDivs()}
-        </div>
-        <div className='main' style={{...mainStyle}}>
-          {/*  GRID */}
-          {this.renderGround()}
-          {/* TANK  */}
-          {this.renderUnits()}
-          {/* SPECS VIEW  */}
-          {this.renderSpecsView()}
-          {/* SPACEBAR */}
-          {this.handleKeyInput()}
+      <div className='wrapper'>
+        <div className={this.state.shooting ? 'dashboard mainFire' : 'dashboard'} style={{flexDirection: 'column'}}>
           {/* RETANX LOGO */}
           {this.renderLogo()}
+          <div><button onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>
+
+          <div><button onClick={this.addUnit.bind(this, TYPES.SOLDIER_TYPE)}>ADD SOLDIER UNIT</button></div>
+
+          <div><button style={{background: this.props.debugMode ? 'red' : 'black', color: this.props.debugMode ? 'black' : 'red'}} onClick={this.toggleDebug.bind(this)}>TOGGLE A*</button></div>
+
+          <div><button style={{background: this.props.debugAstarScores ? 'red' : 'black', color: this.props.debugAstarScores ? 'black' : 'red'}} onClick={this.toggleAscores.bind(this)}>TOGGLE A* SCORES</button></div>
+
+          <div><button style={{background: this.props.aimMode ? 'red' : 'black', color: this.props.aimMode ? 'black' : 'red'}} onClick={this.toggleAim.bind(this)}>TOGGLE AIM</button></div>
+
+          <div><button style={{background: this.props.debugObstacles ? 'red' : 'black', color: this.props.debugObstacles ? 'black' : 'red'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
+
+          {this.renderNumDivs()}
+
+          <div className='instructions'>PRESS A TO FIRE</div>
+        </div>
+        <div id='board'>
+            <div className={this.getMainCSS()}>
+            {/*  GRID */}
+            {this.renderGround()}
+            {/* TANK  */}
+            {this.renderUnits()}
+            {/* SPECS VIEW  */}
+            {this.renderSpecsView()}
+            {/* SPACEBAR */}
+            {this.handleKeyInput()}
+            </div>
         </div>
       </div>
     )

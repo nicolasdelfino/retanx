@@ -72,23 +72,6 @@ export let AStar = (_grid, start, end, units, currentSelectionID) => {
     }
   } while (openSet.length > 0)
 
-  // for(var p = 0; p < path.length; p++) {
-  //   if(p > 0 && p < path.length-1) {
-  //     let previousCell = path[p -1]
-  //     let currentCell = path[p]
-  //     let nextCell = path[p + 1]
-  //
-  //     console.log('pre x', previousCell.x, 'pre y', previousCell.y)
-  //     console.log('next x', nextCell.x, 'next y', nextCell.y)
-  //
-  //     if(previousCell.x !== nextCell.x && nextCell.y !== currentCell.y) {
-  //       let c = _grid.getGrid()[currentCell.x][currentCell.y]
-  //       console.warn('c', c)
-  //       _grid.getGrid()[currentCell.x][currentCell.y].isPathDirectionTurn = true
-  //     }
-  //   }
-  // }
-
   return path
 }
 
