@@ -15,15 +15,15 @@ export const Cell = function(Dimensions) {
   this.showObstacle = false
   this.unitObstacle = false
   this.diffCell = false
-  this.opacity = 0
+  this.opacity = 1
   this.animOrgIndex = null
 
 
-  if((Math.floor(Math.random() * 100) + 1) < 22) {
-    this.obstacle = true
-    this.showObstacle = true
-    this.diffCell = true
-  }
+  // if((Math.floor(Math.random() * 100) + 1) < 22) {
+  //   this.obstacle = true
+  //   this.showObstacle = true
+  //   this.diffCell = true
+  // }
 
   this.focus = function() {
     this.opacity = 1
@@ -32,7 +32,15 @@ export const Cell = function(Dimensions) {
     })
   }
 
-  this.addNeighbors = function(grid, aStarStyle) {
+  this.setType = (type) => {
+    if(type === 'obstacle'){
+      this.obstacle = true
+      this.showObstacle = true
+      this.diffCell = true
+    }
+  }
+
+  this.addNeighbors = (grid, aStarStyle) => {
     let _x = this.x
     let _y = this.y
 
@@ -43,7 +51,7 @@ export const Cell = function(Dimensions) {
     }
   }
 
-  this.addDefaultNeighbors = function(grid, _x, _y) {
+  this.addDefaultNeighbors = (grid, _x, _y) => {
     if(_x < this.cols - 1) {
       this.neighbors.push(grid[_x + 1][_y])
     }
@@ -58,7 +66,7 @@ export const Cell = function(Dimensions) {
     }
   }
 
-  this.addDiagonalNeighbors = function(grid, _x, _y) {
+  this.addDiagonalNeighbors = (grid, _x, _y) => {
     if(_x > 0 && _y > 0) {
       this.neighbors.push(grid[_x - 1][_y - 1])
     }
@@ -73,7 +81,7 @@ export const Cell = function(Dimensions) {
     }
   }
 
-  this.reset = function() {
+  this.reset = () => {
     this.f = 0
     this.g = 0
     this.h = 0
