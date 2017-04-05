@@ -24,12 +24,12 @@ class Ground extends React.Component {
   }
 
   getRandomObstacleCell() {
-    return 'gridItemObstacle0'
+    return 'gridItem tileObstacle'
     // return 'gridItemObstacle' + Math.floor(Math.random() * 3)
   }
 
   getCell(cell) {
-    return !cell.diffCell ? 'gridItem' : 'gridItem dirtPatch'
+    return !cell.diffCell ? 'gridItem' : 'gridItem tileBurned'
   }
 
   renderExplosion(isExploding) {
@@ -61,7 +61,7 @@ class Ground extends React.Component {
         let cell = _grid.getGrid()[i][x]
         if(cell.obstacle && cell.showObstacle) {
           row.push(<div key={x} style={{ ...cellStyle, background: 'rgb(0,0,0)' }} onClick={() => this.clickCell(x,i,false)}>
-            <div className={this.getRandomObstacleCell()} style={{opacity: cell.opacity, flex:1, border: '0px dashed rgba(0,0,0,0)', color: 'rgb(255,255,255)', backgroundSize: size + 'px ' + size + 'px'}}>
+            <div className={'gridItem ' + cell.cssClass} style={{opacity: cell.opacity, flex:1, border: '0px dashed rgba(0,0,0,0)', color: 'rgb(255,255,255)', backgroundSize: size + 'px ' + size + 'px'}}>
               {this.renderExplosion(cell.isExploding)}
             </div>
           </div>)

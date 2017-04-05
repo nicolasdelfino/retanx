@@ -17,6 +17,7 @@ export const Cell = function(Dimensions) {
   this.diffCell = false
   this.opacity = 1
   this.animOrgIndex = null
+  this.cssClass = ''
 
 
   // if((Math.floor(Math.random() * 100) + 1) < 22) {
@@ -34,6 +35,13 @@ export const Cell = function(Dimensions) {
 
   this.setType = (type) => {
     if(type === 'obstacle'){
+      this.cssClass = 'tileObstacle'
+      this.obstacle = true
+      this.showObstacle = true
+      this.diffCell = true
+    }
+    else if(type === 'wall'){
+      this.cssClass = 'tileWall'
       this.obstacle = true
       this.showObstacle = true
       this.diffCell = true

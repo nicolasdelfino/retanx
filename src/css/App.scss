@@ -80,7 +80,7 @@
 }
 
 .gridItem {
-  background-image: url("../assets/tile_stone.png");
+  background-image: url("../assets/tile_ground.png");
   background-size: 50px 50px;
   flex: 1;
   transition: all 0s ease;
@@ -90,8 +90,16 @@
   background-image: url("../assets/waterItem0.png");
 }
 
-.dirtPatch {
-  background-image: url("../assets/dirtPatch.png");
+.tileObstacle {
+  background-image: url("../assets/tile_obstacle.png");
+}
+
+.tileWall {
+  background-image: url("../assets/tile_wall.png");
+}
+
+.tileBurned {
+  background-image: url("../assets/tile_burned.png");
 }
 
 .gridItemObstacle0 {
