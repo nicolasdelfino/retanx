@@ -28,10 +28,6 @@ class Ground extends React.Component {
     // return 'gridItemObstacle' + Math.floor(Math.random() * 3)
   }
 
-  getCell(cell) {
-    return !cell.diffCell ? 'gridItem' : 'gridItem tileBurned'
-  }
-
   renderExplosion(isExploding) {
     if (!isExploding) {
       return null;
@@ -59,16 +55,23 @@ class Ground extends React.Component {
       let row = []
       for (let x = 0; x < rows; x++) {
         let cell = _grid.getGrid()[i][x]
-        if(cell.obstacle && cell.showObstacle) {
+        if(cell.obstacle) {
           row.push(<div key={x} style={{ ...cellStyle, background: 'rgb(0,0,0)' }} onClick={() => this.clickCell(x,i,false)}>
             <div className={'gridItem ' + cell.cssClass} style={{opacity: cell.opacity, flex:1, border: '0px dashed rgba(0,0,0,0)', color: 'rgb(255,255,255)', backgroundSize: size + 'px ' + size + 'px'}}>
               {this.renderExplosion(cell.isExploding)}
             </div>
           </div>)
         }
+        else if(cell.showRuins){
+          row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i,true)}>
+            <div className='gridItem tileBurned' style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '.1s', flex:1, border: '0px dashed transparent', backgroundSize: size + 'px ' + size + 'px'}}>
+              {this.renderExplosion(cell.isExploding)}
+            </div>
+          </div>)
+        }
         else {
           row.push(<div key={x} style={{ ...cellStyle }} onClick={() => this.clickCell(x,i,true)}>
-            <div className={this.getCell(cell)} style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '.1s', flex:1, border: '0px dashed transparent', backgroundSize: size + 'px ' + size + 'px'}}>
+            <div className='gridItem' style={{opacity: cell.opacity, 'transition': 'all .2s ease-in-out', 'transitionDelay': '.1s', flex:1, border: '0px dashed transparent', backgroundSize: size + 'px ' + size + 'px'}}>
               {this.renderExplosion(cell.isExploding)}
             </div>
           </div>)
@@ -183,7 +186,7 @@ class Ground extends React.Component {
       let row = []
       for (let x = 0; x < rows; x++) {
         var cell = _grid.getGrid()[i][x]
-        if( (cell.obstacle && cell.showObstacle) || cell.unitObstacle) {
+        if( cell.obstacle || cell.unitObstacle) {
           row.push(
             <div key={x} style={{ ...cellStyle}}>
               <div style={{flex:1, flexDirection: 'row'}}>

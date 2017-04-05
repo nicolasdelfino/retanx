@@ -1,25 +1,33 @@
 export const Cell = function(Dimensions) {
-  this.x    = 0
-  this.y    = 0
-  this.f    = 0
-  this.g    = 0
-  this.h    = 0
-  this.cols  = Dimensions().width / Dimensions().tileSize
-  this.rows  = Dimensions().height / Dimensions().tileSize
+  this.x      = 0
+  this.y      = 0
+  this.f      = 0
+  this.g      = 0
+  this.h      = 0
+  this.cols   = Dimensions().width / Dimensions().tileSize
+  this.rows   = Dimensions().height / Dimensions().tileSize
+
+  // AStar
   this.neighbors  = []
   this.previous   = undefined
   this.isPath     = false
-  this.isPathDirectionTurn = false
-  this.tempPathString = ''
-  this.obstacle = false
-  this.showObstacle = false
-  this.unitObstacle = false
-  this.diffCell = false
-  this.opacity = 1
-  this.animOrgIndex = null
-  this.cssClass = ''
 
+  // animation
+  this.isPathDirectionTurn  = false
+  this.tempPathString       = ''
+  this.animOrgIndex         = null
+  this.opacity              = 1
 
+  // obstacle props
+  this.obstacle       = false
+  this.unitObstacle   = false
+  this.showRuins      = false
+
+  // tile sprite
+  this.cssClass       = ''
+
+  // random obstacles
+  //_________________________________________________________
   // if((Math.floor(Math.random() * 100) + 1) < 22) {
   //   this.obstacle = true
   //   this.showObstacle = true
@@ -37,14 +45,10 @@ export const Cell = function(Dimensions) {
     if(type === 'obstacle'){
       this.cssClass = 'tileObstacle'
       this.obstacle = true
-      this.showObstacle = true
-      this.diffCell = true
     }
     else if(type === 'wall'){
       this.cssClass = 'tileWall'
       this.obstacle = true
-      this.showObstacle = true
-      this.diffCell = true
     }
   }
 

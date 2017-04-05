@@ -391,7 +391,7 @@ class MainConnect extends React.Component {
 
     // make sure that start cell isn´t a wall
     start.obstacle = false
-    start.showObstacle = false
+    // start.showObstacle = false
 
     let path = AStar(_grid, start, end, this.props.units, this.props.currentSelectionID)
     console.log('A* path', path)
@@ -573,6 +573,7 @@ class MainConnect extends React.Component {
             setTimeout(() => {
               grid[x][y].isExploding = false;
               grid[x][y].obstacle = false;
+              grid[x][y].showRuins = true;
               if (unit) {
                 //TODO: Remove unit from state
               }
