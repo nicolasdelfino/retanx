@@ -186,7 +186,15 @@ class Ground extends React.Component {
       let row = []
       for (let x = 0; x < rows; x++) {
         var cell = _grid.getGrid()[i][x]
-        if( cell.obstacle || cell.unitObstacle) {
+        if( (cell.obstacle || cell.unitObstacle) && !cell.indestructable) {
+          row.push(
+            <div key={x} style={{ ...cellStyle, background: 'rgba(228, 0, 0, 0.1)'}}>
+              <div style={{flex:1, flexDirection: 'row'}}>
+              </div>
+            </div>
+          )
+        }
+        else if( (cell.obstacle || cell.unitObstacle) && cell.indestructable) {
           row.push(
             <div key={x} style={{ ...cellStyle}}>
               <div style={{flex:1, flexDirection: 'row'}}>
