@@ -22,6 +22,7 @@ export const Cell = function(Dimensions) {
   this.obstacle       = false
   this.unitObstacle   = false
   this.showRuins      = false
+  this.indestructable = false
 
   // tile sprite
   this.cssClass       = ''
@@ -47,8 +48,9 @@ export const Cell = function(Dimensions) {
       this.obstacle = true
     }
     else if(type === 'wall'){
-      this.cssClass = 'tileWall'
-      this.obstacle = true
+      this.cssClass       = 'tileWall'
+      this.obstacle       = true
+      this.indestructable = true
     }
   }
 

@@ -459,7 +459,6 @@ class MainConnect extends React.Component {
       return null
     }
 
-    // let tank = this.props.units[this.props.currentSelectionID]
     return (
       <div style={{...specsStyle}}>
         <div style={{padding: 20, fontSize: 10, background: 'transparent', color: '#ccc', cursor: 'pointer'}} onClick={() => {
@@ -562,7 +561,7 @@ class MainConnect extends React.Component {
                 kill = true;
               }
             }
-          } else if (grid[x][y].obstacle) {
+          } else if (grid[x][y].obstacle && !grid[x][y].indestructable) {
             kill = true;
           }
 
