@@ -16,7 +16,7 @@ export const Cell = function(Dimensions) {
   this.isPathDirectionTurn  = false
   this.tempPathString       = ''
   this.animOrgIndex         = null
-  this.opacity              = 1
+  this.opacity              = 0
 
   // obstacle props
   this.obstacle       = false
@@ -35,10 +35,10 @@ export const Cell = function(Dimensions) {
   //   this.diffCell = true
   // }
 
-  this.focus = function() {
+  this.reveal = function(fullReveal) {
     this.opacity = 1
     this.neighbors.forEach((neighbor) => {
-        neighbor.opacity += 0.5
+        neighbor.opacity += fullReveal ? 1 : 0.5
     })
   }
 

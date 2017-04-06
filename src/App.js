@@ -91,7 +91,8 @@ class MainConnect extends React.Component {
     this.props.dispatch({ type: 'ADD_UNIT', payload: unit})
 
     _grid.getGrid()[unitPosition.x][unitPosition.y].obstacle = false
-    _grid.getGrid()[unitPosition.x][unitPosition.y].opacity = 1
+    _grid.getGrid()[unitPosition.x][unitPosition.y].addNeighbors(_grid.getGrid(), 'normal')
+    _grid.getGrid()[unitPosition.x][unitPosition.y].reveal(true)
   }
 
   toggleDebug() {
@@ -367,7 +368,7 @@ class MainConnect extends React.Component {
       let tCell = path[c]
       if(c <= animOrgIndex) {
         setTimeout(() => {
-          tCell.focus()
+          tCell.reveal()
         }, c * 10)
       }
     }

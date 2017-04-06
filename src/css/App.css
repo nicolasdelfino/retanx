@@ -1,6 +1,19 @@
 .App {
   text-align: center; }
 
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+  background: #260600; }
+
+::-webkit-scrollbar-thumb {
+  background: red;
+  -webkit-border-radius: 0ex;
+  -webkit-box-shadow: 0px 1px 2px transparent; }
+
+::-webkit-scrollbar-corner {
+  background: #000; }
+
 .totalDivs {
   color: red;
   font-size: 10px;
