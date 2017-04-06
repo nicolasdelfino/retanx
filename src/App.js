@@ -47,7 +47,8 @@ class MainConnect extends React.Component {
 
   constructor(props) {
     super(props)
-    this.timer = null
+    this.animationTimer = null
+    this.moveTimer = null
     this.shootingTimer = null
     this.state = {
       isAiming: false,
@@ -286,7 +287,7 @@ class MainConnect extends React.Component {
     let end = path[path.length -1]
     let animationCells = []
 
-    clearTimeout(this.timer)
+    clearTimeout(this.animationTimer)
 
     for(let i = 0; i < path.length; i ++) {
       if(i > 0 && i < path.length -1) {
@@ -306,32 +307,27 @@ class MainConnect extends React.Component {
 
     //////////////////////////////////////////////////////////////////////////////////////////
     // Put animation on unit
-    //this.props.units[this.props.currentSelectionID].animate()
+    moveUnit.animationCells = animationCells
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
     // Animate path
 
-    animationCells.forEach((item, index) => {
-
-      if(!moveUnit.allowMovement) {
-        return
-      }
+    moveUnit.animationCells.forEach((item, index) => {
 
       item.tempPathString = index
       let delay = index * (moveUnit.moveSpeed + moveUnit.aimDuration)
 
-      this.timer = setTimeout(() => {
+      moveUnit.animationTimeOuts.push(setTimeout(() => {
         let position = {
           x: item.y,
           y: item.x
         }
 
-        if(!moveUnit.allowMovement) {
+        if(!this.props.units[moveUnit.id].allowMovement) {
           this.resetUnitMovement(moveUnit)
           return
         }
-
         // used for controlling walk animation
         this.setState({ isMoving: false })
 
@@ -348,18 +344,20 @@ class MainConnect extends React.Component {
 
         // move unit
         setTimeout(() => {
+
           this.setState({ isMoving: true })
           this.props.dispatch({type: 'MOVE', payload: {id: moveUnit.id, target: position}})
 
           this.makeFOW(path, item.animOrgIndex)
 
           // check if animation end
-          if(index === animationCells.length -1) {
+          if(index === moveUnit.animationCells.length -1) {
             // TODO add travel duration (this.getSpeed())
-            animationCells[index].opacity = 1
+            moveUnit.animationCells[index].opacity = 1
 
             setTimeout(() => {
               this.setState({ isMoving: false })
+
               // stop tracking unit positions
               clearInterval(trackerInterval)
               console.log('** Unit arrived at target cell **')
@@ -369,7 +367,7 @@ class MainConnect extends React.Component {
 
         }, moveUnit.aimDuration)
 
-      }, delay)
+      }, delay))
     })
 
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
@@ -392,14 +390,23 @@ class MainConnect extends React.Component {
   //////////////////////////////////////////////////////////////////////////////////////////
   // Cancel movement
   stopMovement() {
-    console.log(this.props.units[this.props.currentSelectionID])
+    // console.error('stopMovement', this.props.units[this.props.currentSelectionID])
     this.props.units[this.props.currentSelectionID].break()
+    this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
   }
 
-  resetUnitMovement(unit) {
-    setTimeout(() => {
-      unit.allowMovement = true
-    }, 200)
+  resetUnitMovement(moveUnit) {
+    // console.error('resetUnitMovement', moveUnit.position, this.props.units[moveUnit.id].aimTarget)
+    clearInterval(trackerInterval)
+    clearTimeout(this.animationTimer)
+    clearTimeout(this.moveTimer)
+
+    for (var i = 0; i < moveUnit.animationTimeOuts.length; i++) {
+        clearTimeout(moveUnit.animationTimeOuts[i]);
+    }
+    this.props.units[moveUnit.id].allowMovement = true
+
+    this.setState({ isMoving: false, isAnimating: false })
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -446,13 +453,13 @@ class MainConnect extends React.Component {
     let autoMove = false
     if(autoMove) {
       // Clear aim time each time a new aim action is called (takes 1 second to aim)
-      clearTimeout(this.timer)
+      clearTimeout(this.animationTimer)
       // Move cannon action (aim)
       this.props.dispatch({type: 'AIM', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell } })
       this.setState({ isAiming: true })
 
       // Wait for aim animation to finish
-      this.timer = setTimeout(() => {
+      this.animationTimer = setTimeout(() => {
         this.setState({ isAiming: false })
         this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell}})
       }, 500)

@@ -40,6 +40,7 @@ export const TankType = function() {
   this.shouldRotate = true
   this.allowMovement = true
   this.animationCells = []
+  this.animationTimeOuts = []
 
   // Randomize colors
   let randomize    = false
@@ -59,7 +60,9 @@ export const TankType = function() {
   }
 
   this.break = function() {
+    console.warn('unit break!')
     this.allowMovement = false
+    this.animationCells = []
   }
 
   this.getUnit = function() {
@@ -91,7 +94,8 @@ export const TankType = function() {
       maxHealth:        this.maxHealth,
       allowMovement:    this.allowMovement,
       break:            this.break,
-      animationCells:   this.animationCells
+      animationCells:   this.animationCells,
+      animationTimeOuts:this.animationTimeOuts
     }
   }
 }
