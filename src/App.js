@@ -52,6 +52,7 @@ class MainConnect extends React.Component {
     this.state = {
       isAiming: false,
       isMoving: false,
+      isAnimating: false,
       isFollowingPath: true,
       forceValUpdate: 0,
       shooting: false,
@@ -349,6 +350,7 @@ class MainConnect extends React.Component {
               // stop tracking unit positions
               clearInterval(trackerInterval)
               console.log('** Unit arrived at target cell **')
+              this.setState({isAnimating: false})
             }, this.props.units[this.props.currentSelectionID].moveSpeed)
           }
 
@@ -372,6 +374,12 @@ class MainConnect extends React.Component {
         }, c * 10)
       }
     }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Cancel movement
+  stopMovement() {
+
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -411,6 +419,8 @@ class MainConnect extends React.Component {
 
     // follow shortest path to destination
     this.followPath(start, path)
+
+    this.setState({isAnimating: true})
 
     // No A*, just click and move (bird path)
     let autoMove = false
@@ -496,6 +506,12 @@ class MainConnect extends React.Component {
               this.handleShotFired()
               this.shootingTimer = setInterval(() => { this.handleShotFired(); }, 300)
             }
+        }
+        else if(e.keyCode === 83) {
+          if(this.state.isAnimating) {
+            console.warn('STOP ASTAR', this.state.isMoving)
+            this.stopMovement()
+          }
         }
     }
 
