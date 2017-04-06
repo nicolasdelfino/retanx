@@ -16,7 +16,7 @@ const unitReducer = (state = initState, action) => {
       ...state,
       units: [
         ...state.units.slice(0, action.payload.id),
-        { ...specs, aimTarget: { x:action.payload.target.y, y: action.payload.target.x }, rotate: 'true', angle: action.payload.angle },
+        { ...specs, aimTarget: { x:action.payload.target.y, y: action.payload.target.x }, rotate: true, angle: action.payload.angle },
         ...state.units.slice(action.payload.id + 1),
       ],
     }
@@ -26,7 +26,7 @@ const unitReducer = (state = initState, action) => {
       ...state,
       units: [
         ...state.units.slice(0, action.payload.id),
-        { ...specs, position: { x:action.payload.target.y, y: action.payload.target.x }, rotate: 'false' },
+        { ...specs, position: { x:action.payload.target.y, y: action.payload.target.x }, rotate: false },
         ...state.units.slice(action.payload.id + 1),
       ],
     }

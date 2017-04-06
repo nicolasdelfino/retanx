@@ -9,7 +9,7 @@ class SpecsView extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if(props.rotate === 'true') {
+    if(props.rotate === true) {
       this.setState({ rotation: props.rotation })
     }
   }

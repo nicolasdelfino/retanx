@@ -254,7 +254,7 @@ class MainConnect extends React.Component {
   //////////////////////////////////////////////////////////////////////////////////////////
   // Follow path function, cuts out redundant cells
 
-  followPath(start, path) {
+  followPath(moveUnit, start, path) {
 
     // track the position of units when something is moving
     let units     = this.props.units
@@ -305,30 +305,43 @@ class MainConnect extends React.Component {
     animationCells.push(end)
 
     //////////////////////////////////////////////////////////////////////////////////////////
+    // Put animation on unit
+    //this.props.units[this.props.currentSelectionID].animate()
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////
     // Animate path
 
     animationCells.forEach((item, index) => {
+
+      if(!moveUnit.allowMovement) {
+        return
+      }
+
       item.tempPathString = index
-      let delay = index * (this.props.units[this.props.currentSelectionID].moveSpeed + this.props.units[this.props.currentSelectionID].aimDuration)
+      let delay = index * (moveUnit.moveSpeed + moveUnit.aimDuration)
+
       this.timer = setTimeout(() => {
         let position = {
           x: item.y,
           y: item.x
         }
 
+        if(!moveUnit.allowMovement) {
+          this.resetUnitMovement(moveUnit)
+          return
+        }
+
         // used for controlling walk animation
         this.setState({ isMoving: false })
 
-        let unit = this.props.units[this.props.currentSelectionID]
-
         // aim cannon
         this.props.dispatch({type: 'AIM', payload: {
-          id: this.props.units[this.props.currentSelectionID].id,
+          id: moveUnit.id,
           target: position,
-          angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], { x: position.y, y: position.x }) }})
+          angle: this.aimDegrees(this.props.units[moveUnit.id], { x: position.y, y: position.x }) }})
 
-
-          _grid.getGrid()[unit.position.x][unit.position.y].opacity = 1
+          _grid.getGrid()[moveUnit.position.x][moveUnit.position.y].opacity = 1
 
           //get cells between this one and last non animation cell
           this.makeFOW(path, item.animOrgIndex)
@@ -336,7 +349,7 @@ class MainConnect extends React.Component {
         // move unit
         setTimeout(() => {
           this.setState({ isMoving: true })
-          this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: position}})
+          this.props.dispatch({type: 'MOVE', payload: {id: moveUnit.id, target: position}})
 
           this.makeFOW(path, item.animOrgIndex)
 
@@ -351,10 +364,10 @@ class MainConnect extends React.Component {
               clearInterval(trackerInterval)
               console.log('** Unit arrived at target cell **')
               this.setState({isAnimating: false})
-            }, this.props.units[this.props.currentSelectionID].moveSpeed)
+            }, moveUnit.moveSpeed)
           }
 
-        }, this.props.units[this.props.currentSelectionID].aimDuration)
+        }, moveUnit.aimDuration)
 
       }, delay)
     })
@@ -379,7 +392,14 @@ class MainConnect extends React.Component {
   //////////////////////////////////////////////////////////////////////////////////////////
   // Cancel movement
   stopMovement() {
+    console.log(this.props.units[this.props.currentSelectionID])
+    this.props.units[this.props.currentSelectionID].break()
+  }
 
+  resetUnitMovement(unit) {
+    setTimeout(() => {
+      unit.allowMovement = true
+    }, 200)
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -402,7 +422,7 @@ class MainConnect extends React.Component {
     start.obstacle = false
     // start.showObstacle = false
 
-    let path = AStar(_grid, start, end, this.props.units, this.props.currentSelectionID)
+    let path = AStar(_grid, start, end, this.props.units, unit.id)
     console.log('A* path', path)
 
     if(path.length === 0) {
@@ -410,7 +430,7 @@ class MainConnect extends React.Component {
 
       // aim cannon
       this.props.dispatch({type: 'AIM', payload: {
-        id: this.props.units[this.props.currentSelectionID].id,
+        id: unit.id,
         target: cell,
         angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], {x:cell.y, y:cell.x }) }})
 
@@ -418,7 +438,7 @@ class MainConnect extends React.Component {
     }
 
     // follow shortest path to destination
-    this.followPath(start, path)
+    this.followPath(unit, start, path)
 
     this.setState({isAnimating: true})
 
