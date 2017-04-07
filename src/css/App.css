@@ -1,6 +1,19 @@
 .App {
   text-align: center; }
 
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+  background: #260600; }
+
+::-webkit-scrollbar-thumb {
+  background: red;
+  -webkit-border-radius: 0ex;
+  -webkit-box-shadow: 0px 1px 2px transparent; }
+
+::-webkit-scrollbar-corner {
+  background: #000; }
+
 .totalDivs {
   color: red;
   font-size: 10px;
@@ -72,7 +85,7 @@
     transform: rotate(360deg); } }
 
 .gridItem {
-  background-image: url("../assets/tile_stone.png");
+  background-image: url("../assets/tile_ground.png");
   background-size: 50px 50px;
   flex: 1;
   transition: all 0s ease; }
@@ -80,8 +93,14 @@
 .waterItem {
   background-image: url("../assets/waterItem0.png"); }
 
-.dirtPatch {
-  background-image: url("../assets/dirtPatch.png"); }
+.tileObstacle {
+  background-image: url("../assets/tile_obstacle.png"); }
+
+.tileWall {
+  background-image: url("../assets/tile_wall.png"); }
+
+.tileBurned {
+  background-image: url("../assets/tile_burned.png"); }
 
 .gridItemObstacle0 {
   background-image: url("../assets/wall.png");

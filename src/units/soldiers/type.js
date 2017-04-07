@@ -21,6 +21,7 @@ export const SoldierType = function() {
   // Id & position
   this.id          = null
   this.position    = null
+  this.shouldRotate = true
   // cell width height properties
   this.cellWidth   = 100
   this.cellHeight  = 100
@@ -70,7 +71,7 @@ export const SoldierType = function() {
       headColor:      this.headColor,
       weaponColor:    this.weaponColor,
       barrelColor:    this.barrelColor,
-      rotate:         'true',
+      rotate:         this.shouldRotate,
       selected:       false,
       angle:          0,
       mass:           this.mass,

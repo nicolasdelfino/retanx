@@ -47,11 +47,13 @@ class MainConnect extends React.Component {
 
   constructor(props) {
     super(props)
-    this.timer = null
+    this.animationTimer = null
+    this.moveTimer = null
     this.shootingTimer = null
     this.state = {
       isAiming: false,
       isMoving: false,
+      isAnimating: false,
       isFollowingPath: true,
       forceValUpdate: 0,
       shooting: false,
@@ -91,7 +93,8 @@ class MainConnect extends React.Component {
     this.props.dispatch({ type: 'ADD_UNIT', payload: unit})
 
     _grid.getGrid()[unitPosition.x][unitPosition.y].obstacle = false
-    _grid.getGrid()[unitPosition.x][unitPosition.y].opacity = 1
+    _grid.getGrid()[unitPosition.x][unitPosition.y].addNeighbors(_grid.getGrid(), 'normal')
+    _grid.getGrid()[unitPosition.x][unitPosition.y].reveal(true)
   }
 
   toggleDebug() {
@@ -252,7 +255,7 @@ class MainConnect extends React.Component {
   //////////////////////////////////////////////////////////////////////////////////////////
   // Follow path function, cuts out redundant cells
 
-  followPath(start, path) {
+  followPath(moveUnit, start, path) {
 
     // track the position of units when something is moving
     let units     = this.props.units
@@ -284,7 +287,7 @@ class MainConnect extends React.Component {
     let end = path[path.length -1]
     let animationCells = []
 
-    clearTimeout(this.timer)
+    clearTimeout(this.animationTimer)
 
     for(let i = 0; i < path.length; i ++) {
       if(i > 0 && i < path.length -1) {
@@ -303,57 +306,68 @@ class MainConnect extends React.Component {
     animationCells.push(end)
 
     //////////////////////////////////////////////////////////////////////////////////////////
+    // Put animation on unit
+    moveUnit.animationCells = animationCells
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////
     // Animate path
 
-    animationCells.forEach((item, index) => {
+    moveUnit.animationCells.forEach((item, index) => {
+
       item.tempPathString = index
-      let delay = index * (this.props.units[this.props.currentSelectionID].moveSpeed + this.props.units[this.props.currentSelectionID].aimDuration)
-      this.timer = setTimeout(() => {
+      let delay = index * (moveUnit.moveSpeed + moveUnit.aimDuration)
+
+      moveUnit.animationTimeOuts.push(setTimeout(() => {
         let position = {
           x: item.y,
           y: item.x
         }
 
+        if(!this.props.units[moveUnit.id].allowMovement) {
+          this.resetUnitMovement(moveUnit)
+          return
+        }
         // used for controlling walk animation
         this.setState({ isMoving: false })
 
-        let unit = this.props.units[this.props.currentSelectionID]
-
         // aim cannon
         this.props.dispatch({type: 'AIM', payload: {
-          id: this.props.units[this.props.currentSelectionID].id,
+          id: moveUnit.id,
           target: position,
-          angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], { x: position.y, y: position.x }) }})
+          angle: this.aimDegrees(this.props.units[moveUnit.id], { x: position.y, y: position.x }) }})
 
-
-          _grid.getGrid()[unit.position.x][unit.position.y].opacity = 1
+          _grid.getGrid()[moveUnit.position.x][moveUnit.position.y].opacity = 1
 
           //get cells between this one and last non animation cell
           this.makeFOW(path, item.animOrgIndex)
 
         // move unit
         setTimeout(() => {
+
           this.setState({ isMoving: true })
-          this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: position}})
+          this.props.dispatch({type: 'MOVE', payload: {id: moveUnit.id, target: position}})
 
           this.makeFOW(path, item.animOrgIndex)
 
           // check if animation end
-          if(index === animationCells.length -1) {
+          if(index === moveUnit.animationCells.length -1) {
             // TODO add travel duration (this.getSpeed())
-            animationCells[index].opacity = 1
+            moveUnit.animationCells[index].opacity = 1
 
             setTimeout(() => {
               this.setState({ isMoving: false })
+
               // stop tracking unit positions
               clearInterval(trackerInterval)
               console.log('** Unit arrived at target cell **')
-            }, this.props.units[this.props.currentSelectionID].moveSpeed)
+              this.setState({isAnimating: false})
+            }, moveUnit.moveSpeed)
           }
 
-        }, this.props.units[this.props.currentSelectionID].aimDuration)
+        }, moveUnit.aimDuration)
 
-      }, delay)
+      }, delay))
     })
 
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
@@ -367,10 +381,32 @@ class MainConnect extends React.Component {
       let tCell = path[c]
       if(c <= animOrgIndex) {
         setTimeout(() => {
-          tCell.focus()
+          tCell.reveal()
         }, c * 10)
       }
     }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Cancel movement
+  stopMovement() {
+    // console.error('stopMovement', this.props.units[this.props.currentSelectionID])
+    this.props.units[this.props.currentSelectionID].break()
+    this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
+  }
+
+  resetUnitMovement(moveUnit) {
+    // console.error('resetUnitMovement', moveUnit.position, this.props.units[moveUnit.id].aimTarget)
+    clearInterval(trackerInterval)
+    clearTimeout(this.animationTimer)
+    clearTimeout(this.moveTimer)
+
+    for (var i = 0; i < moveUnit.animationTimeOuts.length; i++) {
+        clearTimeout(moveUnit.animationTimeOuts[i]);
+    }
+    this.props.units[moveUnit.id].allowMovement = true
+
+    this.setState({ isMoving: false, isAnimating: false })
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////
@@ -391,9 +427,9 @@ class MainConnect extends React.Component {
 
     // make sure that start cell isn´t a wall
     start.obstacle = false
-    start.showObstacle = false
+    // start.showObstacle = false
 
-    let path = AStar(_grid, start, end, this.props.units, this.props.currentSelectionID)
+    let path = AStar(_grid, start, end, this.props.units, unit.id)
     console.log('A* path', path)
 
     if(path.length === 0) {
@@ -401,7 +437,7 @@ class MainConnect extends React.Component {
 
       // aim cannon
       this.props.dispatch({type: 'AIM', payload: {
-        id: this.props.units[this.props.currentSelectionID].id,
+        id: unit.id,
         target: cell,
         angle: this.aimDegrees(this.props.units[this.props.currentSelectionID], {x:cell.y, y:cell.x }) }})
 
@@ -409,19 +445,21 @@ class MainConnect extends React.Component {
     }
 
     // follow shortest path to destination
-    this.followPath(start, path)
+    this.followPath(unit, start, path)
+
+    this.setState({isAnimating: true})
 
     // No A*, just click and move (bird path)
     let autoMove = false
     if(autoMove) {
       // Clear aim time each time a new aim action is called (takes 1 second to aim)
-      clearTimeout(this.timer)
+      clearTimeout(this.animationTimer)
       // Move cannon action (aim)
       this.props.dispatch({type: 'AIM', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell } })
       this.setState({ isAiming: true })
 
       // Wait for aim animation to finish
-      this.timer = setTimeout(() => {
+      this.animationTimer = setTimeout(() => {
         this.setState({ isAiming: false })
         this.props.dispatch({type: 'MOVE', payload: {id: this.props.units[this.props.currentSelectionID].id, target: cell}})
       }, 500)
@@ -459,7 +497,6 @@ class MainConnect extends React.Component {
       return null
     }
 
-    // let tank = this.props.units[this.props.currentSelectionID]
     return (
       <div style={{...specsStyle}}>
         <div style={{padding: 20, fontSize: 10, background: 'transparent', color: '#ccc', cursor: 'pointer'}} onClick={() => {
@@ -496,6 +533,12 @@ class MainConnect extends React.Component {
               this.handleShotFired()
               this.shootingTimer = setInterval(() => { this.handleShotFired(); }, 300)
             }
+        }
+        else if(e.keyCode === 83) {
+          if(this.state.isAnimating) {
+            console.warn('STOP ASTAR', this.state.isMoving)
+            this.stopMovement()
+          }
         }
     }
 
@@ -562,7 +605,7 @@ class MainConnect extends React.Component {
                 kill = true;
               }
             }
-          } else if (grid[x][y].obstacle) {
+          } else if (grid[x][y].obstacle && !grid[x][y].indestructable) {
             kill = true;
           }
 
@@ -573,6 +616,7 @@ class MainConnect extends React.Component {
             setTimeout(() => {
               grid[x][y].isExploding = false;
               grid[x][y].obstacle = false;
+              grid[x][y].showRuins = true;
               if (unit) {
                 //TODO: Remove unit from state
               }

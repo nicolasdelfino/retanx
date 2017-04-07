@@ -1,38 +1,60 @@
 export const Cell = function(Dimensions) {
-  this.x    = 0
-  this.y    = 0
-  this.f    = 0
-  this.g    = 0
-  this.h    = 0
-  this.cols  = Dimensions().width / Dimensions().tileSize
-  this.rows  = Dimensions().height / Dimensions().tileSize
+  this.x      = 0
+  this.y      = 0
+  this.f      = 0
+  this.g      = 0
+  this.h      = 0
+  this.cols   = Dimensions().width / Dimensions().tileSize
+  this.rows   = Dimensions().height / Dimensions().tileSize
+
+  // AStar
   this.neighbors  = []
   this.previous   = undefined
   this.isPath     = false
-  this.isPathDirectionTurn = false
-  this.tempPathString = ''
-  this.obstacle = false
-  this.showObstacle = false
-  this.unitObstacle = false
-  this.diffCell = false
-  this.opacity = 0
-  this.animOrgIndex = null
 
+  // animation
+  this.isPathDirectionTurn  = false
+  this.tempPathString       = ''
+  this.animOrgIndex         = null
+  this.opacity              = 0
 
-  if((Math.floor(Math.random() * 100) + 1) < 22) {
-    this.obstacle = true
-    this.showObstacle = true
-    this.diffCell = true
-  }
+  // obstacle props
+  this.obstacle       = false
+  this.unitObstacle   = false
+  this.showRuins      = false
+  this.indestructable = false
 
-  this.focus = function() {
+  // tile sprite
+  this.cssClass       = ''
+
+  // random obstacles
+  //_________________________________________________________
+  // if((Math.floor(Math.random() * 100) + 1) < 22) {
+  //   this.obstacle = true
+  //   this.showObstacle = true
+  //   this.diffCell = true
+  // }
+
+  this.reveal = function(fullReveal) {
     this.opacity = 1
     this.neighbors.forEach((neighbor) => {
-        neighbor.opacity += 0.5
+        neighbor.opacity += fullReveal ? 1 : 0.5
     })
   }
 
-  this.addNeighbors = function(grid, aStarStyle) {
+  this.setType = (type) => {
+    if(type === 'obstacle'){
+      this.cssClass = 'tileObstacle'
+      this.obstacle = true
+    }
+    else if(type === 'wall'){
+      this.cssClass       = 'tileWall'
+      this.obstacle       = true
+      this.indestructable = true
+    }
+  }
+
+  this.addNeighbors = (grid, aStarStyle) => {
     let _x = this.x
     let _y = this.y
 
@@ -43,7 +65,7 @@ export const Cell = function(Dimensions) {
     }
   }
 
-  this.addDefaultNeighbors = function(grid, _x, _y) {
+  this.addDefaultNeighbors = (grid, _x, _y) => {
     if(_x < this.cols - 1) {
       this.neighbors.push(grid[_x + 1][_y])
     }
@@ -58,7 +80,7 @@ export const Cell = function(Dimensions) {
     }
   }
 
-  this.addDiagonalNeighbors = function(grid, _x, _y) {
+  this.addDiagonalNeighbors = (grid, _x, _y) => {
     if(_x > 0 && _y > 0) {
       this.neighbors.push(grid[_x - 1][_y - 1])
     }
@@ -73,7 +95,7 @@ export const Cell = function(Dimensions) {
     }
   }
 
-  this.reset = function() {
+  this.reset = () => {
     this.f = 0
     this.g = 0
     this.h = 0

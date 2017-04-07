@@ -6,7 +6,7 @@ export const TankType = function() {
   // A* category
   this.aStarStyle  = 'basic'
   // Rotate aim duration
-  this.aimDuration = 800
+  this.aimDuration = 200
   // Movement speed
   this.moveSpeed   = 1200
   // Colors
@@ -37,6 +37,11 @@ export const TankType = function() {
   this.health      = 1000
   this.maxHealth   = 1000
 
+  this.shouldRotate = true
+  this.allowMovement = true
+  this.animationCells = []
+  this.animationTimeOuts = []
+
   // Randomize colors
   let randomize    = false
 
@@ -54,33 +59,43 @@ export const TankType = function() {
     this.cannonColor  = cannon
   }
 
+  this.break = function() {
+    console.warn('unit break!')
+    this.allowMovement = false
+    this.animationCells = []
+  }
+
   this.getUnit = function() {
     return {
-      id:           this.id,
-      type:         this.type,
-      position:     this.position,
-      aimTarget:    {x: 0, y: 0},
-      moveSpeed:    this.moveSpeed,
-      aimDuration:  this.aimDuration,
-      aStarStyle:   this.aStarStyle,
-      width:        randomize ? Math.floor(Math.random() * 45) + 40 : 30,
-      height:       randomize ? Math.floor(Math.random() * 50) + 45 : 45,
-      cannonSize:   randomize ? Math.floor(Math.random() * 100) + 70 : 70,
-      cellWidth:    this.cellWidth,
-      cellHeight:   this.cellHeight,
-      background:   this.baseColor,
-      cabineColor:  this.cabinColor,
-      cannonColor:  this.cannonColor,
-      rotate:       'true',
-      selected:     false,
-      angle:        0,
-      mass:         this.mass,
-      hp:           this.hitPoints,
-      hpPosTop:     this.hpPosTop,
-      alive:        this.alive,
-      range:        this.range,
-      health:       this.health,
-      maxHealth:    this.maxHealth
+      id:               this.id,
+      type:             this.type,
+      position:         this.position,
+      aimTarget:        {x: 0, y: 0},
+      moveSpeed:        this.moveSpeed,
+      aimDuration:      this.aimDuration,
+      aStarStyle:       this.aStarStyle,
+      width:            randomize ? Math.floor(Math.random() * 45) + 40 : 30,
+      height:           randomize ? Math.floor(Math.random() * 50) + 45 : 45,
+      cannonSize:       randomize ? Math.floor(Math.random() * 100) + 70 : 70,
+      cellWidth:        this.cellWidth,
+      cellHeight:       this.cellHeight,
+      background:       this.baseColor,
+      cabineColor:      this.cabinColor,
+      cannonColor:      this.cannonColor,
+      rotate:           this.shouldRotate,
+      selected:         false,
+      angle:            0,
+      mass:             this.mass,
+      hp:               this.hitPoints,
+      hpPosTop:         this.hpPosTop,
+      alive:            this.alive,
+      range:            this.range,
+      health:           this.health,
+      maxHealth:        this.maxHealth,
+      allowMovement:    this.allowMovement,
+      break:            this.break,
+      animationCells:   this.animationCells,
+      animationTimeOuts:this.animationTimeOuts
     }
   }
 }

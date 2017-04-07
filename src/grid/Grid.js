@@ -1,4 +1,5 @@
 import { Cell } from './Cell'
+import { Map } from './maps/Map'
 
 // Grid singleton
 export const Dimensions = () => ({
@@ -10,23 +11,31 @@ export const Dimensions = () => ({
 
 export const Grid = function() {
 
-  var instance = null
+  let instance = null
+  let map = new Map()
 
   function createGrid() {
      var grid     = []
      let divider  = Dimensions().divider
      let cols     = Dimensions().width / Dimensions().tileSize
      let rows     = Dimensions().height / Dimensions().tileSize
-
+     let mapIndex = 0
      for(var s = 0; s < cols; s++) {
        grid[s] = new Array(rows)
+       mapIndex = 0
        for(var a = 0; a < rows; a++) {
+         let cellType = map.getCellType(map.getTiles()[s + mapIndex])
+
          let cell = new Cell(Dimensions)
-         cell.x = s
-         cell.y = a
+         cell.x   = s
+         cell.y   = a
          cell.row = s
          cell.col = a
          grid[s][a] = cell
+
+         cell.setType(cellType)
+
+         mapIndex += 10
        }
      }
 
