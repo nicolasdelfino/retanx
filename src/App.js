@@ -270,7 +270,7 @@ class MainConnect extends React.Component {
       ////////////////////////////////////////////////////////////////////////////////////////////
       // UNIT COLLISIONS
 
-      let roadKill = collisionManager.trackCollisions(tracker.trackUnits(units, this.props.currentSelectionID))
+      let roadKill = collisionManager.trackCollisions(tracker.trackUnits(units, moveUnit.id))
       if(roadKill) {
         if(units[roadKill.id].alive) {
           console.warn('%cROADKILL', 'color:red', roadKill)
@@ -309,7 +309,6 @@ class MainConnect extends React.Component {
     // Put animation on unit
     moveUnit.animationCells = animationCells
 
-
     //////////////////////////////////////////////////////////////////////////////////////////
     // Animate path
 
@@ -335,12 +334,13 @@ class MainConnect extends React.Component {
         this.props.dispatch({type: 'AIM', payload: {
           id: moveUnit.id,
           target: position,
-          angle: this.aimDegrees(this.props.units[moveUnit.id], { x: position.y, y: position.x }) }})
+          angle: this.aimDegrees(this.props.units[moveUnit.id], { x: position.y, y: position.x }) }
+        })
 
-          _grid.getGrid()[moveUnit.position.x][moveUnit.position.y].opacity = 1
+        _grid.getGrid()[moveUnit.position.x][moveUnit.position.y].opacity = 1
 
-          //get cells between this one and last non animation cell
-          this.makeFOW(path, item.animOrgIndex)
+        //get cells between this one and last non animation cell
+        this.makeFOW(path, item.animOrgIndex)
 
         // move unit
         setTimeout(() => {
@@ -376,9 +376,9 @@ class MainConnect extends React.Component {
   //////////////////////////////////////////////////////////////////////////////////////////
   // F.O.W.
 
-  makeFOW(path, animOrgIndex) {
-    for(var c = 0; c < path.length; c++) {
-      let tCell = path[c]
+  makeFOW(p, animOrgIndex) {
+    for(var c = 0; c < p.length; c++) {
+      let tCell = p[c]
       if(c <= animOrgIndex) {
         setTimeout(() => {
           tCell.reveal()
@@ -390,13 +390,11 @@ class MainConnect extends React.Component {
   //////////////////////////////////////////////////////////////////////////////////////////
   // Cancel movement
   stopMovement() {
-    // console.error('stopMovement', this.props.units[this.props.currentSelectionID])
     this.props.units[this.props.currentSelectionID].break()
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
   }
 
   resetUnitMovement(moveUnit) {
-    // console.error('resetUnitMovement', moveUnit.position, this.props.units[moveUnit.id].aimTarget)
     clearInterval(trackerInterval)
     clearTimeout(this.animationTimer)
     clearTimeout(this.moveTimer)

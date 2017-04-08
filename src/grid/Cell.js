@@ -104,7 +104,7 @@ export const Cell = function(Dimensions) {
     this.isPath = false
     this.isPathDirectionTurn = false
     this.tempPathString = ''
-    this.animOrgIndex = null
+    //this.animOrgIndex = null
     this.unitObstacle = false
   }
 }
