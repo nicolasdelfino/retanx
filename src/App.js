@@ -16,6 +16,8 @@ import sound_pew from './assets/pew.mp3'
 import sound_explosion from './assets/explosion.mp3'
 import logo from './retanx.png'
 
+import $ from "jquery"
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Grid and aStar
 import { Dimensions, Grid } from './grid/Grid'
@@ -66,10 +68,12 @@ class MainConnect extends React.Component {
     _grid = Grid.getInstance()
     this.addUnit(TYPES.TANK_TYPE, true)
 
+
     setInterval(() => {
       this.setState({
         totalDivs: utils.getTotalDivs()
       })
+
     }, 1000)
   }
 
@@ -82,7 +86,7 @@ class MainConnect extends React.Component {
     // pick random position
     let unitPosition = firstUnit === true ? { x: Math.floor(_grid.getCols() / 2), y: 3 } : unitFactory.getRandomPos(this.props.units)
 
-    console.warn(unitPosition)
+    // console.warn(unitPosition)
 
     if(!unitPosition) {
       console.log('No available position for unit')
@@ -361,6 +365,8 @@ class MainConnect extends React.Component {
               // stop tracking unit positions
               clearInterval(trackerInterval)
               console.log('** Unit arrived at target cell **')
+              // this.focusCamera('unit_' + moveUnit.id)
+
               this.setState({isAnimating: false})
             }, moveUnit.moveSpeed)
           }
@@ -667,6 +673,15 @@ class MainConnect extends React.Component {
     return zoom
   }
 
+  focusCamera(elementId) {
+    let id = elementId || 'unit_0'
+    let element = $('#' + id + ' .position')
+    let windowToSpriteCenter = Math.floor($(element).offset().top) - Math.floor($(window).height() / 2)
+    $('html, body').animate({
+        scrollTop: windowToSpriteCenter
+    }, 1000);
+  }
+
 	render() {
     return (
       <div className='wrapper'>
@@ -692,6 +707,10 @@ class MainConnect extends React.Component {
           <div><button style={{background: 'black', color: 'red'}} onClick={()=> {
             this.props.dispatch({ type: 'SET_ZOOM', payload: this.getZoomOut()})
           }}>ZOOM OUT</button></div>
+
+          <div><button style={{background: 'black', color: 'red'}} onClick={()=> {
+            this.focusCamera()
+          }}>FOCUS</button></div>
 
           {this.renderNumDivs()}
 
