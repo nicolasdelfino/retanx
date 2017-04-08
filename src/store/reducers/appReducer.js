@@ -6,7 +6,7 @@ const initState = {
   debugAstarScores: false,
   debugObstacles: false,
   aimMode: false,
-  zoom: 0.5
+  zoom: 1
 }
 
 //put aim target here and change aimTarget within a tank reducer to point to target?
