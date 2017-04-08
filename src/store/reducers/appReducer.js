@@ -5,7 +5,8 @@ const initState = {
   debugMode: false,
   debugAstarScores: false,
   debugObstacles: false,
-  aimMode: false
+  aimMode: false,
+  zoom: 0.5
 }
 
 //put aim target here and change aimTarget within a tank reducer to point to target?
@@ -45,6 +46,11 @@ const app = (state = initState, action) => {
       return {
         ...state,
         debugAstarScores: !state.debugAstarScores
+    }
+    case 'SET_ZOOM':
+      return {
+        ...state,
+        zoom: action.payload
     }
     default:
       return state

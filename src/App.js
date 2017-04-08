@@ -651,6 +651,22 @@ class MainConnect extends React.Component {
     return this.state.shooting === true ?  'mainFire' : 'noFire'
   }
 
+  getZoomIn() {
+    let zoom = this.props.zoom + 0.1
+    if(zoom > 1) {
+      zoom = 1
+    }
+    return zoom
+  }
+
+  getZoomOut() {
+    let zoom = this.props.zoom - 0.1
+    if(zoom <= 0) {
+      zoom = 0
+    }
+    return zoom
+  }
+
 	render() {
     return (
       <div className='wrapper'>
@@ -669,10 +685,19 @@ class MainConnect extends React.Component {
 
           <div><button style={{background: this.props.debugObstacles ? 'red' : 'black', color: this.props.debugObstacles ? 'black' : 'red'}} onClick={this.toggleObstacles.bind(this)}>TOGGLE OBSTACLES</button></div>
 
+          <div><button style={{background: 'black', color: 'red'}} onClick={()=> {
+            this.props.dispatch({ type: 'SET_ZOOM', payload: this.getZoomIn()})
+          }}>ZOOM IN</button></div>
+
+          <div><button style={{background: 'black', color: 'red'}} onClick={()=> {
+            this.props.dispatch({ type: 'SET_ZOOM', payload: this.getZoomOut()})
+          }}>ZOOM OUT</button></div>
+
           {this.renderNumDivs()}
 
           <div className='instructions'>PRESS A TO FIRE</div>
         </div>
+        <div className='zoomWrapper' style={{'transform': 'scale(' + this.props.zoom + ')'}}>
         <div id='board'>
             <div className={this.getMainCSS()}>
             {/*  GRID */}
@@ -684,6 +709,7 @@ class MainConnect extends React.Component {
             {/* SPACEBAR */}
             {this.handleKeyInput()}
             </div>
+        </div>
         </div>
       </div>
     )
@@ -698,7 +724,8 @@ const MSTP = (state) => {
     debugMode: state.app.debugMode,
     aimMode: state.app.aimMode,
     debugAstarScores: state.app.debugAstarScores,
-    debugObstacles: state.app.debugObstacles
+    debugObstacles: state.app.debugObstacles,
+    zoom: state.app.zoom
   }
 }
 
