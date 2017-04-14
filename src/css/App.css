@@ -152,20 +152,23 @@ body {
 .zoomWrapper {
   transition: all 0.5s ease-in-out; }
 
+.rotationWrapper {
+  transition: all 5s ease-in-out; }
+
 #board {
   display: flex;
   margin-bottom: 100px;
   align-self: center;
-  transform: scale(0.2);
+  transform: scale(0.2) rotate(0deg);
   opacity: 0;
   animation: zoomIn 2s ease normal forwards; }
 
 @keyframes zoomIn {
   0% {
-    transform: scale(0.2);
+    transform: scale(0.2) rotate(90deg);
     opacity: 0; }
   100% {
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
     opacity: 1; } }
 
 .ground {

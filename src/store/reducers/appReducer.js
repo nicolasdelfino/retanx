@@ -6,7 +6,8 @@ const initState = {
   debugAstarScores: false,
   debugObstacles: false,
   aimMode: false,
-  zoom: 1
+  zoom: 1,
+  cameraRotation: 0
 }
 
 //put aim target here and change aimTarget within a tank reducer to point to target?
@@ -51,6 +52,11 @@ const app = (state = initState, action) => {
       return {
         ...state,
         zoom: action.payload
+    }
+    case 'SET_RANDOM_ROTATION':
+      return {
+        ...state,
+        cameraRotation: action.payload
     }
     default:
       return state

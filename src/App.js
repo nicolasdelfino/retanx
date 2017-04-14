@@ -75,6 +75,16 @@ class MainConnect extends React.Component {
       })
 
     }, 1000)
+
+    // rotate camera
+    setInterval(() => {
+      this.props.dispatch({ type: 'SET_RANDOM_ROTATION', payload: this.getRandomRotation()})
+
+    }, 5000)
+  }
+
+  getRandomRotation() {
+    return Math.floor(Math.random() * 20) + 1
   }
 
   addUnit(type, firstUnit) {
@@ -717,6 +727,7 @@ class MainConnect extends React.Component {
           <div className='instructions'>PRESS A TO FIRE</div>
         </div>
         <div className='zoomWrapper' style={{'transform': 'scale(' + this.props.zoom + ')'}}>
+        <div className='rotationWrapper' style={{'transform': 'rotate(' + this.props.cameraRotation + 'deg)'}}>
         <div id='board'>
             <div className={this.getMainCSS()}>
             {/*  GRID */}
@@ -728,6 +739,7 @@ class MainConnect extends React.Component {
             {/* SPACEBAR */}
             {this.handleKeyInput()}
             </div>
+        </div>
         </div>
         </div>
       </div>
@@ -744,7 +756,8 @@ const MSTP = (state) => {
     aimMode: state.app.aimMode,
     debugAstarScores: state.app.debugAstarScores,
     debugObstacles: state.app.debugObstacles,
-    zoom: state.app.zoom
+    zoom: state.app.zoom,
+    cameraRotation: state.app.cameraRotation
   }
 }
 
