@@ -1,5 +1,3 @@
-import $ from "jquery";
-
 export const UnitWorldPositionTracker = function() {
 
   let instance = null
@@ -31,11 +29,11 @@ export const UnitWorldPositionTracker = function() {
         return
       }
 
-      const log = true
-
-      let main = $('#board')
-      let mainX = Math.floor(main.offset().left)
-      let mainY = Math.floor(main.offset().top)
+      const log     = true
+      let main      = document.querySelectorAll('#board')
+      let mainRect  = main[0].getBoundingClientRect();
+      let mainX     = Math.floor(mainRect.left + document.body.scrollLeft)
+      let mainY     = Math.floor(mainRect.top + document.body.scrollTop)
       if(log) {
         console.group('U.W.P TRACKER')
       }
@@ -46,10 +44,15 @@ export const UnitWorldPositionTracker = function() {
 
       let movingUnits = []
       liveUnits.forEach((unit, index) => {
-        let element = $('#unit_' + unit.id + " .position"); // NO JQUERY PLEASE
 
-        let xx = Math.floor(element.offset().left) - Math.floor(mainX)
-        let yy = Math.floor(element.offset().top) - Math.floor(mainY)
+        let element     = document.querySelectorAll('#unit_' + unit.id + ' .position')
+        let rect        = element[0].getBoundingClientRect();
+        let offsetTop   = rect.top + document.body.scrollTop
+        let offsetLeft  = rect.left + document.body.scrollLeft
+
+
+        let xx = Math.floor(offsetLeft) - Math.floor(mainX)
+        let yy = Math.floor(offsetTop) - Math.floor(mainY)
 
         //https://en.wikipedia.org/wiki/Rounding#Round_half_to_even
         let x = getBankersRounding(xx / 100)
