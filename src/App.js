@@ -16,8 +16,6 @@ import sound_pew from './assets/pew.mp3'
 import sound_explosion from './assets/explosion.mp3'
 import logo from './retanx.png'
 
-import $ from "jquery"
-
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Grid and aStar
 import { Dimensions, Grid } from './grid/Grid'
@@ -80,11 +78,11 @@ class MainConnect extends React.Component {
     setInterval(() => {
       this.props.dispatch({ type: 'SET_RANDOM_ROTATION', payload: this.getRandomRotation()})
 
-    }, 5000)
+    }, 10000)
   }
 
   getRandomRotation() {
-    return Math.floor(Math.random() * 20) + 1
+    return Math.floor(Math.random() * 50) + -50
   }
 
   addUnit(type, firstUnit) {
@@ -683,13 +681,45 @@ class MainConnect extends React.Component {
     return zoom
   }
 
+  easeInOut(currentTime, start, change, duration) {
+      currentTime /= duration / 2;
+      if (currentTime < 1) {
+          return change / 2 * currentTime * currentTime + start;
+      }
+      currentTime -= 1;
+      return -change / 2 * (currentTime * (currentTime - 2) - 1) + start;
+  }
+
+
+  scrollTo(element, to, duration) {
+      let start = element.scrollTop,
+          change = to - start,
+          increment = 20;
+
+      const animateScroll = (elapsedTime) => {
+          elapsedTime += increment;
+          var position = this.easeInOut(elapsedTime, start, change, duration);
+          element.scrollTop = position;
+          if (elapsedTime < duration) {
+              setTimeout(function() {
+                  animateScroll(elapsedTime);
+              }, increment);
+          }
+      };
+
+      animateScroll(0);
+  }
+
   focusCamera(elementId) {
     let id = elementId || 'unit_0'
-    let element = $('#' + id + ' .position')
-    let windowToSpriteCenter = Math.floor($(element).offset().top) - Math.floor($(window).height() / 2)
-    $('html, body').animate({
-        scrollTop: windowToSpriteCenter
-    }, 1000);
+
+    let element     = document.querySelectorAll('#' + id + ' .position')
+    let rect        = element[0].getBoundingClientRect();
+    let offsetTop   = rect.top + document.body.scrollTop
+
+    let windowUnitCenter = Math.floor(offsetTop) - Math.floor(window.innerHeight / 2)
+
+    utils.scrollTo(document.body, windowUnitCenter, 1000);
   }
 
 	render() {
