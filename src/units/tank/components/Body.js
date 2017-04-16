@@ -1,4 +1,7 @@
 import React from 'react';
+
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 class Body extends React.Component {
   constructor(props) {
     super(props)
@@ -6,13 +9,13 @@ class Body extends React.Component {
       rotation: this.props.rotation
     }
   }
-
+  //_____________________________________________________________________________________________________
   componentWillReceiveProps(props) {
     if(props.rotate === true) {
       this.setState({ rotation: props.rotation })
     }
   }
-
+  //_____________________________________________________________________________________________________
   render() {
 
     const zoom = 1

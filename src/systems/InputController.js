@@ -3,13 +3,11 @@ import { connect } from 'react-redux'
 import sound_pew from '../assets/pew.mp3'
 import sound_explosion from '../assets/explosion.mp3'
 
-////////////////////////////////////////////////////////////////////////////////////////////
 // Grid and aStar
 import { Grid } from '../grid/Grid'
 let _grid = null
 
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 class IC extends Component {
@@ -28,19 +26,19 @@ class IC extends Component {
       totalDivs: 0
     }
   }
-
+  //_____________________________________________________________________________________________________
   componentDidMount() {
     _grid = Grid.getInstance()
   }
-
+  //_____________________________________________________________________________________________________
   startShooting() {
     this.props.dispatch({ type: 'START_SHOOTING' })
   }
-
+  //_____________________________________________________________________________________________________
   stopShooting() {
     this.props.dispatch({ type: 'STOP_SHOOTING' })
   }
-
+  //_____________________________________________________________________________________________________
   handleKeyInput() {
     document.body.onkeydown = (e) => {
         if(e.keyCode === 65 && this.props.currentSelectionID !== null){
@@ -57,7 +55,6 @@ class IC extends Component {
           }
         }
     }
-
     document.body.onkeyup = (e) => {
         if(e.keyCode === 65){
             this.stopShooting()
@@ -65,13 +62,13 @@ class IC extends Component {
         }
     }
   }
-
+  //_____________________________________________________________________________________________________
   // Cancel movement
   stopMovement() {
     this.props.units[this.props.currentSelectionID].break()
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
   }
-
+  //_____________________________________________________________________________________________________
   handleShotFired() {
     //Pew
     (new Audio(sound_pew)).play();

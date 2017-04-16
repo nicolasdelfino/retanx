@@ -1,4 +1,7 @@
 import React from 'react';
+
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 class Cannon extends React.Component {
   constructor(props) {
     super(props)
@@ -6,13 +9,13 @@ class Cannon extends React.Component {
       rotation: this.props.rotation
     }
   }
-
+  //_____________________________________________________________________________________________________
   componentWillReceiveProps(props) {
     if(props.rotate === true) {
       this.setState({ rotation: props.rotation })
     }
   }
-
+  //_____________________________________________________________________________________________________
   shoot() {
     if(!this.props.shooting) {
       return null
@@ -21,7 +24,7 @@ class Cannon extends React.Component {
       <div className='beam' />
     )
   }
-
+  //_____________________________________________________________________________________________________
   lasersight() {
     if (!this.props.debugAim) {
       return null
@@ -30,7 +33,7 @@ class Cannon extends React.Component {
       <div className='lasersight tankSight' />
     )
   }
-
+  //_____________________________________________________________________________________________________
   render() {
     const cannonSpecs = {
       width: 8,

@@ -1,15 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 export const Utils = function() {
   let instance = null
 
   function createUtils() {
-
+    //_____________________________________________________________________________________________________
     function getTotalDivs() {
       return document.getElementsByTagName('div').length
     }
 
-    /////////////////////////////////////////////////////////////////////////////
     // scroll
-
     const easeInOut = (currentTime, start, change, duration) => {
         currentTime /= duration / 2;
         if (currentTime < 1) {
@@ -37,7 +37,7 @@ export const Utils = function() {
 
       animateScroll(0);
     }
-
+    //_____________________________________________________________________________________________________
     function getAimDegrees(tank, aimTarget) {
       let position = tank.position
       let p1 = {
@@ -61,7 +61,6 @@ export const Utils = function() {
       if (a - tank.angle < -180) a += 360;
       return a
     }
-
 
     return {
         getTotalDivs: getTotalDivs,

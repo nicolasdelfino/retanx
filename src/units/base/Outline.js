@@ -1,5 +1,7 @@
 import React from 'react';
 
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 class Outline extends React.Component {
   constructor(props) {
     super(props)
@@ -7,13 +9,13 @@ class Outline extends React.Component {
       rotation: this.props.rotation
     }
   }
-
+  //_____________________________________________________________________________________________________
   componentWillReceiveProps(props) {
     if(props.rotate === true) {
       this.setState({ rotation: props.rotation })
     }
   }
-
+  //_____________________________________________________________________________________________________
   render() {
     let w = this.props.specs.width * 1.5
     let h = this.props.specs.height * 1.2

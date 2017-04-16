@@ -2,28 +2,25 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Ground from '../grid/Ground'
 
-////////////////////////////////////////////////////////////////////////////////////////////
 // Grid and aStar
 import { AStar } from '../grid/AStar'
 import { Grid } from '../grid/Grid'
 let _grid = null
 
-////////////////////////////////////////////////////////////////////////////////////////////
 // Position tracker
 import { UnitWorldPositionTracker } from '../units/utils/UnitWorldPositionTracker'
 let tracker = UnitWorldPositionTracker.getInstance()
 let trackerInterval = null
 
-////////////////////////////////////////////////////////////////////////////////////////////
 // Collision manager
 import { WorldCollision } from '../units/utils/WorldCollision'
 let collisionManager = WorldCollision.getInstance()
 
-////////////////////////////////////////////////////////////////////////////////////////////
 // Generic Utils
 import { Utils } from '../utils/Utils'
 let utils = Utils.getInstance()
 
+////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 class UC extends Component {
   constructor(props) {
@@ -40,15 +37,13 @@ class UC extends Component {
       totalDivs: 0
     }
   }
-
+  //_____________________________________________________________________________________________________
   componentDidMount() {
     _grid = Grid.getInstance()
   }
 
-
-  //////////////////////////////////////////////////////////////////////////////////////////
+  //_____________________________________________________________________________________________________
   // Follow path function, cuts out redundant cells
-
   followPath(moveUnit, start, path) {
 
     // track the position of units when something is moving
@@ -60,10 +55,8 @@ class UC extends Component {
       if(units.length === 1) {
         return
       }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////
+      //_____________________________________________________________________________________________________
       // UNIT COLLISIONS
-
       let roadKill = collisionManager.trackCollisions(tracker.trackUnits(units, moveUnit.id))
       if(roadKill) {
         if(units[roadKill.id].alive) {
@@ -99,11 +92,11 @@ class UC extends Component {
     end.animOrgIndex = path.length -1
     animationCells.push(end)
 
-    //////////////////////////////////////////////////////////////////////////////////////////
+    //_____________________________________________________________________________________________________
     // Put animation on unit
     moveUnit.animationCells = animationCells
 
-    //////////////////////////////////////////////////////////////////////////////////////////
+    //_____________________________________________________________________________________________________
     // Animate path
 
     moveUnit.animationCells.forEach((item, index) => {
@@ -122,7 +115,6 @@ class UC extends Component {
           return
         }
         // used for controlling walk animation
-        // this.setState({ isMoving: false })
         this.props.dispatch({ type: 'STOP_MOVING' })
 
         // aim cannon
@@ -153,15 +145,12 @@ class UC extends Component {
             moveUnit.animationCells[index].opacity = 1
 
             setTimeout(() => {
-              // this.setState({ isMoving: false })
               this.props.dispatch({ type: 'STOP_MOVING' })
 
               // stop tracking unit positions
               clearInterval(trackerInterval)
               console.log('** Unit arrived at target cell **')
-              // this.focusCamera('unit_' + moveUnit.id)
 
-              // this.setState({isAnimating: false})
               this.props.dispatch({ type: 'STOP_ANIMATING' })
             }, moveUnit.moveSpeed)
           }
@@ -173,10 +162,8 @@ class UC extends Component {
 
     this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
   }
-
-  //////////////////////////////////////////////////////////////////////////////////////////
+  //_____________________________________________________________________________________________________
   // F.O.W.
-
   makeFOW(p, animOrgIndex) {
     for(var c = 0; c < p.length; c++) {
       let tCell = p[c]
@@ -187,14 +174,7 @@ class UC extends Component {
       }
     }
   }
-
-  //////////////////////////////////////////////////////////////////////////////////////////
-  // // Cancel movement
-  // stopMovement() {
-  //   this.props.units[this.props.currentSelectionID].break()
-  //   this.setState({ forceValUpdate: this.state.forceValUpdate + 1 })
-  // }
-
+  //_____________________________________________________________________________________________________
   resetUnitMovement(moveUnit) {
     clearInterval(trackerInterval)
     clearTimeout(this.animationTimer)
@@ -268,7 +248,7 @@ class UC extends Component {
       }, 500)
     }
   }
-
+  //_____________________________________________________________________________________________________
   renderGround() {
     if(this.props.units.length === 0) {
       return null
@@ -285,7 +265,7 @@ class UC extends Component {
       aim={this.aimOnCell.bind(this)} move={this.moveToCell.bind(this)}/>
     )
   }
-
+  //_____________________________________________________________________________________________________
   aimOnCell(cell) {
     if(!this.props.units[this.props.currentSelectionID].selected) {
       return null

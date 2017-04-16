@@ -6,11 +6,13 @@ let _grid = Grid.getInstance()
 import { TankType } from '../tank/type'
 import { SoldierType } from '../soldiers/type'
 
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 export const UnitFactory = function() {
   var instance = null
 
   function createUtils() {
-    //___________________________________________________________________________
+    //_____________________________________________________________________________________________________
     function isPositionAvaliable(position, units) {
       let isAvailable = true
       if(_grid.suggestedPositionIsAnObstacleCell(position)) {
@@ -24,7 +26,7 @@ export const UnitFactory = function() {
 
       return isAvailable
     }
-    //___________________________________________________________________________
+    //_____________________________________________________________________________________________________
     function getRandomPosition(units) {
       let columns = _grid.getCols()
       let rows = _grid.getRows()
@@ -33,7 +35,7 @@ export const UnitFactory = function() {
         y: Math.floor(Math.random() * rows)
       }
     }
-    //___________________________________________________________________________
+    //_____________________________________________________________________________________________________
     function getRandomPos(units) {
       let foundPosition = false
       let position = null
@@ -53,7 +55,7 @@ export const UnitFactory = function() {
       }
       return foundPosition ? position : undefined
     }
-    //___________________________________________________________________________
+    //_____________________________________________________________________________________________________
     function getUnit(unitType, unitPosition, units) {
       // console.log('unit utils', units)
       let unit = null
@@ -69,7 +71,7 @@ export const UnitFactory = function() {
       }
       return unit
     }
-    //___________________________________________________________________________
+    //_____________________________________________________________________________________________________
     function getSoldierUnit(unitPosition, units) {
       let soldier = new SoldierType()
       // id
@@ -87,7 +89,7 @@ export const UnitFactory = function() {
 
       return soldier.getUnit()
     }
-    //___________________________________________________________________________
+    //_____________________________________________________________________________________________________
     function getTankUnit(unitPosition, units) {
       let tank = new TankType()
       // id
@@ -102,9 +104,9 @@ export const UnitFactory = function() {
 
       return tank.getUnit()
     }
-    //___________________________________________________________________________
+    //_____________________________________________________________________________________________________
     // PUBLIC
-    //___________________________________________________________________________
+    //_____________________________________________________________________________________________________
     return {
       getRandomPos: getRandomPos,
       getUnit: getUnit,

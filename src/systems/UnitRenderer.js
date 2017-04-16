@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
 import * as TYPES from '../units/types/unitTypes'
 import BasePosition from '../units/base/BasePosition'
 import Body from '../units/tank/components/Body'
@@ -11,21 +10,16 @@ import HP from '../units/base/HitPoints'
 import SpecsView from '../units/tank/components/SpecsView'
 import FootSoldier from '../units/soldiers/components/FootSoldier'
 
-////////////////////////////////////////////////////////////////////////////////////////////
 // Grid
 import { Dimensions, Grid } from '../grid/Grid'
 let _grid = null
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// Generic Utils
-import { Utils } from '../utils/Utils'
-let utils = Utils.getInstance()
-
-////////////////////////////////////////////////////////////////////////////////////////////
 // Unit factory
 import { UnitFactory } from '../units/utils/UnitFactory'
 let unitFactory = UnitFactory.getInstance()
 
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 class UR extends Component {
 
   constructor(props) {
@@ -42,32 +36,16 @@ class UR extends Component {
       totalDivs: 0
     }
   }
-
+  //_____________________________________________________________________________________________________
   componentDidMount() {
     _grid = Grid.getInstance()
     this.addUnit(TYPES.TANK_TYPE, true)
-
-
-    setInterval(() => {
-      this.setState({
-        totalDivs: utils.getTotalDivs()
-      })
-
-    }, 1000)
-
-    // rotate camera
-    setInterval(() => {
-      this.props.dispatch({ type: 'SET_RANDOM_ROTATION', payload: this.getRandomRotation()})
-
-    }, 10000)
   }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////
-
+  //_____________________________________________________________________________________________________
   getRandomRotation() {
     return Math.floor(Math.random() * 50) + -50
   }
-
+  //_____________________________________________________________________________________________________
   coordinates(pos, width, height) {
     // console.log('pos', pos)
     let size = Dimensions().tileSize
@@ -76,23 +54,17 @@ class UR extends Component {
       y: pos.y * size + (size / 2 - height / 2)
     }
   }
-
+  //_____________________________________________________________________________________________________
   getIsThisUnitShooting(unit, id) {
     return (unit.selected) && (this.props.currentSelectionID === id) && (this.props.shooting) ? true : false
   }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////
-
+  //_____________________________________________________________________________________________________
   addUnit(type, firstUnit) {
     if(!type) {
       // default to use tank type
       type = TYPES.TANK_TYPE
     }
-    // console.log('firstUnit', firstUnit)
-    // pick random position
     let unitPosition = firstUnit === true ? { x: Math.floor(_grid.getCols() / 2), y: 3 } : unitFactory.getRandomPos(this.props.units)
-
-    // console.warn(unitPosition)
 
     if(!unitPosition) {
       console.log('No available position for unit')
@@ -106,21 +78,20 @@ class UR extends Component {
     _grid.getGrid()[unitPosition.x][unitPosition.y].addNeighbors(_grid.getGrid(), 'normal')
     _grid.getGrid()[unitPosition.x][unitPosition.y].reveal(true)
   }
-
-
+  //_____________________________________________________________________________________________________
   getSpeed(position) {
     // TODO TRAVEL SPEED
   }
-
+  //_____________________________________________________________________________________________________
   showSpecs() {
     this.props.dispatch({type: 'SHOW_DETAIL_VIEW'})
   }
-
+  //_____________________________________________________________________________________________________
   hideSpecs() {
     this.props.dispatch({type: 'HIDE_DETAIL_VIEW'})
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////////
+  //_____________________________________________________________________________________________________
   // Select unit
   selectUnit(units, id) {
     this.props.dispatch({type: 'SELECT_UNIT', payload: {id: id }})
@@ -130,9 +101,7 @@ class UR extends Component {
     // deselect all other units
     this.props.dispatch({type: 'DESELECT_ALL_BUT_ID', payload: {id: id }})
   }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////
-
+  //_____________________________________________________________________________________________________
   renderUnits() {
     let units     = this.props.units
     let unitList  = []

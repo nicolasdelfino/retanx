@@ -1,75 +1,60 @@
-import React from 'react';
+import React from 'react'
 import './css/App.css';
 import { connect } from 'react-redux'
 import Ground from './grid/Ground'
-
-
 import logo from './retanx.png'
-
 import UnitRenderer from './systems/UnitRenderer'
 import UnitController from './systems/UnitController'
 import InputController from './systems/InputController'
 
 import * as TYPES from './units/types/unitTypes'
 
-////////////////////////////////////////////////////////////////////////////////////////////
 // Grid and aStar
 import { Dimensions, Grid } from './grid/Grid'
 let _grid = null
 
-////////////////////////////////////////////////////////////////////////////////////////////
 // Unit factory
 import { UnitFactory } from './units/utils/UnitFactory'
 let unitFactory = UnitFactory.getInstance()
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
 // Generic Utils
 import { Utils } from './utils/Utils'
 let utils = Utils.getInstance()
 
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 class MainConnect extends React.Component {
 
   constructor(props) {
     super(props)
-    this.animationTimer = null
-    this.moveTimer = null
-    this.shootingTimer = null
     this.state = {
-      isAiming: false,
-      isMoving: false,
-      isAnimating: false,
-      isFollowingPath: true,
-      forceValUpdate: 0,
-      shooting: false,
       refresh: 0,
       totalDivs: 0
     }
   }
 
+  //_____________________________________________________________________________________________________
   componentDidMount() {
     _grid = Grid.getInstance()
-    // this.addUnit(TYPES.TANK_TYPE, true)
-
 
     setInterval(() => {
       this.setState({
         totalDivs: utils.getTotalDivs()
       })
-
     }, 1000)
 
     // rotate camera
     setInterval(() => {
       this.props.dispatch({ type: 'SET_RANDOM_ROTATION', payload: this.getRandomRotation()})
-
     }, 10000)
   }
 
+  //_____________________________________________________________________________________________________
   getRandomRotation() {
     return Math.floor(Math.random() * 50) + -50
   }
 
+  //_____________________________________________________________________________________________________
   addUnit(type, firstUnit) {
     if(!type) {
       // default to use tank type
@@ -78,8 +63,6 @@ class MainConnect extends React.Component {
     console.log('firstUnit', firstUnit)
     // pick random position
     let unitPosition = firstUnit === true ? { x: Math.floor(_grid.getCols() / 2), y: 3 } : unitFactory.getRandomPos(this.props.units)
-
-    // console.warn(unitPosition)
 
     if(!unitPosition) {
       console.log('No available position for unit')
@@ -94,23 +77,83 @@ class MainConnect extends React.Component {
     _grid.getGrid()[unitPosition.x][unitPosition.y].reveal(true)
   }
 
+  //_____________________________________________________________________________________________________
   toggleDebug() {
     this.props.dispatch({ type: 'TOGGLE_DEBUG' })
   }
-
+  //_____________________________________________________________________________________________________
   toggleAscores() {
     this.props.dispatch({ type: 'TOGGLE_ASCORES' })
   }
-
+  //_____________________________________________________________________________________________________
   toggleAim() {
     this.props.dispatch({ type: 'TOGGLE_AIM' })
   }
-
+  //_____________________________________________________________________________________________________
   toggleObstacles() {
     this.props.dispatch({ type: 'TOGGLE_OBSTACLES' })
   }
+  //_____________________________________________________________________________________________________
+  renderLogo() {
+    return <div className='logo'><img src={logo} alt='logo'/></div>
+  }
+  //_____________________________________________________________________________________________________
+  renderNumDivs() {
+    return <div className='totalDivs'>Total divs: {this.state.totalDivs}</div>
+  }
+  //_____________________________________________________________________________________________________
+  getMainCSS() {
+    return this.props.shooting === true ?  'mainFire' : 'noFire'
+  }
+  //_____________________________________________________________________________________________________
+  getZoomIn() {
+    return this.props.zoom + 0.1 > 1 ? 1 : this.props.zoom + 0.1
+  }
+  //_____________________________________________________________________________________________________
+  getZoomOut() {
+    return this.props.zoom - 0.1 <= 0 ? 0 : this.props.zoom - 0.1
+  }
+  //_____________________________________________________________________________________________________
+  easeInOut(currentTime, start, change, duration) {
+      currentTime /= duration / 2;
+      if (currentTime < 1) {
+          return change / 2 * currentTime * currentTime + start;
+      }
+      currentTime -= 1;
+      return -change / 2 * (currentTime * (currentTime - 2) - 1) + start;
+  }
+  //_____________________________________________________________________________________________________
+  scrollTo(element, to, duration) {
+      let start = element.scrollTop,
+          change = to - start,
+          increment = 20;
 
+      const animateScroll = (elapsedTime) => {
+          elapsedTime += increment;
+          var position = this.easeInOut(elapsedTime, start, change, duration);
+          element.scrollTop = position;
+          if (elapsedTime < duration) {
+              setTimeout(function() {
+                  animateScroll(elapsedTime);
+              }, increment);
+          }
+      };
 
+      animateScroll(0);
+  }
+  //_____________________________________________________________________________________________________
+  focusCamera(elementId) {
+    let id = elementId || 'unit_0'
+
+    let element     = document.querySelectorAll('#' + id + ' .position')
+    let rect        = element[0].getBoundingClientRect();
+    let offsetTop   = rect.top + document.body.scrollTop
+
+    let windowUnitCenter = Math.floor(offsetTop) - Math.floor(window.innerHeight / 2)
+
+    utils.scrollTo(document.body, windowUnitCenter, 1000);
+  }
+  //_____________________________________________________________________________________________________
   renderSpecsView() {
     const specsStyle = {
       display: 'flex',
@@ -133,7 +176,7 @@ class MainConnect extends React.Component {
       </div>
     )
   }
-
+  //_____________________________________________________________________________________________________
   renderGround() {
     if(this.props.units.length === 0) {
       return null
@@ -150,76 +193,7 @@ class MainConnect extends React.Component {
       aim={this.aimOnCell.bind(this)} move={this.moveToCell.bind(this)}/>
     )
   }
-
-  renderLogo() {
-    return <div className='logo'><img src={logo} alt='logo'/></div>
-  }
-
-  renderNumDivs() {
-    return <div className='totalDivs'>Total divs: {this.state.totalDivs}</div>
-  }
-
-  getMainCSS() {
-    return this.state.shooting === true ?  'mainFire' : 'noFire'
-  }
-
-  getZoomIn() {
-    let zoom = this.props.zoom + 0.1
-    if(zoom > 1) {
-      zoom = 1
-    }
-    return zoom
-  }
-
-  getZoomOut() {
-    let zoom = this.props.zoom - 0.1
-    if(zoom <= 0) {
-      zoom = 0
-    }
-    return zoom
-  }
-
-  easeInOut(currentTime, start, change, duration) {
-      currentTime /= duration / 2;
-      if (currentTime < 1) {
-          return change / 2 * currentTime * currentTime + start;
-      }
-      currentTime -= 1;
-      return -change / 2 * (currentTime * (currentTime - 2) - 1) + start;
-  }
-
-
-  scrollTo(element, to, duration) {
-      let start = element.scrollTop,
-          change = to - start,
-          increment = 20;
-
-      const animateScroll = (elapsedTime) => {
-          elapsedTime += increment;
-          var position = this.easeInOut(elapsedTime, start, change, duration);
-          element.scrollTop = position;
-          if (elapsedTime < duration) {
-              setTimeout(function() {
-                  animateScroll(elapsedTime);
-              }, increment);
-          }
-      };
-
-      animateScroll(0);
-  }
-
-  focusCamera(elementId) {
-    let id = elementId || 'unit_0'
-
-    let element     = document.querySelectorAll('#' + id + ' .position')
-    let rect        = element[0].getBoundingClientRect();
-    let offsetTop   = rect.top + document.body.scrollTop
-
-    let windowUnitCenter = Math.floor(offsetTop) - Math.floor(window.innerHeight / 2)
-
-    utils.scrollTo(document.body, windowUnitCenter, 1000);
-  }
-
+  //_____________________________________________________________________________________________________
 	render() {
     return (
       <div className='wrapper'>
@@ -285,10 +259,11 @@ const MSTP = (state) => {
     debugAstarScores: state.app.debugAstarScores,
     debugObstacles: state.app.debugObstacles,
     zoom: state.app.zoom,
+    shooting: state.unitReducer.shooting,
     cameraRotation: state.app.cameraRotation
   }
 }
 
-const App = connect(MSTP, null)(MainConnect)
+const Retanx = connect(MSTP, null)(MainConnect)
 
-export default App
+export default Retanx
