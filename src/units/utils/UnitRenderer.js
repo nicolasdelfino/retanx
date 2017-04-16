@@ -1,21 +1,21 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as TYPES from '../units/types/unitTypes'
-import BasePosition from '../units/base/BasePosition'
-import Body from '../units/tank/components/Body'
-import Cannon from '../units/tank/components/Cannon'
-import Tracks from '../units/tank/components/Tracks'
-import Outline from '../units/base/Outline'
-import HP from '../units/base/HitPoints'
-import SpecsView from '../units/tank/components/SpecsView'
-import FootSoldier from '../units/soldiers/components/FootSoldier'
+import * as TYPES from '../types/unitTypes'
+import BasePosition from '../base/BasePosition'
+import Body from '../tank/components/Body'
+import Cannon from '../tank/components/Cannon'
+import Tracks from '../tank/components/Tracks'
+import Outline from '../base/Outline'
+import HP from '../base/HitPoints'
+import SpecsView from '../tank/components/SpecsView'
+import FootSoldier from '../soldiers/components/FootSoldier'
 
 // Grid
-import { Dimensions, Grid } from '../grid/Grid'
+import { Dimensions, Grid } from '../../grid/Grid'
 let _grid = null
 
 // Unit factory
-import { UnitFactory } from '../units/utils/UnitFactory'
+import { UnitFactory } from './UnitFactory'
 let unitFactory = UnitFactory.getInstance()
 
 ////////////////////////////////////////////////////////////////////////////////////////////

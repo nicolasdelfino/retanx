@@ -1,23 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Ground from '../grid/Ground'
+import Ground from '../../grid/Ground'
 
 // Grid and aStar
-import { AStar } from '../grid/AStar'
-import { Grid } from '../grid/Grid'
+import { AStar } from '../../grid/AStar'
+import { Grid } from '../../grid/Grid'
 let _grid = null
 
 // Position tracker
-import { UnitWorldPositionTracker } from '../units/utils/UnitWorldPositionTracker'
+import { UnitWorldPositionTracker } from './UnitWorldPositionTracker'
 let tracker = UnitWorldPositionTracker.getInstance()
 let trackerInterval = null
 
 // Collision manager
-import { WorldCollision } from '../units/utils/WorldCollision'
+import { WorldCollision } from './WorldCollision'
 let collisionManager = WorldCollision.getInstance()
 
 // Generic Utils
-import { Utils } from '../utils/Utils'
+import { Utils } from '../../utils/Utils'
 let utils = Utils.getInstance()
 
 ////////////////////////////////////////////////////////////////////////////////////////////

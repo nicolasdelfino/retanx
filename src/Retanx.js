@@ -3,8 +3,8 @@ import './css/App.css';
 import { connect } from 'react-redux'
 import Ground from './grid/Ground'
 import logo from './retanx.png'
-import UnitRenderer from './systems/UnitRenderer'
-import UnitController from './systems/UnitController'
+import UnitRenderer from './units/utils/UnitRenderer'
+import UnitController from './units/utils/UnitController'
 import InputController from './systems/InputController'
 
 import * as TYPES from './units/types/unitTypes'
