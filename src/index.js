@@ -1,5 +1,5 @@
 import React from 'react';
-import App from './App';
+import Retanx from './Retanx';
 import './css/index.css';
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
@@ -15,7 +15,7 @@ const store = createStore(
 
 render(
   <Provider store={store}>
-    <App />
+    <Retanx />
   </Provider>,
   document.getElementById('root')
 )

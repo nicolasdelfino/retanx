@@ -1,9 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 export const UnitWorldPositionTracker = function() {
 
   let instance = null
 
   function createUnitTracker() {
-
+    //_____________________________________________________________________________________________________
     function getBankersRounding(value) {
       var intVal   = Math.floor(value);
       var floatVal = value % 1;
@@ -18,7 +20,7 @@ export const UnitWorldPositionTracker = function() {
       }
     }
 
-    //getters
+    //_____________________________________________________________________________________________________
     function trackUnits(allUnits, activeUnit) {
       // get live ones
       let liveUnits = allUnits.filter((unit) => {
@@ -78,10 +80,11 @@ export const UnitWorldPositionTracker = function() {
       return movingUnits
     }
 
-    //setters
+    //_____________________________________________________________________________________________________
     function turnOn() {
       this.isOn = true
     }
+    //_____________________________________________________________________________________________________
     function turnOff() {
       this.isOn = false
     }

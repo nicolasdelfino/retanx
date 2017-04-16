@@ -1,7 +1,9 @@
 import React from 'react'
 
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 class HP extends React.Component {
-
+  //_____________________________________________________________________________________________________
   renderHPBarOverlay() {
     let r = []
     for(var i = 0; i < this.props.specs.hp; i++) {
@@ -9,7 +11,7 @@ class HP extends React.Component {
     }
     return <div style={{zIndex: 100, display: 'flex', flex: 1, flexDirection: 'row'}}>{r}</div>
   }
-
+  //_____________________________________________________________________________________________________
   renderHealth() {
     let health = Math.ceil(this.props.specs.health / this.props.specs.maxHealth * 100);
     return (
@@ -18,7 +20,7 @@ class HP extends React.Component {
       </div>
     )
   }
-
+  //_____________________________________________________________________________________________________
   render() {
     if(!this.props.specs.alive || (this.props.specs.health <= 0)) {
       return null

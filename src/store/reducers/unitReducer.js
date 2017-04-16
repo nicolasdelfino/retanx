@@ -1,4 +1,7 @@
 const initState = {
+  shooting: false,
+  isMoving: false,
+  isAnimating: false,
   units: []
 }
 
@@ -63,6 +66,31 @@ const unitReducer = (state = initState, action) => {
     return {
       units: ex
     }
+    case 'START_SHOOTING':
+    return {
+      ...state, shooting: true
+    }
+    case 'STOP_SHOOTING':
+    return {
+      ...state, shooting: false
+    }
+    case 'START_ANIMATING':
+    return {
+      ...state, isAnimating: true
+    }
+    case 'STOP_ANIMATING':
+    return {
+      ...state, isAnimating: false
+    }
+    case 'START_MOVING':
+    return {
+      ...state, isMoving: true
+    }
+    case 'STOP_MOVING':
+    return {
+      ...state, isMoving: false
+    }
+
     default:
       return state
   }

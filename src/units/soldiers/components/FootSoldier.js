@@ -1,6 +1,9 @@
 import React from 'react'
 import '../../../css/FootSoldier.css';
 import '../../../css/App.css';
+
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
 export default class FootSoldier extends React.Component {
   constructor(props) {
     super(props)
@@ -8,13 +11,13 @@ export default class FootSoldier extends React.Component {
       rotation: this.props.rotation
     }
   }
-
+  //_____________________________________________________________________________________________________
   componentWillReceiveProps(props) {
     if(props.rotate === true) {
       this.setState({ rotation: props.rotation })
     }
   }
-
+  //_____________________________________________________________________________________________________
   getCSS() {
     let animation = ''
     if(this.props.isShooting === true) {
@@ -26,7 +29,7 @@ export default class FootSoldier extends React.Component {
 
     return 'unit' + animation
   }
-
+  //_____________________________________________________________________________________________________
   lasersight() {
     if(!this.props.debugAim) {
       return null
@@ -35,11 +38,11 @@ export default class FootSoldier extends React.Component {
       <div className='lasersight soldierSight' />
     )
   }
-
+  //_____________________________________________________________________________________________________
   renderUnit() {
     return this.props.specs.alive === true ? this.renderSoldier() : this.renderBlood()
   }
-
+  //_____________________________________________________________________________________________________
   renderSoldier() {
     return (
         <div className="unitWrapper" style={{transform: 'rotate(' + this.state.rotation + 'deg)', 'transition': 'all ' + this.props.specs.aimDuration / 1000 + 's ease'}}>
@@ -61,7 +64,7 @@ export default class FootSoldier extends React.Component {
         </div>
     )
   }
-
+  //_____________________________________________________________________________________________________
   renderBlood() {
     return <div style={{display: 'flex', width: this.props.specs.cellWidth, height: this.props.specs.cellHeight, alignItems: 'center', justifyContent: 'center'}}>
       <div className='bloodPool' style={{width: 10, height: 10, borderRadius: 5, background: 'rgba(255,0,0,0.4)'}} />

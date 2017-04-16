@@ -1,7 +1,7 @@
 const initState = {
   aimTarget: {x: 0, y: 0},
   detailsView: false,
-  currentSelectionID: 0,
+  currentSelectionID: null,
   debugMode: false,
   debugAstarScores: false,
   debugObstacles: false,
