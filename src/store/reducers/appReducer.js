@@ -58,6 +58,11 @@ const app = (state = initState, action) => {
         ...state,
         cameraRotation: action.payload
     }
+    case 'DEF':
+    return {
+      ...state,
+      debugObstacles: state.debugObstacles
+    }
     default:
       return state
   }
