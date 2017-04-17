@@ -5,28 +5,35 @@ import { Map } from './maps/Map'
 export const Dimensions = () => ({
   width: 1000,
   height: 2000,
-  divider: 9,
   tileSize: 100
 })
 
 export const Grid = function() {
+  let instance    = null
 
-  let instance = null
-  let map = new Map()
+  let map         = null
+  let tileMap     = null
+
+  let dimensions  = null
+  let oDimensions = null
 
   function createGrid() {
+
+     map = tileMap === null ? new Map() : new tileMap()
+     dimensions = oDimensions === null ? Dimensions() : oDimensions()
+
      var grid     = []
-     let divider  = Dimensions().divider
-     let cols     = Dimensions().width / Dimensions().tileSize
-     let rows     = Dimensions().height / Dimensions().tileSize
+     let cols     = dimensions.width / dimensions.tileSize
+     let rows     = dimensions.height / dimensions.tileSize
      let mapIndex = 0
+
      for(var s = 0; s < cols; s++) {
        grid[s] = new Array(rows)
        mapIndex = 0
        for(var a = 0; a < rows; a++) {
          let cellType = map.getCellType(map.getTiles()[s + mapIndex])
 
-         let cell = new Cell(Dimensions)
+         let cell = new Cell(dimensions)
          cell.x   = s
          cell.y   = a
          cell.row = s
@@ -35,7 +42,7 @@ export const Grid = function() {
 
          cell.setType(cellType)
 
-         mapIndex += 10
+         mapIndex += cols
        }
      }
 
@@ -88,31 +95,45 @@ export const Grid = function() {
      function getGrid() { return grid }
      function getCols() { return cols }
      function getRows() { return rows }
-     function getDivider() { return divider }
 
      //setters
      function setGrid(val) { grid = val }
+     function setTileMap(val) { tileMap = val }
+     function setODimensions(val) { oDimensions = val }
 
      return {
-        getGrid: getGrid,
-        setGrid: setGrid,
-        getCols: getCols,
-        getRows: getRows,
-        getDivider: getDivider,
-        resetCells: resetCells,
-        addCellNeighbors: addCellNeighbors,
-        getPositionForCell: getPositionForCell,
+        getGrid:                            getGrid,
+        setGrid:                            setGrid,
+        getCols:                            getCols,
+        getRows:                            getRows,
+        setTileMap:                         setTileMap,
+        setODimensions:                     setODimensions,
+        resetCells:                         resetCells,
+        addCellNeighbors:                   addCellNeighbors,
+        getPositionForCell:                 getPositionForCell,
         makeObstaclesOfUnitsWithHigherMass: makeObstaclesOfUnitsWithHigherMass,
-        suggestedPositionIsAnObstacleCell: suggestedPositionIsAnObstacleCell
+        suggestedPositionIsAnObstacleCell:  suggestedPositionIsAnObstacleCell
      }
   }
 
   return {
-     getInstance: function() {
-        if(!instance) {
-           instance = createGrid();
-        }
-        return instance;
-     }
+    setSettings: function(overrideDimensions, overrideTiles) {
+        oDimensions = overrideDimensions !== null ? overrideDimensions : null
+        tileMap     = overrideTiles !== null ? overrideTiles : null
+        // if(tileMap !== null) {
+        //   let m = new tileMap()
+        //   console.warn(m.getTiles())
+        // }
+    },
+    getInstance: function(freshInstance) {
+      if(freshInstance && instance) {
+        instance = null
+        instance = createGrid()
+      }
+      else if(!instance) {
+        instance = createGrid()
+      }
+      return instance;
+    }
   }
 }()
