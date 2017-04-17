@@ -1,15 +1,18 @@
 // A* pathfinding
 export let AStar = (_grid, start, end, units, currentSelectionID) => {
-  console.log('A*')
-
   // Reset score of cells
   _grid.resetCells()
 
-  // pass tanks to grid and make them obstacles
-  _grid.makeObstaclesOfUnitsWithHigherMass(units[currentSelectionID], units, currentSelectionID)
+  let aStarStyle = 'basic'
 
-  // Add possible cell neighbors, pass unit A* style
-  let aStarStyle = units[currentSelectionID].aStarStyle
+  if(currentSelectionID !== null) {
+    // pass tanks to grid and make them obstacles
+    _grid.makeObstaclesOfUnitsWithHigherMass(units[currentSelectionID], units, currentSelectionID)
+
+    // Add possible cell neighbors, pass unit A* style
+    aStarStyle = units[currentSelectionID].aStarStyle
+  }
+
   _grid.addCellNeighbors(aStarStyle)
 
   let openSet   = []

@@ -95,9 +95,11 @@ class IC extends Component {
     ]);
 
     //Find obstacles within target area, and blow em up!
-    let grid = _grid.getGrid();
-    for (let x = 0; x < grid.length; x++) {
-      for (let y = 0; y < grid[x].length; y++) {
+    let grid = _grid.getGrid()
+    let rows = _grid.getRows()
+    let cols = _grid.getCols()
+    for (let x = 0; x < cols; x++) {
+      for (let y = 0; y < rows; y++) {
         if (this.pointInPolygon(x+0.5, y+0.5, targetArea)) {
 
           let kill = false;
@@ -118,7 +120,8 @@ class IC extends Component {
           if (kill) {
             (new Audio(sound_explosion)).play();
             grid[x][y].isExploding = true;
-            this.setState({refresh: this.state.refresh+1}); //TODO: Ugly-ass-hack, make the cell a state component instead?
+            this.props.dispatch({ type: 'DEF' })
+
             setTimeout(() => {
               grid[x][y].isExploding = false;
               grid[x][y].obstacle = false;
@@ -126,7 +129,8 @@ class IC extends Component {
               if (unit) {
                 //TODO: Remove unit from state
               }
-              this.setState({refresh: this.state.refresh+1});
+              console.log('DONE')
+              this.props.dispatch({ type: 'DEF' })
             }, 400);
           }
 

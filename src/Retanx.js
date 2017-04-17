@@ -197,7 +197,7 @@ class MainConnect extends React.Component {
 	render() {
     return (
       <div className='wrapper'>
-        <div className={this.state.shooting ? 'dashboard mainFire' : 'dashboard'} style={{flexDirection: 'column'}}>
+        <div className={this.props.shooting ? 'dashboard mainFire' : 'dashboard'} style={{flexDirection: 'column'}}>
           {/* RETANX LOGO */}
           {this.renderLogo()}
           <div><button onClick={this.addUnit.bind(this, TYPES.TANK_TYPE)}>ADD TANK UNIT</button></div>

@@ -4,8 +4,8 @@ export const Cell = function(Dimensions) {
   this.f      = 0
   this.g      = 0
   this.h      = 0
-  this.cols   = Dimensions().width / Dimensions().tileSize
-  this.rows   = Dimensions().height / Dimensions().tileSize
+  this.cols   = Dimensions.width / Dimensions.tileSize
+  this.rows   = Dimensions.height / Dimensions.tileSize
 
   // AStar
   this.neighbors  = []
