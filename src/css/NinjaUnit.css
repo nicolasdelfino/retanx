@@ -1,0 +1,516 @@
+.main {
+  display: flex;
+  flex: 1;
+  width: 70px;
+  height: 70px;
+  border-radius: 100px;
+  align-items: center;
+  justify-content: center;
+  background: #2f2c38;
+  background: transparent;
+  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.15);
+  margin: 10px; }
+
+.unitWrapper {
+  position: absolute;
+  background: transparent;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px; }
+  .unitWrapper .unit {
+    zoom: 0.25; }
+    .unitWrapper .unit .body {
+      width: 100px;
+      height: 70px;
+      background: #171719;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      border-radius: 10px;
+      box-shadow: 0px 0px 80px 10px black;
+      transition: all 0.5s ease; }
+      .unitWrapper .unit .body .arms {
+        display: flex;
+        position: absolute;
+        flex: 1;
+        width: 130px;
+        height: 50px;
+        background: #1f2023;
+        flex-direction: row;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-radius: 10px;
+        justify-content: space-between; }
+        .unitWrapper .unit .body .arms .arm {
+          display: flex;
+          width: 30px;
+          height: 50px;
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+          border-radius: 10px; }
+          .unitWrapper .unit .body .arms .arm.left {
+            background: #060707;
+            z-index: -1; }
+          .unitWrapper .unit .body .arms .arm.right {
+            background: #060707;
+            z-index: -1; }
+      .unitWrapper .unit .body .head {
+        position: relative;
+        background: #000;
+        width: 50px;
+        height: 60px;
+        border-radius: 10px;
+        margin-bottom: -20px; }
+      .unitWrapper .unit .body .bandana {
+        position: absolute;
+        background: transparent;
+        width: 50px;
+        height: 45px;
+        border-radius: 12px;
+        margin-bottom: -20px;
+        border: 3px solid green;
+        border-bottom: 10px solid green; }
+        .unitWrapper .unit .body .bandana .knot {
+          width: 20px;
+          height: 20px;
+          position: relative;
+          background: green;
+          border-radius: 10px;
+          left: calc(50% - 12px);
+          top: -20px; }
+          .unitWrapper .unit .body .bandana .knot .bowWrapper {
+            position: relative;
+            left: 5px; }
+            .unitWrapper .unit .body .bandana .knot .bowWrapper .bowLeft {
+              position: absolute;
+              height: 50px;
+              width: 10px;
+              background: green;
+              top: -30px;
+              transform: rotate(-10deg);
+              z-index: -1; }
+            .unitWrapper .unit .body .bandana .knot .bowWrapper .bowRight {
+              position: absolute;
+              height: 55px;
+              width: 10px;
+              background: #00b300;
+              top: -35px;
+              left: 10px;
+              transform: rotate(30deg); }
+
+.dead {
+  background: rgba(255, 0, 0, 0.5);
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  opacity: 0.7;
+  animation: deathAnimation .4s ease-in; }
+  .dead .body {
+    opacity: 0;
+    animation: none; }
+  .dead .gunWrapper {
+    opacity: 0;
+    animation: none; }
+
+@keyframes deathAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0, 0); }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.5, 0.5); } }
+
+.unit.sleeping .head {
+  position: relative;
+  background: #000;
+  width: 50px;
+  height: 60px;
+  border-radius: 10px;
+  margin-top: -220px;
+  transform: rotate(5deg);
+  border-top: 10px solid green; }
+
+.unit.sleeping .bandana {
+  display: none; }
+
+.unit.sleeping .body {
+  width: 100px;
+  height: 140px;
+  background: #171719;
+  display: flex;
+  zoom: .9;
+  margin-top: -50px;
+  align-items: center;
+  justify-content: center;
+  overflow: visible; }
+  .unit.sleeping .body .arms {
+    display: flex;
+    position: absolute;
+    flex: 1;
+    z-index: 10;
+    width: 150px;
+    height: 50px;
+    background: #1f2023;
+    flex-direction: row;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-radius: 10px;
+    margin-top: -50px;
+    justify-content: space-between; }
+    .unit.sleeping .body .arms .arm {
+      display: flex;
+      width: 30px;
+      height: 120px;
+      margin-top: 20px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px; }
+      .unit.sleeping .body .arms .arm.left {
+        background: #1f2023;
+        z-index: 1;
+        margin-left: -10px;
+        margin-top: 0px;
+        transform: rotate(10deg); }
+      .unit.sleeping .body .arms .arm.right {
+        background: #1f2023;
+        z-index: 1;
+        margin-right: -10px;
+        margin-top: 0px;
+        transform: rotate(-10deg); }
+  .unit.sleeping .body .legs {
+    display: flex;
+    position: absolute;
+    flex: 1;
+    width: 100px;
+    height: 100px;
+    background: transparent;
+    flex-direction: row;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-radius: 10px;
+    margin-top: 100px;
+    justify-content: space-between; }
+    .unit.sleeping .body .legs .leg {
+      display: flex;
+      width: 40px;
+      height: 120px;
+      margin-top: 20px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px; }
+      .unit.sleeping .body .legs .leg.left {
+        background: #36383d;
+        z-index: 1;
+        margin-left: -10px;
+        margin-top: 0px;
+        transform: rotate(10deg); }
+      .unit.sleeping .body .legs .leg.right {
+        background: #36383d;
+        z-index: 1;
+        margin-right: 0px;
+        margin-top: 0px;
+        transform: rotate(0deg); }
+
+.walking .body {
+  animation: walking-body 0.3s infinite; }
+
+.walking .arm.left {
+  animation: walking-arm-left 0.3s infinite; }
+
+.walking .arm.right {
+  animation: walking-arm-right 0.3s infinite; }
+
+.walking .head {
+  margin-top: -10px;
+  animation: walking-head 0.3s infinite; }
+
+.walking .bandana {
+  margin-top: 0px;
+  animation: walking-head 0.3s infinite; }
+
+@keyframes walking-body {
+  0% {
+    transform: rotate(-5deg); }
+  50% {
+    transform: rotate(5deg); }
+  100% {
+    transform: rotate(-5deg); } }
+
+@keyframes walking-arm-left {
+  0% {
+    margin-top: 0px; }
+  50% {
+    margin-top: 20px; }
+  100% {
+    margin-top: 0px; } }
+
+@keyframes walking-arm-right {
+  0% {
+    margin-top: 20px; }
+  50% {
+    margin-top: 0px; }
+  100% {
+    margin-top: 20px; } }
+
+@keyframes walking-head {
+  0% {
+    transform: rotate(8deg); }
+  50% {
+    transform: rotate(-8deg); }
+  100% {
+    transform: rotate(8deg); } }
+
+.jumping .body {
+  animation: jumping-body 0.5s infinite; }
+
+.jumping .head {
+  animation: jumping-head 0.5s infinite; }
+
+@keyframes jumping-body {
+  0% {
+    transform: scale(0.8, 0.8); }
+  50% {
+    transform: scale(1.2, 1.2); }
+  100% {
+    transform: scale(1, 1); } }
+
+@keyframes jumping-head {
+  0% {
+    transform: translate(0, -5px); }
+  80% {
+    transform: translate(0, 2px); }
+  100% {
+    transform: translate(0, 0px); } }
+
+.running .body {
+  animation: running-body 0.5s infinite; }
+
+.running .arm.left {
+  animation: running-arm-left 0.5s infinite; }
+
+.running .arm.right {
+  animation: running-arm-right 0.5s infinite; }
+
+.running .head {
+  margin-top: 10px;
+  animation: running-head 0.2s infinite; }
+
+.running .bandana {
+  margin-top: 10px;
+  animation: running-head 0.2s infinite; }
+
+.running .sword {
+  visibility: hidden; }
+
+@keyframes running-body {
+  0% {
+    transform: rotate(-5deg); }
+  50% {
+    transform: rotate(5deg); }
+  100% {
+    transform: rotate(-5deg); } }
+
+@keyframes running-arm-left {
+  0% {
+    margin-top: -20px; }
+  50% {
+    margin-top: 40px; }
+  100% {
+    margin-top: -20px; } }
+
+@keyframes running-arm-right {
+  0% {
+    margin-top: 40px; }
+  50% {
+    margin-top: -20px; }
+  100% {
+    margin-top: 40px; } }
+
+@keyframes running-head {
+  0% {
+    transform: rotate(4deg); }
+  50% {
+    transform: rotate(-4deg); }
+  100% {
+    transform: rotate(4deg); } }
+
+.idle .body {
+  animation: idle-body 2s infinite; }
+
+.idle .head {
+  margin-top: -10px;
+  animation: idle-head 3s infinite; }
+
+.idle .bandana {
+  margin-top: 0px;
+  animation: idle-head 3s infinite; }
+
+@keyframes idle-body {
+  0% {
+    transform: translate(0px, 0px); }
+  40% {
+    transform: translate(1px, 1px); }
+  80% {
+    transform: translate(-1px, -1px); }
+  100% {
+    transform: translate(0px, 0px); } }
+
+@keyframes idle-head {
+  0% {
+    transform: rotate(0deg); }
+  30% {
+    transform: rotate(6deg); }
+  60% {
+    transform: rotate(-6deg); }
+  100% {
+    transform: rotate(0deg); } }
+
+.shooting .body {
+  transform: rotate(-30deg);
+  animation: shooting-body 0.3s infinite; }
+
+.shooting .arm.left {
+  margin-top: 40px;
+  margin-left: 5px;
+  transform: rotate(-20deg); }
+
+.shooting .arm.right {
+  margin-top: 40px;
+  margin-right: 10px;
+  transform: rotate(30deg); }
+
+.shooting .head {
+  transform: rotate(30deg);
+  animation: shooting-head 0.2s infinite; }
+
+.shooting .gunWrapper {
+  position: relative;
+  z-index: 1; }
+  .shooting .gunWrapper .gun {
+    width: 60px;
+    height: 60px;
+    background: #73757a;
+    position: absolute;
+    top: 45px;
+    left: 40px;
+    z-index: -1;
+    transform: rotate(-180deg);
+    animation: shooting-gun 0.1s infinite; }
+    .shooting .gunWrapper .gun .barrel {
+      position: absolute;
+      width: 30px;
+      height: 120px;
+      background: #73757a;
+      top: -70px;
+      left: 15px;
+      border-top: 10px solid #93959b; }
+
+@keyframes shooting-gun {
+  0% {
+    margin-top: 0px; }
+  75% {
+    margin-top: -5px; }
+  100% {
+    margin-top: 0px; } }
+
+@keyframes shooting-body {
+  0% {
+    margin-top: 0px; }
+  35% {
+    margin-top: -15px; }
+  100% {
+    margin-top: 0px; } }
+
+@keyframes shooting-head {
+  0% {
+    margin-top: 0px; }
+  35% {
+    margin-top: -5px; }
+  100% {
+    margin-top: 0px; } }
+
+@keyframes rotateUnit {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
+.sword {
+  position: absolute;
+  margin-top: 500px;
+  margin-left: 80px;
+  z-index: 0;
+  transform: rotate(-50deg);
+  zoom: 0.2; }
+  .sword *,
+  .sword *::before,
+  .sword *::after {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box; }
+  .sword .blade,
+  .sword .blade::before,
+  .sword .blade::after,
+  .sword .handle,
+  .sword .handle::before,
+  .sword .handle::after,
+  .sword .guard {
+    position: absolute; }
+  .sword .blade,
+  .sword .blade::before,
+  .sword .blade::after,
+  .sword .handle,
+  .sword .handle::before,
+  .sword .handle::after {
+    top: 0; }
+  .sword .blade::before,
+  .sword .blade::after,
+  .sword .handle::before,
+  .sword .handle::after {
+    content: "";
+    display: block; }
+  .sword .blade::before,
+  .sword .blade::after {
+    width: 0;
+    height: 0;
+    border-top-width: 30px;
+    border-top-style: solid;
+    border-left: 30px solid transparent; }
+  .sword .handle,
+  .sword .handle::before,
+  .sword .handle::after {
+    height: 30px; }
+  .sword .handle::before,
+  .sword .handle::after,
+  .sword .guard {
+    background: #000; }
+  .sword .blade {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    border-bottom: 4px solid #666;
+    width: 450px;
+    height: 30px;
+    background: #888; }
+  .sword .blade::before {
+    z-index: -1;
+    left: -25px;
+    border-top-color: #888; }
+  .sword .blade::after {
+    z-index: -2;
+    left: -30px;
+    border-top-color: #666; }
+  .sword .handle {
+    right: -100px;
+    width: 100px;
+    border-bottom: 4px solid #000;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background: #000; }
+  .sword .guard {
+    width: 5px;
+    height: 45px;
+    top: -7.5px;
+    border-radius: 5px; }

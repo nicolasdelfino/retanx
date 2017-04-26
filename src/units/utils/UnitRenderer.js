@@ -9,7 +9,7 @@ import Outline from '../base/Outline'
 import HP from '../base/HitPoints'
 import SpecsView from '../tank/components/SpecsView'
 import FootSoldier from '../soldiers/components/FootSoldier'
-
+import NinjaUnit from '../ninja/components/NinjaUnit'
 // Grid
 import { Dimensions, Grid } from '../../grid/Grid'
 let _grid = null
@@ -39,7 +39,7 @@ class UR extends Component {
   //_____________________________________________________________________________________________________
   componentDidMount() {
     _grid = Grid.getInstance()
-    this.addUnit(TYPES.TANK_TYPE, true)
+    this.addUnit(TYPES.NINJA_TYPE, true)
   }
   //_____________________________________________________________________________________________________
   getRandomRotation() {
@@ -175,6 +175,38 @@ class UR extends Component {
               <Outline moveSpeed={soldierUnit.moveSpeed} specs={soldierUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
             </div>
             <SpecsView specs={soldierUnit}
+            details={this.showSpecs.bind(this)}
+            rotate={shouldRotate}
+            position={this.coordinates(position, cellWidth, cellHeight)}
+            rotation={angle}/>
+          </div>
+        )
+      }
+      else if(type === TYPES.NINJA_TYPE) {
+        let ninjaUnit = unit
+        unitList.push(
+          <div id={'unit_' + id} key={index}>
+          <div style={{'cursor': 'pointer'}} onClick={() => {
+            if(this.state.isAiming) { return }
+            if(ninjaUnit.selected) {
+              this.props.dispatch({type: 'DESELECT_UNIT', payload: {id: ninjaUnit.id }})
+            }
+            else {
+              this.selectUnit(units, ninjaUnit.id)
+            }
+           }}>
+              <BasePosition moveSpeed={ninjaUnit.moveSpeed} position={this.coordinates(position, cellWidth, cellHeight)} >
+                <NinjaUnit
+                isMoving={this.props.isMoving} specs={ninjaUnit}
+                rotate={shouldRotate}
+                rotation={angle}
+                animation={this.props.ninjaAnimation}
+                />
+                <HP specs={ninjaUnit} />
+              </BasePosition>
+              <Outline moveSpeed={ninjaUnit.moveSpeed} specs={ninjaUnit} rotate={shouldRotate} position={this.coordinates(position, cellWidth, cellHeight)} rotation={angle}/>
+            </div>
+            <SpecsView specs={ninjaUnit}
             details={this.showSpecs.bind(this)}
             rotate={shouldRotate}
             position={this.coordinates(position, cellWidth, cellHeight)}

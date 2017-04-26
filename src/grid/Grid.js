@@ -3,8 +3,8 @@ import { Map } from './maps/Map'
 
 // Grid singleton
 export const Dimensions = () => ({
-  width: 1000,
-  height: 2000,
+  width: 600,
+  height: 700,
   tileSize: 100
 })
 

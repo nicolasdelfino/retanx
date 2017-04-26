@@ -5,6 +5,7 @@ let _grid = Grid.getInstance()
 // TYPES
 import { TankType } from '../tank/type'
 import { SoldierType } from '../soldiers/type'
+import { NinjaType } from '../ninja/type'
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,10 +67,23 @@ export const UnitFactory = function() {
         case TYPES.SOLDIER_TYPE:
           unit = getSoldierUnit(unitPosition, units)
           break;
+        case TYPES.NINJA_TYPE:
+          unit = getNinjaUnit(unitPosition, units)
+          break;
         default:
           unit = getTankUnit(unitPosition, units)
       }
       return unit
+    }
+    //_____________________________________________________________________________________________________
+    function getNinjaUnit(unitPosition, units) {
+      let ninja = new NinjaType()
+      // id
+      ninja.setId(units.length)
+      // position
+      ninja.setPosition(unitPosition)
+
+      return ninja.getUnit()
     }
     //_____________________________________________________________________________________________________
     function getSoldierUnit(unitPosition, units) {

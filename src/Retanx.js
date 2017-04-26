@@ -224,6 +224,21 @@ class MainConnect extends React.Component {
             this.focusCamera()
           }}>FOCUS</button></div>
 
+          <div><button style={{background: 'black', color: 'red'}} onClick={()=> { this.props.dispatch({ type: 'IDLE'})
+          }}>IDLE</button></div>
+
+          <div><button style={{background: 'black', color: 'red'}} onClick={()=> { this.props.dispatch({ type: 'WALKING'})
+          }}>WALKING</button></div>
+
+          <div><button style={{background: 'black', color: 'red'}} onClick={()=> { this.props.dispatch({ type: 'RUNNING'})
+          }}>RUNNING</button></div>
+
+          <div><button style={{background: 'black', color: 'red'}} onClick={()=> { this.props.dispatch({ type: 'JUMPING'})
+          }}>JUMPING</button></div>
+
+          <div><button style={{background: 'black', color: 'red'}} onClick={()=> { this.props.dispatch({ type: 'SLEEPING'})
+          }}>SLEEPING</button></div>
+
           {this.renderNumDivs()}
 
           <div className='instructions'>PRESS A TO FIRE</div>

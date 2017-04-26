@@ -34,14 +34,13 @@
   zoom: 0.8;
   background: red;
   padding: 2px; }
-
-.dashboard button {
-  width: 100%;
-  background: black;
-  padding: 2px;
-  color: red;
-  font-size: 10px;
-  outline: 1px solid red; }
+  .dashboard button {
+    width: 100%;
+    background: black;
+    padding: 2px;
+    color: red;
+    font-size: 10px;
+    outline: 1px solid red; }
 
 .instructions {
   padding-top: 10px;

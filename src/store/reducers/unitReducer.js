@@ -2,6 +2,7 @@ const initState = {
   shooting: false,
   isMoving: false,
   isAnimating: false,
+  animation: 'idle',
   units: []
 }
 
@@ -89,6 +90,27 @@ const unitReducer = (state = initState, action) => {
     case 'STOP_MOVING':
     return {
       ...state, isMoving: false
+    }
+
+    case 'IDLE':
+      return {
+        ...state, animation: 'idle'
+    }
+    case 'WALKING':
+      return {
+        ...state, animation: 'walking'
+    }
+    case 'RUNNING':
+      return {
+        ...state, animation: 'running'
+    }
+    case 'JUMPING':
+      return {
+        ...state, animation: 'jumping'
+    }
+    case 'SLEEPING':
+      return {
+        ...state, animation: 'sleeping'
     }
 
     default:
